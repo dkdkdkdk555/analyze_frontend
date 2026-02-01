@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>분석 결과 - 분석드가?</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1E5AE8",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Jalnan2", "Noto Sans KR", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          screens: {
+            'sm': '640px',
+            'md': '768px',
+            'lg': '1024px',
+            'xl': '1280px',
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background-light font-display text-[#111318] transition-colors duration-200">
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-50 w-full bg-white border-b border-solid border-[#e5e7eb] px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-3">
+    <div class="flex items-center justify-between whitespace-nowrap max-w-[1200px] mx-auto">
+      <div class="flex items-center gap-4 md:gap-8">
+        <a href="index.html" class="flex items-center gap-2 md:gap-4">
+          <div class="size-5 md:size-6 text-primary">
+            <span class="material-symbols-outlined text-xl md:text-2xl">analytics</span>
+          </div>
+          <h2 class="text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">분석드가?</h2>
+        </a>
+        <nav class="hidden md:flex items-center gap-6 lg:gap-9">
+          <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="index.html">홈</a>
+          <a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary" href="#">분석 결과</a>
+        </nav>
+      </div>
+      <div class="flex flex-1 justify-end gap-2 md:gap-4">
+        <button class="flex items-center justify-center rounded-lg h-9 md:h-10 w-9 md:w-10 bg-[#f0f1f4] text-[#111318]">
+          <span class="material-symbols-outlined text-lg md:text-xl">share</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app" class="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-6 md:py-8">
+    <!-- Loading State -->
+    <div id="loading" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-[#f0f1f4] border-t-primary rounded-full animate-spin"></div>
+      <p class="text-[#636e88] text-base md:text-lg">분석 중 입니다..</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden flex flex-col items-center justify-center min-h-[60vh] gap-6">
+      <span class="material-symbols-outlined text-5xl md:text-6xl text-red-400">error</span>
+      <p class="text-[#636e88] text-base md:text-lg">오류가 발생했습니다</p>
+      <button id="retry-btn" class="flex items-center justify-center rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors">
+        다시 시도
+      </button>
+    </div>
+
+    <!-- Limited State -->
+    <div id="limited" class="hidden flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4">
+      <span class="material-symbols-outlined text-5xl md:text-6xl text-orange-400">lock</span>
+      <p class="text-[#111318] text-lg md:text-xl font-bold">일일 무료 분석 한도를 초과했습니다</p>
+      <p class="text-[#636e88] text-sm md:text-base">정식 출시 시 알림을 받으시겠어요?</p>
+      <button id="email-signup-btn" class="flex items-center justify-center rounded-lg h-11 px-8 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors">
+        런칭 알림 받기
+      </button>
+    </div>
+
+    <!-- Results Content -->
+    <div id="results" class="hidden">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap gap-2 pb-4 md:pb-6 items-center text-sm">
+        <a class="text-[#636e88] font-medium hover:text-primary" href="index.html">홈</a>
+        <span class="text-[#636e88]">/</span>
+        <span id="breadcrumb-app-name" class="text-[#111318] font-bold">앱 분석</span>
+      </div>
+
+      <!-- Profile Header -->
+      <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-[#dcdee5] mb-6 md:mb-8">
+        <div class="flex flex-col sm:flex-row gap-4 md:gap-6 items-center sm:items-start">
+          <img id="app-icon" class="w-16 h-16 md:w-24 md:h-24 rounded-xl border border-gray-100 object-cover" alt="App Icon">
+          <div class="text-center sm:text-left flex-1">
+            <h1 id="app-name" class="text-xl md:text-[28px] font-bold leading-tight tracking-[-0.015em]"></h1>
+            <p id="app-meta" class="text-[#636e88] text-sm md:text-base font-normal mt-1"></p>
+          </div>
+          <button class="hidden sm:flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
+            <span class="material-symbols-outlined mr-2 text-lg">download</span>
+            PDF 다운로드
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. Market Definition -->
+      <section id="market-definition" class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">01.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">시장 정의</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <div id="tam-card" class="flex flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dcdee5] bg-white">
+            <p class="text-[#636e88] text-xs md:text-sm font-medium uppercase tracking-wider">TAM (Total Addressable Market)</p>
+            <p id="tam-value" class="text-[#111318] text-2xl md:text-3xl font-bold leading-tight mt-1"></p>
+            <p id="tam-description" class="text-xs md:text-sm text-gray-500 mt-2"></p>
+          </div>
+          <div id="sam-card" class="flex flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dcdee5] bg-white">
+            <p class="text-[#636e88] text-xs md:text-sm font-medium uppercase tracking-wider">SAM (Serviceable Available Market)</p>
+            <p id="sam-value" class="text-[#111318] text-2xl md:text-3xl font-bold leading-tight mt-1"></p>
+            <p id="sam-description" class="text-xs md:text-sm text-gray-500 mt-2"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Core Value -->
+      <section id="core-value" class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">02.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">핵심 가치</h2>
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-8">
+          <div class="max-w-3xl">
+            <p id="core-value-statement" class="text-primary text-base md:text-xl lg:text-2xl font-bold leading-relaxed"></p>
+            <p id="core-value-detail" class="mt-4 md:mt-6 text-[#636e88] text-sm md:text-lg leading-relaxed"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Core Features & 4. Unresolved Problems -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8 md:mb-10">
+        <!-- 3. Core Features -->
+        <section id="core-features">
+          <div class="flex items-center gap-2 mb-3 md:mb-4">
+            <span class="text-primary font-bold text-sm md:text-base">03.</span>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">핵심 기능</h2>
+          </div>
+          <div class="bg-white border border-[#dcdee5] rounded-xl overflow-hidden">
+            <ul id="core-features-list" class="divide-y divide-gray-100">
+              <!-- Features will be dynamically inserted here -->
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. Unresolved Problems -->
+        <section id="unresolved-problems">
+          <div class="flex items-center gap-2 mb-3 md:mb-4">
+            <span class="text-primary font-bold text-sm md:text-base">04.</span>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">미해결 문제</h2>
+          </div>
+          <div id="unresolved-problems-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+            <!-- Problems will be dynamically inserted here -->
+          </div>
+        </section>
+      </div>
+
+      <!-- 5. Ratings & 6. Reviews by Rating -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10">
+        <!-- 5. Ratings -->
+        <div id="ratings-chart" class="lg:col-span-1">
+          <div class="flex items-center gap-2 mb-3 md:mb-4">
+            <span class="text-primary font-bold text-sm md:text-base">05.</span>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">평점 분포</h2>
+          </div>
+          <div class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-8 flex flex-col items-center">
+            <div class="relative w-32 h-32 md:w-40 md:h-40">
+              <div id="ratings-pie" class="w-full h-full rounded-full"></div>
+              <div class="absolute inset-3 md:inset-4 bg-white rounded-full flex flex-col items-center justify-center">
+                <span id="overall-rating" class="text-2xl md:text-3xl font-bold"></span>
+                <span class="text-[10px] md:text-xs text-gray-500">평균 평점</span>
+              </div>
+            </div>
+            <div id="ratings-legend" class="mt-4 md:mt-6 w-full space-y-1.5 md:space-y-2">
+              <!-- Legend will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Reviews by Rating -->
+        <div id="reviews-by-rating" class="lg:col-span-2">
+          <div class="flex items-center gap-2 mb-3 md:mb-4">
+            <span class="text-primary font-bold text-sm md:text-base">06.</span>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">평점별 리뷰 요약</h2>
+          </div>
+          <div id="reviews-list" class="bg-white border border-[#dcdee5] rounded-xl divide-y divide-gray-100">
+            <!-- Reviews will be dynamically inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Complaints -->
+      <section id="complaints" class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">07.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">불만 카테고리</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <!-- UI/UX -->
+          <div id="complaints-uiux" class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5">
+            <div class="flex items-center gap-2 mb-3 md:mb-4 border-b pb-2 md:pb-3 border-gray-100">
+              <span class="material-symbols-outlined text-primary text-lg md:text-xl">grid_view</span>
+              <h3 class="font-bold text-sm md:text-base">UI / UX</h3>
+            </div>
+            <ul id="complaints-uiux-list" class="space-y-2 md:space-y-3">
+              <!-- Complaints will be dynamically inserted here -->
+            </ul>
+          </div>
+          <!-- Performance -->
+          <div id="complaints-performance" class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5">
+            <div class="flex items-center gap-2 mb-3 md:mb-4 border-b pb-2 md:pb-3 border-gray-100">
+              <span class="material-symbols-outlined text-primary text-lg md:text-xl">speed</span>
+              <h3 class="font-bold text-sm md:text-base">성능</h3>
+            </div>
+            <ul id="complaints-performance-list" class="space-y-2 md:space-y-3">
+              <!-- Complaints will be dynamically inserted here -->
+            </ul>
+          </div>
+          <!-- Stability -->
+          <div id="complaints-stability" class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5 sm:col-span-2 md:col-span-1">
+            <div class="flex items-center gap-2 mb-3 md:mb-4 border-b pb-2 md:pb-3 border-gray-100">
+              <span class="material-symbols-outlined text-primary text-lg md:text-xl">security</span>
+              <h3 class="font-bold text-sm md:text-base">안정성</h3>
+            </div>
+            <ul id="complaints-stability-list" class="space-y-2 md:space-y-3">
+              <!-- Complaints will be dynamically inserted here -->
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Strategy Suggestion -->
+      <section id="strategy-suggestion" class="mb-8 md:mb-12">
+        <div class="bg-primary rounded-xl p-4 md:p-8 shadow-lg shadow-primary/20 text-white flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-lg md:text-xl">lightbulb</span>
+              <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider">전략 제안</h2>
+            </div>
+            <p id="strategy-oneline" class="text-lg md:text-2xl font-bold leading-snug"></p>
+            <p id="strategy-reasoning" class="mt-2 md:mt-4 text-sm md:text-base opacity-90"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- User Feedback Section -->
+      <section class="user-feedback border-t border-gray-200 pt-8 md:pt-10 pb-12 md:pb-20">
+        <div class="max-w-2xl mx-auto bg-white rounded-xl border border-dashed border-primary/40 p-4 md:p-8">
+          <div class="text-center">
+            <p class="text-base md:text-lg font-bold mb-3 md:mb-4">도움이 되셨나요?</p>
+            <div class="feedback-buttons flex justify-center gap-3 md:gap-4 mb-6 md:mb-8">
+              <button data-helpful="true" class="flex items-center gap-2 px-4 md:px-6 py-2 rounded-full border border-gray-200 hover:border-primary hover:text-primary transition-colors text-sm md:text-base">
+                <span class="material-symbols-outlined text-lg md:text-xl">thumb_up</span> 예
+              </button>
+              <button data-helpful="false" class="flex items-center gap-2 px-4 md:px-6 py-2 rounded-full border border-gray-200 hover:border-red-500 hover:text-red-500 transition-colors text-sm md:text-base">
+                <span class="material-symbols-outlined text-lg md:text-xl">thumb_down</span> 아니오
+              </button>
+            </div>
+          </div>
+          <div id="feedback-form" class="hidden flex flex-col gap-3">
+            <label class="text-xs md:text-sm font-medium text-gray-600">추가로 궁금한 점이 있으신가요?</label>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <textarea id="curious-content" class="flex-1 rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm md:text-base p-3" placeholder="질문을 입력해주세요." rows="2"></textarea>
+              <button id="submit-feedback" class="bg-primary text-white px-4 md:px-6 py-2 rounded-lg font-bold text-sm md:text-base whitespace-nowrap">전송</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Email Popup -->
+    <div id="email-popup" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="text-center">
+          <span class="material-symbols-outlined text-4xl md:text-5xl text-primary mb-4">mail</span>
+          <h2 class="text-lg md:text-xl font-bold mb-2">런칭 알림 받기</h2>
+          <p class="text-[#636e88] text-sm md:text-base mb-4 md:mb-6">정식 런칭 시 이메일로 알려드립니다</p>
+          <input id="email-input" type="email" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm md:text-base p-3 mb-4" placeholder="이메일을 입력해주세요">
+          <div class="flex gap-2 md:gap-3">
+            <button id="close-popup" class="flex-1 py-2.5 md:py-3 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm md:text-base hover:bg-gray-50 transition-colors">닫기</button>
+            <button id="submit-email" class="flex-1 py-2.5 md:py-3 rounded-lg bg-primary text-white font-bold text-sm md:text-base hover:bg-primary/90 transition-colors">제출</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="analysis.js"></script>
+</body>
+</html>

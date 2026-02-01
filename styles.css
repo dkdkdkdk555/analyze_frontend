@@ -1,0 +1,376 @@
+/* Custom Font - Jalnan2 */
+@font-face {
+  font-family: 'Jalnan2';
+  src: url('./assets/font/Jalnan2/Jalnan2.otf') format('opentype');
+  font-display: swap;
+}
+
+/* CSS Variables */
+:root {
+  --theme-color: #1E5AE8;
+  --text-color: #111318;
+  --text-secondary: #636e88;
+  --bg-color: #f6f6f8;
+  --bg-white: #fff;
+  --border-color: #dcdee5;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Jalnan2', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Utility Classes (for JavaScript compatibility) */
+.hidden {
+  display: none !important;
+}
+
+/* Dropdown Item Template (used by JavaScript) */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(30, 90, 232, 0.05);
+}
+
+.dropdown-item .app-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item .app-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.dropdown-item .app-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.dropdown-item .app-name {
+  font-weight: 700;
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.dropdown-item .store-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.dropdown-item .store-badge.play-store {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: rgb(21, 128, 61);
+}
+
+.dropdown-item .store-badge.app-store {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: rgb(29, 78, 216);
+}
+
+.dropdown-item .app-developer {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.125rem;
+}
+
+.dropdown-item .arrow-icon {
+  opacity: 0;
+  color: var(--theme-color);
+  transition: opacity 0.15s;
+}
+
+.dropdown-item:hover .arrow-icon {
+  opacity: 1;
+}
+
+/* Core Features List Item */
+.feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.feature-item .feature-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.feature-item .feature-icon {
+  color: var(--theme-color);
+}
+
+.feature-item .feature-name {
+  font-weight: 500;
+}
+
+.feature-item .feature-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.feature-item .feature-badge.positive {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: rgb(21, 128, 61);
+}
+
+.feature-item .feature-badge.neutral {
+  background-color: rgba(156, 163, 175, 0.2);
+  color: rgb(75, 85, 99);
+}
+
+.feature-item .feature-badge.negative {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: rgb(185, 28, 28);
+}
+
+/* Problem Card */
+.problem-card {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.problem-card .problem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.problem-card .problem-icon {
+  color: #ef4444;
+}
+
+.problem-card .problem-icon.medium {
+  color: #f97316;
+}
+
+.problem-card .problem-icon.low {
+  color: #6b7280;
+}
+
+.problem-card .signal-bars {
+  display: flex;
+  gap: 2px;
+}
+
+.problem-card .signal-bar {
+  width: 4px;
+  height: 12px;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+}
+
+.problem-card .signal-bar.active {
+  background-color: #ef4444;
+}
+
+.problem-card .signal-bar.active.medium {
+  background-color: #f97316;
+}
+
+.problem-card .signal-bar.active.low {
+  background-color: #6b7280;
+}
+
+.problem-card .problem-title {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.problem-card .problem-description {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.problem-card .urgency-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  align-self: flex-start;
+}
+
+.problem-card .urgency-badge.high {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: rgb(220, 38, 38);
+}
+
+.problem-card .urgency-badge.medium {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: rgb(234, 88, 12);
+}
+
+.problem-card .urgency-badge.low {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: rgb(75, 85, 99);
+}
+
+/* Complaint Item */
+.complaint-item {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.complaint-item .bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--theme-color);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.complaint-item .complaint-text {
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+/* Review Item */
+.review-item {
+  padding: 1rem;
+}
+
+.review-item .stars {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-item .star {
+  font-size: 1.25rem;
+}
+
+.review-item .star.filled {
+  color: #facc15;
+}
+
+.review-item .star.empty {
+  color: #e5e7eb;
+}
+
+.review-item .star.critical {
+  color: #f87171;
+}
+
+.review-item .rating-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+.review-item .review-list {
+  list-style: disc;
+  list-style-position: inside;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.review-item .review-list li {
+  margin-bottom: 0.25rem;
+}
+
+/* Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--theme-color);
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+
+  header,
+  .user-feedback,
+  #email-popup {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  main {
+    padding: 0;
+    max-width: 100%;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 640px) {
+  .dropdown-item .app-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .dropdown-item .app-name {
+    font-size: 0.875rem;
+  }
+
+  .dropdown-item .app-developer {
+    font-size: 0.75rem;
+  }
+
+  .feature-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .feature-item .feature-badge {
+    align-self: flex-start;
+  }
+}
