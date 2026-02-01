@@ -45,26 +45,48 @@ export function initSearchBar(apiBaseUrl) {
   }
 
   function renderDropdown(results) {
+    const dropdownItems = document.getElementById('dropdown-items');
+    const dropdownMore = document.getElementById('dropdown-more');
+
     if (!results || results.length === 0) {
-      dropdown.innerHTML = '<div class="dropdown-item">검색 결과가 없습니다</div>';
+      dropdownItems.innerHTML = `
+        <div class="flex items-center justify-center p-6 text-[#636e88]">
+          검색 결과가 없습니다
+        </div>
+      `;
+      if (dropdownMore) dropdownMore.classList.add('hidden');
       dropdown.classList.remove('hidden');
       return;
     }
 
-    dropdown.innerHTML = results.map(app => `
-      <div class="dropdown-item" data-app='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
-        <img class="app-icon" src="${app.iconImageUrl}" alt="${app.appName}" />
-        <span class="app-name">${app.appName}</span>
-        <div class="store-icons">
-          ${app.appStoreUrl ? '<img src="../assets/images/app-store-icon.svg" alt="App Store" />' : ''}
-          ${app.playStoreUrl ? '<img src="../assets/images/google-play-icon.svg" alt="Google Play" />' : ''}
+    dropdownItems.innerHTML = results.map(app => `
+      <div class="flex items-center gap-4 rounded-lg p-3 hover:bg-primary/5 cursor-pointer transition-colors group/item" data-app='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
+        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-14 shadow-sm border border-gray-100" style="background-image: url('${app.iconImageUrl}')"></div>
+        <div class="flex flex-1 flex-col text-left">
+          <div class="flex items-center gap-2 flex-wrap">
+            <p class="text-[#111318] text-base font-bold leading-normal">${app.appName}</p>
+            ${app.playStoreUrl ? '<span class="flex items-center gap-1 rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-bold text-green-700">PLAY STORE</span>' : ''}
+            ${app.appStoreUrl ? '<span class="flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold text-blue-700">APP STORE</span>' : ''}
+          </div>
+          ${app.developer ? `<p class="text-[#636e88] text-sm">${app.developer}</p>` : ''}
+        </div>
+        <div class="opacity-0 group-hover/item:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-primary">arrow_forward</span>
         </div>
       </div>
     `).join('');
 
+    if (dropdownMore) {
+      if (results.length > 3) {
+        dropdownMore.classList.remove('hidden');
+      } else {
+        dropdownMore.classList.add('hidden');
+      }
+    }
+
     dropdown.classList.remove('hidden');
 
-    dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    dropdownItems.querySelectorAll('[data-app]').forEach(item => {
       item.addEventListener('click', () => {
         const appData = item.dataset.app;
         if (appData) {

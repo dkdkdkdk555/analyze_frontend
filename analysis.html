@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>분석 결과 - 분석드가?</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -19,7 +20,7 @@
             "background-dark": "#111621",
           },
           fontFamily: {
-            "display": ["Jalnan2", "Noto Sans KR", "sans-serif"]
+            "display": ["Inter", "Noto Sans KR", "sans-serif"]
           },
           borderRadius: {
             "DEFAULT": "0.25rem",
@@ -55,10 +56,34 @@
           <a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary" href="#">분석 결과</a>
         </nav>
       </div>
+      <!-- Header Search Form -->
       <div class="flex flex-1 justify-end gap-2 md:gap-4">
-        <button class="flex items-center justify-center rounded-lg h-9 md:h-10 w-9 md:w-10 bg-[#f0f1f4] text-[#111318]">
-          <span class="material-symbols-outlined text-lg md:text-xl">share</span>
-        </button>
+        <div id="header-search-section" class="relative flex-1 max-w-[360px]">
+          <div class="search flex items-center h-9 md:h-10 rounded-lg bg-[#f0f1f4] px-3 focus-within:ring-2 focus-within:ring-primary focus-within:bg-white transition-all">
+            <span class="material-symbols-outlined text-[#636e88] text-lg mr-2">search</span>
+            <input
+              id="header-search-input"
+              class="flex-1 bg-transparent border-none text-sm text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0"
+              placeholder="다른 앱 분석하기"
+              type="text"
+            >
+            <button
+              id="header-analyze-btn"
+              class="ml-2 px-3 py-1 rounded bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
+              disabled
+            >
+              분석
+            </button>
+          </div>
+          <!-- Header Search Dropdown -->
+          <div id="header-search-dropdown" class="hidden absolute top-[calc(100%+4px)] left-0 w-full overflow-hidden rounded-xl border border-[#dcdee5] bg-white shadow-2xl z-50">
+            <div class="p-2">
+              <div id="header-dropdown-items" class="flex flex-col max-h-[300px] overflow-y-auto">
+                <!-- Dropdown items will be dynamically inserted here -->
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -67,7 +92,7 @@
     <!-- Loading State -->
     <div id="loading" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
       <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-[#f0f1f4] border-t-primary rounded-full animate-spin"></div>
-      <p class="text-[#636e88] text-base md:text-lg">분석 중 입니다..</p>
+      <p id="loading-text" class="text-[#636e88] text-base md:text-lg transition-opacity duration-500 ease-in-out">스토어 등록정보를 분석 중 입니다..</p>
     </div>
 
     <!-- Error State -->
@@ -106,7 +131,7 @@
             <h1 id="app-name" class="text-xl md:text-[28px] font-bold leading-tight tracking-[-0.015em]"></h1>
             <p id="app-meta" class="text-[#636e88] text-sm md:text-base font-normal mt-1"></p>
           </div>
-          <button class="hidden sm:flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
+          <button id="download-pdf-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">download</span>
             PDF 다운로드
           </button>
@@ -268,10 +293,10 @@
           <div class="text-center">
             <p class="text-base md:text-lg font-bold mb-3 md:mb-4">도움이 되셨나요?</p>
             <div class="feedback-buttons flex justify-center gap-3 md:gap-4 mb-6 md:mb-8">
-              <button data-helpful="true" class="flex items-center gap-2 px-4 md:px-6 py-2 rounded-full border border-gray-200 hover:border-primary hover:text-primary transition-colors text-sm md:text-base">
+              <button id="feedback-yes" data-helpful="true" class="feedback-btn flex items-center gap-2 px-4 md:px-6 py-2 rounded-full border border-gray-200 hover:border-primary hover:text-primary transition-colors text-sm md:text-base">
                 <span class="material-symbols-outlined text-lg md:text-xl">thumb_up</span> 예
               </button>
-              <button data-helpful="false" class="flex items-center gap-2 px-4 md:px-6 py-2 rounded-full border border-gray-200 hover:border-red-500 hover:text-red-500 transition-colors text-sm md:text-base">
+              <button id="feedback-no" data-helpful="false" class="feedback-btn flex items-center gap-2 px-4 md:px-6 py-2 rounded-full border border-gray-200 hover:border-red-500 hover:text-red-500 transition-colors text-sm md:text-base">
                 <span class="material-symbols-outlined text-lg md:text-xl">thumb_down</span> 아니오
               </button>
             </div>
