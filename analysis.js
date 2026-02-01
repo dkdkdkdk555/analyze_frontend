@@ -5,12 +5,16 @@ const params = new URLSearchParams(window.location.search);
 const appStoreUrl = params.get('appStoreUrl');
 const playStoreUrl = params.get('playStoreUrl');
 
+// A/B 테스트 텍스트 (추후 변형 테스트 시 사용)
+const AB_TEXT = 'default_v1';
+
 let analysisData = null;
 let feedbackSubmitted = false;
 let selectedFeedback = null;
 let headerDebounceTimer;
 let selectedHeaderApp = null;
 let loadingMessageInterval = null;
+let exposureSent = false;
 
 const loadingMessages = [
   '스토어 등록정보를 분석 중 입니다..',
@@ -19,6 +23,22 @@ const loadingMessages = [
 ];
 let currentLoadingMessageIndex = 0;
 
+// 페이지 노출 이벤트 전송 (A/B 테스트 추적)
+async function sendExposureEvent() {
+  if (exposureSent) return;
+
+  try {
+    await fetch(`${API_BASE_URL}/api/events/exposure`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ abText: AB_TEXT })
+    });
+    exposureSent = true;
+  } catch (error) {
+    console.error('Exposure event error:', error);
+  }
+}
+
 async function analyzeApp() {
   showLoading();
 
@@ -26,7 +46,7 @@ async function analyzeApp() {
     const response = await fetch(`${API_BASE_URL}/api/apps/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ appStoreUrl, playStoreUrl })
+      body: JSON.stringify({ appStoreUrl, playStoreUrl, abText: AB_TEXT })
     });
 
     if (response.status === 429) {
@@ -392,6 +412,9 @@ document.getElementById('download-pdf-btn')?.addEventListener('click', downloadA
 
 // Header search functionality
 initHeaderSearch();
+
+// Send exposure event on page load
+sendExposureEvent();
 
 // Start analysis
 analyzeApp();
