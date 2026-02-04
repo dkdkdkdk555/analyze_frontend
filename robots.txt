@@ -1,0 +1,10 @@
+# robots.txt for analyze-dega.pages.dev
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://analyze-dega.pages.dev/sitemap.xml
+
+# Crawl-delay for polite crawling (optional, mainly for Naver)
+Crawl-delay: 1

@@ -4,11 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>분석 결과 - 분석드가?</title>
+  <meta name="description" content="앱 분석 결과를 확인하세요. 시장 정의, 핵심 가치, 리뷰 분석, 미해결 문제 등 상세한 인사이트를 제공합니다.">
+  
+  <!-- Open Graph / SNS 미리보기 -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://analyze-dega.pages.dev/analysis.html">
+  <meta property="og:title" content="앱 분석 결과 - 분석드가?">
+  <meta property="og:description" content="앱 분석 결과를 확인하세요. 시장 정의, 핵심 가치, 리뷰 분석, 미해결 문제 등 상세한 인사이트를 제공합니다.">
+  <meta property="og:image" content="https://analyze-dega.pages.dev/assets/images/og-image.png">
+  <meta property="og:site_name" content="분석드가?">
+  <meta property="og:locale" content="ko_KR">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://analyze-dega.pages.dev/analysis.html">
+  <meta name="twitter:title" content="앱 분석 결과 - 분석드가?">
+  <meta name="twitter:description" content="앱 분석 결과를 확인하세요. 시장 정의, 핵심 가치, 리뷰 분석, 미해결 문제 등 상세한 인사이트를 제공합니다.">
+  <meta name="twitter:image" content="https://analyze-dega.pages.dev/assets/images/og-image.png">
+  
+  <!-- SEO Meta Tags -->
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="앱 분석 결과, 앱 리뷰 분석, 시장 분석, 경쟁사 분석, 앱 인사이트">
+  <meta name="author" content="분석드가?">
+  <meta name="theme-color" content="#1E5AE8">
+  
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7850046432758723"
+    crossorigin="anonymous"></script>
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -45,19 +74,23 @@
   <header class="sticky top-0 z-50 w-full bg-white border-b border-solid border-[#e5e7eb] px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-3">
     <div class="flex items-center justify-between whitespace-nowrap max-w-[1200px] mx-auto">
       <div class="flex items-center gap-4 md:gap-8">
-        <a href="index.html" class="flex items-center gap-2 md:gap-4">
-          <div class="size-5 md:size-6 text-primary">
-            <span class="material-symbols-outlined text-xl md:text-2xl">analytics</span>
+        <a href="index.html" class="flex items-center gap-2 md:gap-3 text-primary">
+          <div class="size-5 md:size-6">
+            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z"
+                fill="currentColor"></path>
+            </svg>
           </div>
-          <h2 class="text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">분석드가?</h2>
+          <span class="text-[#111318] font-black text-base md:text-lg tracking-tight">분석드가?</span>
         </a>
-        <nav class="hidden md:flex items-center gap-6 lg:gap-9">
-          <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="index.html">홈</a>
-          <a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary" href="#">분석 결과</a>
-        </nav>
       </div>
       <!-- Header Search Form -->
       <div class="flex flex-1 justify-end gap-2 md:gap-4">
+        <nav class="md:flex items-center gap-6 lg:gap-9">
+          <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="index.html">홈</a>
+          <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="blog.html">블로그</a>
+        </nav>
         <div id="header-search-section" class="relative flex-1 max-w-[360px]">
           <div class="search flex items-center h-9 md:h-10 rounded-lg bg-[#f0f1f4] px-3 focus-within:ring-2 focus-within:ring-primary focus-within:bg-white transition-all">
             <span class="material-symbols-outlined text-[#636e88] text-lg mr-2">search</span>
@@ -93,6 +126,31 @@
     <div id="loading" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
       <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-[#f0f1f4] border-t-primary rounded-full animate-spin"></div>
       <p id="loading-text" class="text-[#636e88] text-base md:text-lg transition-opacity duration-500 ease-in-out">스토어 등록정보를 분석 중 입니다..</p>
+      <!-- Video Ad during loading (hidden by default, shown only if ad loads) -->
+      <!-- 분석드가분석중 -->
+      <div id="loading-ad-container" class="w-full max-w-[728px] mx-auto mt-4" style="min-height: 90px;">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7850046432758723" data-ad-slot="2944179641"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+      <script>
+          (function () {
+            try {
+              // Wait for AdSense script to be ready
+              function pushAd() {
+                if (typeof adsbygoogle !== 'undefined') {
+                  (adsbygoogle = window.adsbygoogle || []).push({});
+                } else {
+                  setTimeout(pushAd, 100);
+                }
+              }
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', pushAd);
+              } else {
+                pushAd();
+              }
+            } catch (e) { }
+          })();
+      </script>
     </div>
 
     <!-- Error State -->
@@ -135,6 +193,7 @@
             <span class="material-symbols-outlined mr-2 text-lg">download</span>
             PDF 다운로드
           </button>
+          <input type="hidden" id="is-cached-result" value="false">
         </div>
       </div>
 

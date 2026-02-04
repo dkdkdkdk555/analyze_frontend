@@ -4,6 +4,10 @@ const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const params = new URLSearchParams(window.location.search);
 const appStoreUrl = params.get('appStoreUrl');
 const playStoreUrl = params.get('playStoreUrl');
+// 검색 시 가져온 메타데이터 (백엔드 fallback용)
+const appName = params.get('appName');
+const iconUrl = params.get('iconUrl');
+const developer = params.get('developer');
 
 // A/B 테스트 텍스트 (추후 변형 테스트 시 사용)
 const AB_TEXT = 'default_v1';
@@ -15,6 +19,13 @@ let headerDebounceTimer;
 let selectedHeaderApp = null;
 let loadingMessageInterval = null;
 let exposureSent = false;
+let userHasEmail = false; // Flag to track if user already submitted email
+let loadingStartTime = null; // Track when loading started
+let pendingAnalysisData = null; // Store analysis result while waiting for minimum loading time
+
+// Minimum loading time: 21 seconds (7 seconds × 3 messages) to show video ad
+const MIN_LOADING_TIME_MS = 21000;
+const LOADING_MESSAGE_INTERVAL_MS = 7000;
 
 const loadingMessages = [
   '스토어 등록정보를 분석 중 입니다..',
@@ -39,31 +50,70 @@ async function sendExposureEvent() {
   }
 }
 
+// 사용자 상태 확인 (이메일 제출 여부)
+async function checkUserStatus() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/user/status`);
+    if (response.ok) {
+      const data = await response.json();
+      userHasEmail = data.hasEmail || false;
+    }
+  } catch (error) {
+    console.error('User status check error:', error);
+  }
+}
+
 async function analyzeApp() {
   showLoading();
+  loadingStartTime = Date.now();
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/apps/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ appStoreUrl, playStoreUrl, abText: AB_TEXT })
+      body: JSON.stringify({
+        appStoreUrl,
+        playStoreUrl,
+        abText: AB_TEXT,
+        // 메타데이터 전달 (iTunes API 실패 시 fallback)
+        metadata: appName ? { appName, iconUrl, developer } : undefined
+      })
     });
 
     if (response.status === 429) {
+      // For rate limit, wait for minimum loading time before showing
+      await waitForMinLoadingTime();
       showLimited();
       return;
     }
 
     if (!response.ok) {
+      await waitForMinLoadingTime();
       showError();
       return;
     }
 
-    analysisData = await response.json();
+    pendingAnalysisData = await response.json();
+
+    // Wait for minimum loading time to show video ad
+    await waitForMinLoadingTime();
+
+    analysisData = pendingAnalysisData;
     renderResults(analysisData);
   } catch (error) {
     console.error('Analysis error:', error);
+    await waitForMinLoadingTime();
     showError();
+  }
+}
+
+// Wait until minimum loading time has elapsed
+async function waitForMinLoadingTime() {
+  const elapsed = Date.now() - loadingStartTime;
+  const remaining = MIN_LOADING_TIME_MS - elapsed;
+
+  if (remaining > 0) {
+    await new Promise(resolve => setTimeout(resolve, remaining));
   }
 }
 
@@ -71,6 +121,12 @@ function renderResults(data) {
   stopLoading();
   document.getElementById('loading').classList.add('hidden');
   document.getElementById('results').classList.remove('hidden');
+
+  // Set cached indicator
+  const isCachedInput = document.getElementById('is-cached-result');
+  if (isCachedInput) {
+    isCachedInput.value = data.isCached ? 'true' : 'false';
+  }
 
   // App Header
   document.getElementById('app-icon').src = data.appIconUrl || '';
@@ -306,12 +362,12 @@ function startLoadingMessages() {
     loadingText.style.opacity = '0';
 
     setTimeout(() => {
-      // Change text and fade in
+      // Cycle through messages continuously
       currentLoadingMessageIndex = (currentLoadingMessageIndex + 1) % loadingMessages.length;
       loadingText.textContent = loadingMessages[currentLoadingMessageIndex];
       loadingText.style.opacity = '1';
     }, 500);
-  }, 7000);
+  }, LOADING_MESSAGE_INTERVAL_MS);
 }
 
 function showError() {
@@ -328,6 +384,8 @@ function showLimited() {
 }
 
 function showEmailPopup() {
+  // Don't show popup if user already submitted email
+  if (userHasEmail) return;
   document.getElementById('email-popup').classList.remove('hidden');
 }
 
@@ -368,6 +426,7 @@ async function submitEmail() {
       body: JSON.stringify({ email })
     });
 
+    userHasEmail = true; // Prevent popup from showing again
     hideEmailPopup();
     alert('등록되었습니다. 런칭 시 알려드리겠습니다!');
   } catch (error) {
@@ -413,11 +472,17 @@ document.getElementById('download-pdf-btn')?.addEventListener('click', downloadA
 // Header search functionality
 initHeaderSearch();
 
-// Send exposure event on page load
-sendExposureEvent();
+// Initialize page (async to ensure user status is checked first)
+(async function init() {
+  // Check user status first (wait for completion to know if email popup should show)
+  await checkUserStatus();
 
-// Start analysis
-analyzeApp();
+  // Send exposure event on page load
+  sendExposureEvent();
+
+  // Start analysis
+  analyzeApp();
+})();
 
 // Initialize header search
 function initHeaderSearch() {
@@ -437,6 +502,10 @@ function initHeaderSearch() {
       const params = new URLSearchParams();
       if (selectedHeaderApp.appStoreUrl) params.set('appStoreUrl', selectedHeaderApp.appStoreUrl);
       if (selectedHeaderApp.playStoreUrl) params.set('playStoreUrl', selectedHeaderApp.playStoreUrl);
+      // 메타데이터도 전달 (백엔드 fallback용)
+      if (selectedHeaderApp.appName) params.set('appName', selectedHeaderApp.appName);
+      if (selectedHeaderApp.iconImageUrl) params.set('iconUrl', selectedHeaderApp.iconImageUrl);
+      if (selectedHeaderApp.developer) params.set('developer', selectedHeaderApp.developer);
       window.location.href = `/analysis.html?${params.toString()}`;
     }
   });
@@ -451,8 +520,6 @@ function initHeaderSearch() {
 
 async function searchHeaderApps(query) {
   const dropdown = document.getElementById('header-search-dropdown');
-  const dropdownItems = document.getElementById('header-dropdown-items');
-  const analyzeBtn = document.getElementById('header-analyze-btn');
 
   if (!query || query.trim().length < 2) {
     dropdown.classList.add('hidden');
@@ -460,14 +527,197 @@ async function searchHeaderApps(query) {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/apps/search?query=${encodeURIComponent(query)}`);
-    if (!response.ok) throw new Error('Search failed');
-    const results = await response.json();
-    renderHeaderDropdown(results);
+    // 로딩 표시
+    showHeaderLoadingDropdown();
+
+    // 병렬로 iTunes API와 백엔드 Play Store 검색 실행
+    const [iTunesResults, playStoreResults] = await Promise.all([
+      searchHeaderiTunes(query),
+      searchHeaderPlayStore(query),
+    ]);
+
+    // 결과 병합 (개선된 매칭 로직)
+    const mergedResults = mergeHeaderResults(iTunesResults, playStoreResults);
+    renderHeaderDropdown(mergedResults);
   } catch (error) {
     console.error('Header search error:', error);
     dropdown.classList.add('hidden');
   }
+}
+
+function showHeaderLoadingDropdown() {
+  const dropdown = document.getElementById('header-search-dropdown');
+  const dropdownItems = document.getElementById('header-dropdown-items');
+  dropdownItems.innerHTML = `
+    <div class="flex items-center justify-center p-4 text-[#636e88] text-sm">
+      <div class="w-4 h-4 border-2 border-gray-200 border-t-primary rounded-full animate-spin mr-2"></div>
+      검색 중...
+    </div>
+  `;
+  dropdown.classList.remove('hidden');
+}
+
+// iTunes Search API 직접 호출
+async function searchHeaderiTunes(query) {
+  try {
+    const response = await fetch(
+      `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=kr&media=software&limit=10`
+    );
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    return (data.results || []).map(app => ({
+      appName: app.trackName,
+      appStoreUrl: app.trackViewUrl,
+      playStoreUrl: null,
+      iconImageUrl: app.artworkUrl512 || app.artworkUrl100,
+      developer: app.artistName,
+    }));
+  } catch (error) {
+    console.error('iTunes search error:', error);
+    return [];
+  }
+}
+
+// 백엔드 Play Store 검색 API 호출
+async function searchHeaderPlayStore(query) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/apps/search?query=${encodeURIComponent(query)}`
+    );
+
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    console.error('Play Store search error:', error);
+    return [];
+  }
+}
+
+// 검색 결과 병합 (개선된 매칭 로직)
+function mergeHeaderResults(iTunesResults, playStoreResults) {
+  const merged = [];
+  const usedPlayStoreIndices = new Set();
+
+  // iTunes 결과를 기준으로 Play Store 매칭 시도
+  iTunesResults.forEach(iTunesApp => {
+    const mergedApp = { ...iTunesApp };
+
+    // 매칭되는 Play Store 앱 찾기
+    const matchIndex = playStoreResults.findIndex((playApp, idx) => {
+      if (usedPlayStoreIndices.has(idx)) return false;
+      return isHeaderAppMatch(iTunesApp, playApp);
+    });
+
+    if (matchIndex !== -1) {
+      const playApp = playStoreResults[matchIndex];
+      mergedApp.playStoreUrl = playApp.playStoreUrl;
+      if (!mergedApp.iconImageUrl && playApp.iconImageUrl) {
+        mergedApp.iconImageUrl = playApp.iconImageUrl;
+      }
+      usedPlayStoreIndices.add(matchIndex);
+    }
+
+    merged.push(mergedApp);
+  });
+
+  // 매칭되지 않은 Play Store 결과 추가
+  playStoreResults.forEach((playApp, idx) => {
+    if (!usedPlayStoreIndices.has(idx)) {
+      merged.push({ ...playApp });
+    }
+  });
+
+  return merged.slice(0, 10);
+}
+
+// 두 앱이 같은 앱인지 판단 (유연한 매칭)
+function isHeaderAppMatch(app1, app2) {
+  const name1 = normalizeHeaderAppName(app1.appName);
+  const name2 = normalizeHeaderAppName(app2.appName);
+
+  // 1. 정규화된 이름이 정확히 일치
+  if (name1 === name2) return true;
+
+  // 2. 기본 이름(부제목 제거) 비교 - "배달의민족 - 무료배민클럽" vs "배달의민족"
+  const baseName1 = normalizeHeaderAppName(getHeaderBaseName(app1.appName));
+  const baseName2 = normalizeHeaderAppName(getHeaderBaseName(app2.appName));
+  if (baseName1 && baseName2 && baseName1 === baseName2) return true;
+
+  // 3. 한쪽 이름이 다른 쪽을 포함 (긴 이름의 50% 이상)
+  const longer = name1.length > name2.length ? name1 : name2;
+  const shorter = name1.length > name2.length ? name2 : name1;
+  if (shorter.length >= 3 && longer.includes(shorter) && shorter.length >= longer.length * 0.5) {
+    return true;
+  }
+
+  // 4. 기본 이름으로도 포함 여부 체크
+  const longerBase = baseName1.length > baseName2.length ? baseName1 : baseName2;
+  const shorterBase = baseName1.length > baseName2.length ? baseName2 : baseName1;
+  if (shorterBase.length >= 3 && longerBase.includes(shorterBase)) {
+    return true;
+  }
+
+  // 5. 개발자명이 일치하고 이름 유사도가 높음
+  if (app1.developer && app2.developer) {
+    const dev1 = normalizeHeaderAppName(app1.developer);
+    const dev2 = normalizeHeaderAppName(app2.developer);
+    if (dev1 === dev2 || dev1.includes(dev2) || dev2.includes(dev1)) {
+      if (calculateHeaderSimilarity(baseName1, baseName2) > 0.5) {
+        return true;
+      }
+    }
+  }
+
+  // 6. 이름 유사도가 매우 높음 (80% 이상)
+  if (calculateHeaderSimilarity(name1, name2) > 0.8) {
+    return true;
+  }
+
+  return false;
+}
+
+// 앱 이름에서 기본 이름 추출 (부제목 제거)
+function getHeaderBaseName(name) {
+  const separators = [' - ', ' – ', ' — ', ' : ', ' | ', ':', '|', ' · '];
+  for (const sep of separators) {
+    if (name.includes(sep)) {
+      return name.split(sep)[0].trim();
+    }
+  }
+  return name;
+}
+
+// 두 문자열의 유사도 계산 (0~1)
+function calculateHeaderSimilarity(str1, str2) {
+  if (str1 === str2) return 1;
+  if (!str1 || !str2) return 0;
+
+  const longer = str1.length > str2.length ? str1 : str2;
+  const shorter = str1.length > str2.length ? str2 : str1;
+
+  let matches = 0;
+  const shorterChars = shorter.split('');
+  const longerChars = longer.split('');
+
+  shorterChars.forEach(char => {
+    const idx = longerChars.indexOf(char);
+    if (idx !== -1) {
+      matches++;
+      longerChars.splice(idx, 1);
+    }
+  });
+
+  return matches / longer.length;
+}
+
+// 앱 이름 정규화 (매칭용)
+function normalizeHeaderAppName(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]/g, '')
+    .slice(0, 50);
 }
 
 function renderHeaderDropdown(results) {
