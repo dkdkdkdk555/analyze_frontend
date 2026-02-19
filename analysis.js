@@ -486,6 +486,9 @@ document.getElementById('download-pdf-btn')?.addEventListener('click', downloadA
 // Header search functionality
 initHeaderSearch();
 
+// Mobile menu
+initMobileMenu();
+
 // Initialize page (async to ensure user status is checked first)
 (async function init() {
   // Check user status first (wait for completion to know if email popup should show)
@@ -842,4 +845,115 @@ async function downloadAsPDF() {
     btn.innerHTML = originalContent;
     btn.disabled = false;
   }
+}
+
+// Mobile hamburger menu
+function initMobileMenu() {
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const drawer = document.getElementById('mobile-menu-drawer');
+  const overlay = document.getElementById('mobile-menu-overlay');
+  const closeBtn = document.getElementById('mobile-menu-close');
+
+  if (!menuBtn || !drawer || !overlay) return;
+
+  function openMenu() {
+    overlay.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      overlay.classList.add('opacity-100');
+      drawer.classList.remove('translate-x-full');
+    });
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    overlay.classList.remove('opacity-100');
+    drawer.classList.add('translate-x-full');
+    setTimeout(() => overlay.classList.add('hidden'), 300);
+    document.body.style.overflow = '';
+  }
+
+  menuBtn.addEventListener('click', openMenu);
+  closeBtn.addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+
+  // Mobile search
+  let mobileSelectedApp = null;
+  let mobileDebounceTimer;
+  const mobileInput = document.getElementById('mobile-search-input');
+  const mobileDropdown = document.getElementById('mobile-search-dropdown');
+  const mobileDropdownItems = document.getElementById('mobile-dropdown-items');
+  const mobileAnalyzeBtn = document.getElementById('mobile-analyze-btn');
+
+  mobileInput.addEventListener('input', (e) => {
+    clearTimeout(mobileDebounceTimer);
+    mobileAnalyzeBtn.disabled = true;
+    mobileSelectedApp = null;
+    mobileDebounceTimer = setTimeout(async () => {
+      const query = e.target.value.trim();
+      if (query.length < 2) {
+        mobileDropdown.classList.add('hidden');
+        return;
+      }
+      mobileDropdownItems.innerHTML = `
+        <div class="flex items-center justify-center p-4 text-[#636e88] text-sm">
+          <div class="w-4 h-4 border-2 border-gray-200 border-t-primary rounded-full animate-spin mr-2"></div>
+          검색 중...
+        </div>`;
+      mobileDropdown.classList.remove('hidden');
+      try {
+        const [iTunesResults, playStoreResults] = await Promise.all([
+          searchHeaderiTunes(query),
+          searchHeaderPlayStore(query),
+        ]);
+        const merged = mergeHeaderResults(iTunesResults, playStoreResults);
+        if (!merged || merged.length === 0) {
+          mobileDropdownItems.innerHTML = `<div class="flex items-center justify-center p-4 text-[#636e88] text-sm">검색 결과가 없습니다</div>`;
+          return;
+        }
+        mobileDropdownItems.innerHTML = merged.slice(0, 5).map(app => `
+          <div class="flex items-center gap-3 rounded-lg p-2 hover:bg-primary/5 cursor-pointer transition-colors" data-app='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
+            <div class="bg-center bg-no-repeat bg-cover rounded-lg size-10 border border-gray-100" style="background-image: url('${app.iconImageUrl}')"></div>
+            <div class="flex flex-1 flex-col text-left min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <p class="text-[#111318] text-sm font-bold truncate">${app.appName}</p>
+                ${app.playStoreUrl ? '<span class="rounded bg-green-100 px-1 py-0.5 text-[8px] font-bold text-green-700">PLAY</span>' : ''}
+                ${app.appStoreUrl ? '<span class="rounded bg-blue-100 px-1 py-0.5 text-[8px] font-bold text-blue-700">iOS</span>' : ''}
+              </div>
+              ${app.developer ? `<p class="text-[#636e88] text-xs truncate">${app.developer}</p>` : ''}
+            </div>
+          </div>`).join('');
+        mobileDropdownItems.querySelectorAll('[data-app]').forEach(item => {
+          item.addEventListener('click', () => {
+            const appData = item.dataset.app;
+            if (appData) {
+              mobileSelectedApp = JSON.parse(appData.replace(/&apos;/g, "'"));
+              mobileInput.value = mobileSelectedApp.appName;
+              mobileDropdown.classList.add('hidden');
+              mobileAnalyzeBtn.disabled = false;
+            }
+          });
+        });
+      } catch (error) {
+        mobileDropdown.classList.add('hidden');
+      }
+    }, 300);
+  });
+
+  mobileAnalyzeBtn.addEventListener('click', () => {
+    if (mobileSelectedApp) {
+      const params = new URLSearchParams();
+      if (mobileSelectedApp.appStoreUrl) params.set('appStoreUrl', mobileSelectedApp.appStoreUrl);
+      if (mobileSelectedApp.playStoreUrl) params.set('playStoreUrl', mobileSelectedApp.playStoreUrl);
+      if (mobileSelectedApp.appName) params.set('appName', mobileSelectedApp.appName);
+      if (mobileSelectedApp.iconImageUrl) params.set('iconUrl', mobileSelectedApp.iconImageUrl);
+      if (mobileSelectedApp.developer) params.set('developer', mobileSelectedApp.developer);
+      window.location.href = `/analysis.html?${params.toString()}`;
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#mobile-search-section')) {
+      mobileDropdown.classList.add('hidden');
+    }
+  });
 }
