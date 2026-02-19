@@ -134,6 +134,20 @@ function renderResults(data) {
   document.getElementById('breadcrumb-app-name').textContent = `앱 분석: ${data.appName || ''}`;
   document.getElementById('app-meta').textContent = `분석 완료 | ${new Date().toLocaleDateString('ko-KR')}`;
 
+  // Store links
+  const appStoreLinkEl = document.getElementById('app-store-link');
+  const playStoreLinkEl = document.getElementById('play-store-link');
+  if (appStoreUrl) {
+    appStoreLinkEl.href = appStoreUrl;
+    appStoreLinkEl.classList.remove('hidden');
+    appStoreLinkEl.classList.add('inline-flex');
+  }
+  if (playStoreUrl) {
+    playStoreLinkEl.href = playStoreUrl;
+    playStoreLinkEl.classList.remove('hidden');
+    playStoreLinkEl.classList.add('inline-flex');
+  }
+
   // 01. Market Definition
   const tam = data.market?.definition?.tam;
   const sam = data.market?.definition?.sam;

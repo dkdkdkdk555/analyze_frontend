@@ -128,7 +128,7 @@
       <p id="loading-text" class="text-[#636e88] text-base md:text-lg transition-opacity duration-500 ease-in-out">스토어 등록정보를 분석 중 입니다..</p>
       <!-- Video Ad during loading (hidden by default, shown only if ad loads) -->
       <!-- 분석드가분석중 -->
-      <div id="loading-ad-container" class="w-full max-w-[728px] mx-auto mt-4" style="min-height: 90px;">
+      <!-- <div id="loading-ad-container" class="w-full max-w-[728px] mx-auto mt-4" style="min-height: 90px;">
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7850046432758723" data-ad-slot="2944179641"
           data-ad-format="auto" data-full-width-responsive="true"></ins>
       </div>
@@ -150,7 +150,7 @@
               }
             } catch (e) { }
           })();
-      </script>
+      </script> -->
     </div>
 
     <!-- Error State -->
@@ -188,6 +188,22 @@
           <div class="text-center sm:text-left flex-1">
             <h1 id="app-name" class="text-xl md:text-[28px] font-bold leading-tight tracking-[-0.015em]"></h1>
             <p id="app-meta" class="text-[#636e88] text-sm md:text-base font-normal mt-1"></p>
+            <div id="store-links" class="flex flex-wrap gap-2 mt-2 justify-center sm:justify-start">
+              <a id="app-store-link" href="#" target="_blank" rel="noopener noreferrer"
+                class="hidden items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 814 1000" fill="currentColor">
+                  <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.5-155.8-127.5c-43.8-77.6-84-196.1-84-307.6 0-172.3 111.3-263.5 221.3-263.5 60.2 0 109.7 39.5 147.2 39.5 36 0 92.7-41.8 162.7-41.8 26.3 0 108.2 2.6 162.7 108.2zm-187.6-166.6c19.1-26.3 32.4-62.2 32.4-98.1 0-5.1-.6-10.9-1.9-15.5-29.5 1.2-64.6 20.1-87.5 47.7-16.7 19.8-33.1 54.1-33.1 90.5 0 6.4.6 12.9 1.9 17.9 3.8.6 8.9 1.3 14.1 1.3 26.3 0 59.4-17.9 74.1-43.8z"/>
+                </svg>
+                App Store
+              </a>
+              <a id="play-store-link" href="#" target="_blank" rel="noopener noreferrer"
+                class="hidden items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 512 512" fill="currentColor">
+                  <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l2.7 1.5 247.2-247v-5.8L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c17.1-9.7 17.1-25.3-.1-34.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+                </svg>
+                Google Play
+              </a>
+            </div>
           </div>
           <button id="download-pdf-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">download</span>
