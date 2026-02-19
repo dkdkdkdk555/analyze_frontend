@@ -3,11 +3,9 @@ let debounceTimer;
 export function initSearchBar(apiBaseUrl) {
   const input = document.getElementById('search-input');
   const dropdown = document.getElementById('search-dropdown');
-  const analyzeBtn = document.getElementById('analyze-btn');
   const errorMessage = document.getElementById('error-message');
   const dropdownMore = document.getElementById('dropdown-more');
 
-  let selectedApp = null;
   let allResults = []; // 전체 검색 결과 저장
   let isExpanded = false; // 드롭다운 확장 상태
   const INITIAL_LIMIT = 5; // 초기 표시 개수
@@ -15,19 +13,6 @@ export function initSearchBar(apiBaseUrl) {
   input.addEventListener('input', (e) => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => searchApps(e.target.value), 300);
-  });
-
-  analyzeBtn.addEventListener('click', () => {
-    if (selectedApp) {
-      const params = new URLSearchParams();
-      if (selectedApp.appStoreUrl) params.set('appStoreUrl', selectedApp.appStoreUrl);
-      if (selectedApp.playStoreUrl) params.set('playStoreUrl', selectedApp.playStoreUrl);
-      // 메타데이터도 전달 (백엔드에서 iTunes API 호출 실패 시 fallback으로 사용)
-      if (selectedApp.appName) params.set('appName', selectedApp.appName);
-      if (selectedApp.iconImageUrl) params.set('iconUrl', selectedApp.iconImageUrl);
-      if (selectedApp.developer) params.set('developer', selectedApp.developer);
-      window.location.href = `/analysis.html?${params.toString()}`;
-    }
   });
 
   // "결과 더 보기" / "접기" 버튼 클릭 핸들러
@@ -344,10 +329,14 @@ export function initSearchBar(apiBaseUrl) {
       item.addEventListener('click', () => {
         const appData = item.dataset.app;
         if (appData) {
-          selectedApp = JSON.parse(appData.replace(/&apos;/g, "'"));
-          input.value = selectedApp.appName;
-          dropdown.classList.add('hidden');
-          analyzeBtn.disabled = false;
+          const app = JSON.parse(appData.replace(/&apos;/g, "'"));
+          const params = new URLSearchParams();
+          if (app.appStoreUrl) params.set('appStoreUrl', app.appStoreUrl);
+          if (app.playStoreUrl) params.set('playStoreUrl', app.playStoreUrl);
+          if (app.appName) params.set('appName', app.appName);
+          if (app.iconImageUrl) params.set('iconUrl', app.iconImageUrl);
+          if (app.developer) params.set('developer', app.developer);
+          window.location.href = `/analysis.html?${params.toString()}`;
         }
       });
     });

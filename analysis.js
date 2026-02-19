@@ -128,6 +128,11 @@ function renderResults(data) {
     isCachedInput.value = data.isCached ? 'true' : 'false';
   }
 
+  // Show reuse-why popup on second analysis
+  if (data.analysisCount === 2) {
+    showReuseWhyPopup();
+  }
+
   // App Header
   document.getElementById('app-icon').src = data.appIconUrl || '';
   document.getElementById('app-name').textContent = data.appName || '';
@@ -400,6 +405,9 @@ function showLimited() {
 function showEmailPopup() {
   // Don't show popup if user already submitted email
   if (userHasEmail) return;
+  // Reset to step 1
+  document.getElementById('email-popup-step1')?.classList.remove('hidden');
+  document.getElementById('email-popup-step2')?.classList.add('hidden');
   document.getElementById('email-popup').classList.remove('hidden');
 }
 
@@ -407,19 +415,19 @@ function hideEmailPopup() {
   document.getElementById('email-popup').classList.add('hidden');
 }
 
-async function submitFeedback(isHelpful) {
+async function submitFeedback(usePurpose) {
   const curiousContent = document.getElementById('curious-content').value;
 
   try {
     await fetch(`${API_BASE_URL}/api/feedback`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ isHelpful, curiousContent })
+      body: JSON.stringify({ usePurpose, curiousContent })
     });
 
     feedbackSubmitted = true;
     const feedbackSection = document.querySelector('.user-feedback');
-    feedbackSection.innerHTML = '<p>피드백 감사합니다!</p>';
+    feedbackSection.innerHTML = '<p class="text-center py-8 text-[#636e88] font-medium">피드백 감사합니다!</p>';
   } catch (error) {
     console.error('Feedback error:', error);
   }
@@ -441,44 +449,153 @@ async function submitEmail() {
     });
 
     userHasEmail = true; // Prevent popup from showing again
-    hideEmailPopup();
-    alert('등록되었습니다. 런칭 시 알려드리겠습니다!');
+
+    // Show step 2 instead of closing
+    document.getElementById('email-popup-step1').classList.add('hidden');
+    document.getElementById('email-popup-step2').classList.remove('hidden');
   } catch (error) {
     console.error('Email signup error:', error);
     alert('오류가 발생했습니다. 다시 시도해주세요.');
   }
 }
 
+async function submitEmailRegistWhy(stage) {
+  try {
+    await fetch(`${API_BASE_URL}/api/email-regist-why`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ emailRegistWhy: stage })
+    });
+  } catch (error) {
+    console.error('EmailRegistWhy error:', error);
+  } finally {
+    hideEmailPopup();
+  }
+}
+
 // Event listeners
 document.getElementById('retry-btn')?.addEventListener('click', analyzeApp);
 
-// Feedback button click handlers with persistent selected state
-const feedbackYesBtn = document.getElementById('feedback-yes');
-const feedbackNoBtn = document.getElementById('feedback-no');
+// Survey option click handlers
+let selectedSurvey = null;
 
-feedbackYesBtn?.addEventListener('click', () => {
-  selectedFeedback = true;
-  feedbackYesBtn.classList.add('selected-yes');
-  feedbackNoBtn.classList.remove('selected-no');
-  document.getElementById('feedback-form')?.classList.remove('hidden');
+document.querySelectorAll('.survey-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.survey-btn').forEach(b => {
+      b.classList.remove('border-primary', 'text-primary', 'bg-primary/5');
+    });
+    btn.classList.add('border-primary', 'text-primary', 'bg-primary/5');
+
+    const value = btn.dataset.value;
+    const otherInput = document.getElementById('survey-other-input');
+    const submitBtn = document.getElementById('submit-feedback');
+
+    if (value === '기타') {
+      otherInput.classList.remove('hidden');
+      selectedSurvey = null;
+      submitBtn.disabled = true;
+    } else {
+      otherInput.classList.add('hidden');
+      selectedSurvey = value;
+      submitBtn.disabled = false;
+    }
+  });
 });
 
-feedbackNoBtn?.addEventListener('click', () => {
-  selectedFeedback = false;
-  feedbackNoBtn.classList.add('selected-no');
-  feedbackYesBtn.classList.remove('selected-yes');
-  document.getElementById('feedback-form')?.classList.remove('hidden');
+document.getElementById('survey-other-text')?.addEventListener('input', (e) => {
+  const val = e.target.value.trim();
+  selectedSurvey = val || null;
+  document.getElementById('submit-feedback').disabled = !val;
 });
 
 document.getElementById('submit-feedback')?.addEventListener('click', () => {
-  if (selectedFeedback !== null) {
-    submitFeedback(selectedFeedback);
+  if (selectedSurvey) {
+    submitFeedback(selectedSurvey);
   }
 });
 
 document.getElementById('submit-email')?.addEventListener('click', submitEmail);
+
+// Reuse Why popup
+let selectedReuseWhy = null;
+
+function showReuseWhyPopup() {
+  // Reset state
+  selectedReuseWhy = null;
+  document.querySelectorAll('.reuse-why-btn').forEach(b => {
+    b.classList.remove('border-primary', 'text-primary', 'bg-primary/5');
+  });
+  document.getElementById('reuse-why-other-input')?.classList.add('hidden');
+  const submitBtn = document.getElementById('submit-reuse-why');
+  if (submitBtn) submitBtn.disabled = true;
+
+  document.getElementById('reuse-why-popup')?.classList.remove('hidden');
+}
+
+function hideReuseWhyPopup() {
+  document.getElementById('reuse-why-popup')?.classList.add('hidden');
+}
+
+async function submitReuseWhy() {
+  if (!selectedReuseWhy) {
+    hideReuseWhyPopup();
+    return;
+  }
+  try {
+    await fetch(`${API_BASE_URL}/api/reuse-why`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reuseWhy: selectedReuseWhy })
+    });
+  } catch (error) {
+    console.error('ReuseWhy error:', error);
+  } finally {
+    hideReuseWhyPopup();
+  }
+}
+
+document.querySelectorAll('.reuse-why-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.reuse-why-btn').forEach(b => {
+      b.classList.remove('border-primary', 'text-primary', 'bg-primary/5');
+    });
+    btn.classList.add('border-primary', 'text-primary', 'bg-primary/5');
+
+    const value = btn.dataset.value;
+    const otherInput = document.getElementById('reuse-why-other-input');
+    const submitBtn = document.getElementById('submit-reuse-why');
+
+    if (value === '기타') {
+      otherInput?.classList.remove('hidden');
+      selectedReuseWhy = null;
+      if (submitBtn) submitBtn.disabled = true;
+    } else {
+      otherInput?.classList.add('hidden');
+      selectedReuseWhy = value;
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+});
+
+document.getElementById('reuse-why-other-text')?.addEventListener('input', (e) => {
+  const val = e.target.value.trim();
+  selectedReuseWhy = val || null;
+  const submitBtn = document.getElementById('submit-reuse-why');
+  if (submitBtn) submitBtn.disabled = !val;
+});
+
+document.getElementById('close-reuse-popup')?.addEventListener('click', hideReuseWhyPopup);
+document.getElementById('submit-reuse-why')?.addEventListener('click', submitReuseWhy);
 document.getElementById('close-popup')?.addEventListener('click', hideEmailPopup);
 document.getElementById('email-signup-btn')?.addEventListener('click', showEmailPopup);
+
+// Stage buttons (email step 2)
+document.querySelectorAll('.stage-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    submitEmailRegistWhy(btn.dataset.value);
+  });
+});
+document.getElementById('skip-stage')?.addEventListener('click', hideEmailPopup);
 
 // PDF Download functionality
 document.getElementById('download-pdf-btn')?.addEventListener('click', downloadAsPDF);
@@ -505,26 +622,12 @@ initMobileMenu();
 function initHeaderSearch() {
   const input = document.getElementById('header-search-input');
   const dropdown = document.getElementById('header-search-dropdown');
-  const analyzeBtn = document.getElementById('header-analyze-btn');
 
-  if (!input || !dropdown || !analyzeBtn) return;
+  if (!input || !dropdown) return;
 
   input.addEventListener('input', (e) => {
     clearTimeout(headerDebounceTimer);
     headerDebounceTimer = setTimeout(() => searchHeaderApps(e.target.value), 300);
-  });
-
-  analyzeBtn.addEventListener('click', () => {
-    if (selectedHeaderApp) {
-      const params = new URLSearchParams();
-      if (selectedHeaderApp.appStoreUrl) params.set('appStoreUrl', selectedHeaderApp.appStoreUrl);
-      if (selectedHeaderApp.playStoreUrl) params.set('playStoreUrl', selectedHeaderApp.playStoreUrl);
-      // 메타데이터도 전달 (백엔드 fallback용)
-      if (selectedHeaderApp.appName) params.set('appName', selectedHeaderApp.appName);
-      if (selectedHeaderApp.iconImageUrl) params.set('iconUrl', selectedHeaderApp.iconImageUrl);
-      if (selectedHeaderApp.developer) params.set('developer', selectedHeaderApp.developer);
-      window.location.href = `/analysis.html?${params.toString()}`;
-    }
   });
 
   // Close dropdown when clicking outside
@@ -740,8 +843,6 @@ function normalizeHeaderAppName(name) {
 function renderHeaderDropdown(results) {
   const dropdown = document.getElementById('header-search-dropdown');
   const dropdownItems = document.getElementById('header-dropdown-items');
-  const input = document.getElementById('header-search-input');
-  const analyzeBtn = document.getElementById('header-analyze-btn');
 
   if (!results || results.length === 0) {
     dropdownItems.innerHTML = `
@@ -773,10 +874,14 @@ function renderHeaderDropdown(results) {
     item.addEventListener('click', () => {
       const appData = item.dataset.app;
       if (appData) {
-        selectedHeaderApp = JSON.parse(appData.replace(/&apos;/g, "'"));
-        input.value = selectedHeaderApp.appName;
-        dropdown.classList.add('hidden');
-        analyzeBtn.disabled = false;
+        const app = JSON.parse(appData.replace(/&apos;/g, "'"));
+        const params = new URLSearchParams();
+        if (app.appStoreUrl) params.set('appStoreUrl', app.appStoreUrl);
+        if (app.playStoreUrl) params.set('playStoreUrl', app.playStoreUrl);
+        if (app.appName) params.set('appName', app.appName);
+        if (app.iconImageUrl) params.set('iconUrl', app.iconImageUrl);
+        if (app.developer) params.set('developer', app.developer);
+        window.location.href = `/analysis.html?${params.toString()}`;
       }
     });
   });
@@ -877,17 +982,13 @@ function initMobileMenu() {
   overlay.addEventListener('click', closeMenu);
 
   // Mobile search
-  let mobileSelectedApp = null;
   let mobileDebounceTimer;
   const mobileInput = document.getElementById('mobile-search-input');
   const mobileDropdown = document.getElementById('mobile-search-dropdown');
   const mobileDropdownItems = document.getElementById('mobile-dropdown-items');
-  const mobileAnalyzeBtn = document.getElementById('mobile-analyze-btn');
 
   mobileInput.addEventListener('input', (e) => {
     clearTimeout(mobileDebounceTimer);
-    mobileAnalyzeBtn.disabled = true;
-    mobileSelectedApp = null;
     mobileDebounceTimer = setTimeout(async () => {
       const query = e.target.value.trim();
       if (query.length < 2) {
@@ -926,10 +1027,14 @@ function initMobileMenu() {
           item.addEventListener('click', () => {
             const appData = item.dataset.app;
             if (appData) {
-              mobileSelectedApp = JSON.parse(appData.replace(/&apos;/g, "'"));
-              mobileInput.value = mobileSelectedApp.appName;
-              mobileDropdown.classList.add('hidden');
-              mobileAnalyzeBtn.disabled = false;
+              const app = JSON.parse(appData.replace(/&apos;/g, "'"));
+              const params = new URLSearchParams();
+              if (app.appStoreUrl) params.set('appStoreUrl', app.appStoreUrl);
+              if (app.playStoreUrl) params.set('playStoreUrl', app.playStoreUrl);
+              if (app.appName) params.set('appName', app.appName);
+              if (app.iconImageUrl) params.set('iconUrl', app.iconImageUrl);
+              if (app.developer) params.set('developer', app.developer);
+              window.location.href = `/analysis.html?${params.toString()}`;
             }
           });
         });
@@ -937,18 +1042,6 @@ function initMobileMenu() {
         mobileDropdown.classList.add('hidden');
       }
     }, 300);
-  });
-
-  mobileAnalyzeBtn.addEventListener('click', () => {
-    if (mobileSelectedApp) {
-      const params = new URLSearchParams();
-      if (mobileSelectedApp.appStoreUrl) params.set('appStoreUrl', mobileSelectedApp.appStoreUrl);
-      if (mobileSelectedApp.playStoreUrl) params.set('playStoreUrl', mobileSelectedApp.playStoreUrl);
-      if (mobileSelectedApp.appName) params.set('appName', mobileSelectedApp.appName);
-      if (mobileSelectedApp.iconImageUrl) params.set('iconUrl', mobileSelectedApp.iconImageUrl);
-      if (mobileSelectedApp.developer) params.set('developer', mobileSelectedApp.developer);
-      window.location.href = `/analysis.html?${params.toString()}`;
-    }
   });
 
   document.addEventListener('click', (e) => {
