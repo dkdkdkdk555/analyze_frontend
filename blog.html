@@ -47,21 +47,7 @@
 </head>
 <body class="bg-background-light text-[#111318] antialiased font-display">
   <div class="relative flex min-h-screen w-full flex-col">
-    <!-- Navigation Bar -->
-    <header class="sticky top-0 z-50 flex items-center justify-between border-b border-solid border-[#f0f1f4] bg-white/80 backdrop-blur-md px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-3 md:py-4">
-      <a href="index.html" class="flex items-center gap-2 md:gap-3 text-primary">
-        <div class="size-6 md:size-8">
-          <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path>
-          </svg>
-        </div>
-        <span class="text-[#111318] font-black text-base md:text-xl tracking-tight">분석드가?</span>
-      </a>
-      <nav class="flex items-center gap-4 md:gap-8">
-        <a class="text-[#111318] text-sm font-medium hover:text-primary transition-colors" href="index.html">홈</a>
-        <a class="text-primary text-sm font-bold border-b-2 border-primary" href="blog.html">블로그</a>
-      </nav>
-    </header>
+    <div id="app-header"></div>
 
     <main class="flex-1 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-8 md:py-12">
       <div class="mx-auto max-w-[960px]">
@@ -160,5 +146,6 @@
       </div>
     </footer>
   </div>
+  <script type="module" src="blog.js"></script>
 </body>
 </html>

@@ -349,7 +349,7 @@ export function initSearchBar(apiBaseUrl) {
 
   // Close dropdown when clicking outside
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search')) {
+    if (!e.target.closest('#search-section')) {
       dropdown.classList.add('hidden');
     }
   });
