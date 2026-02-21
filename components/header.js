@@ -136,7 +136,7 @@ function buildDesktopNavLinks({ page }) {
   const links = [];
 
   links.push(`<a class="${base} ${inactive}" href="#">서비스</a>`);
-  links.push(`<a class="${base} ${inactive}" href="#">이용 플랜</a>`);
+  links.push(`<a class="${base} ${page === 'pricing' ? active : inactive}" href="pricing.html">이용 플랜</a>`);
   links.push(`<a class="${base} ${page === 'blog' ? active : inactive}" href="blog.html">블로그</a>`);
 
   return links.join('');
@@ -188,13 +188,11 @@ function buildMobileDrawer({ page, isLoggedIn }) {
         <span class="material-symbols-outlined text-lg">apps</span>
         서비스
       </a>
-      ${isLoggedIn ? `
-      <a href="#" class="flex items-center gap-3 py-4 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
-        <span class="material-symbols-outlined text-lg">credit_card</span>
-        플랜
+      <a href="pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-lg ${page === 'pricing' ? 'text-primary' : ''}">credit_card</span>
+        이용 플랜
       </a>
-      ` : ''}
-      <a href="blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} ${isLoggedIn ? '' : 'border-b border-[#f0f1f4]'} hover:text-primary transition-colors">
+      <a href="blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'blog' ? 'text-primary' : ''}">article</span>
         블로그
       </a>
