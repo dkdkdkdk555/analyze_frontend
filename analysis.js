@@ -67,9 +67,13 @@ async function analyzeApp() {
   loadingStartTime = Date.now();
 
   try {
+    const authToken = localStorage.getItem('auth_token');
+    const analyzeHeaders = { 'Content-Type': 'application/json' };
+    if (authToken) analyzeHeaders['Authorization'] = `Bearer ${authToken}`;
+
     const response = await fetch(`${API_BASE_URL}/api/apps/analyze`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: analyzeHeaders,
       body: JSON.stringify({
         appStoreUrl,
         playStoreUrl,
@@ -83,6 +87,14 @@ async function analyzeApp() {
       // For rate limit, wait for minimum loading time before showing
       await waitForMinLoadingTime();
       showLimited();
+      return;
+    }
+
+    if (response.status === 402) {
+      // No credits remaining - show modal immediately
+      stopLoading();
+      document.getElementById('loading').classList.add('hidden');
+      showNoCreditsModal();
       return;
     }
 
@@ -401,6 +413,14 @@ function showLimited() {
   showEmailPopup();
 }
 
+function showNoCreditsModal() {
+  document.getElementById('no-credits-modal')?.classList.remove('hidden');
+}
+
+function hideNoCreditsModal() {
+  document.getElementById('no-credits-modal')?.classList.add('hidden');
+}
+
 function showEmailPopup() {
   // Don't show popup if user already submitted email
   if (userHasEmail) return;
@@ -586,6 +606,7 @@ document.getElementById('reuse-why-other-text')?.addEventListener('input', (e) =
 document.getElementById('close-reuse-popup')?.addEventListener('click', hideReuseWhyPopup);
 document.getElementById('submit-reuse-why')?.addEventListener('click', submitReuseWhy);
 document.getElementById('close-popup')?.addEventListener('click', hideEmailPopup);
+document.getElementById('close-no-credits-modal')?.addEventListener('click', hideNoCreditsModal);
 document.getElementById('email-signup-btn')?.addEventListener('click', showEmailPopup);
 
 // Stage buttons (email step 2)
@@ -602,6 +623,23 @@ document.getElementById('download-pdf-btn')?.addEventListener('click', downloadA
 // Initialize header (search + mobile menu)
 initHeader({ page: 'analysis', apiBaseUrl: API_BASE_URL });
 
+// Pre-flight check: verify logged-in user has quota before starting analysis
+async function checkAnalyzeQuota() {
+  const authToken = localStorage.getItem('auth_token');
+  if (!authToken) return true; // Non-logged-in: IP rate limit handled by backend
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/analyze/check`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    if (!res.ok) return true; // On error, let backend handle it
+    const data = await res.json();
+    return data.canAnalyze !== false;
+  } catch {
+    return true; // On network error, let backend handle it
+  }
+}
+
 // Initialize page (async to ensure user status is checked first)
 (async function init() {
   // Check user status first (wait for completion to know if email popup should show)
@@ -609,6 +647,13 @@ initHeader({ page: 'analysis', apiBaseUrl: API_BASE_URL });
 
   // Send exposure event on page load
   sendExposureEvent();
+
+  // Pre-check quota for logged-in users before starting analysis
+  const canAnalyze = await checkAnalyzeQuota();
+  if (!canAnalyze) {
+    showNoCreditsModal();
+    return;
+  }
 
   // Start analysis
   analyzeApp();

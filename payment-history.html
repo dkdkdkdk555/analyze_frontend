@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>결제 내역 - 분석드가?</title>
+  <meta name="description" content="크레딧 결제 내역을 확인하세요.">
+
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary": "#1E5AE8", "background-light": "#f6f6f8", "background-dark": "#111621" },
+          fontFamily: { "display": ["Inter", "Noto Sans KR", "sans-serif"] },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+          screens: { 'sm': '640px', 'md': '768px', 'lg': '1024px', 'xl': '1280px' }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display bg-background-light min-h-screen">
+
+  <div id="app-header"></div>
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-[#111318] mb-6">결제 내역</h1>
+
+    <!-- 로딩 -->
+    <div id="list-loading" class="flex flex-col items-center py-20 gap-3">
+      <div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm text-[#636e88]">불러오는 중...</p>
+    </div>
+
+    <!-- 비로그인 -->
+    <div id="list-unauth" class="hidden flex flex-col items-center py-20 gap-4 text-center">
+      <span class="material-symbols-outlined text-5xl text-[#c4c8d4]">lock</span>
+      <p class="text-base font-medium text-[#111318]">로그인이 필요합니다</p>
+      <p class="text-sm text-[#636e88]">Google 로그인 후 결제 내역을 확인하세요.</p>
+    </div>
+
+    <!-- 빈 목록 -->
+    <div id="list-empty" class="hidden flex flex-col items-center py-20 gap-4 text-center">
+      <span class="material-symbols-outlined text-5xl text-[#c4c8d4]">receipt_long</span>
+      <p class="text-base font-medium text-[#111318]">결제 내역이 없습니다</p>
+      <p class="text-sm text-[#636e88]">크레딧을 충전하고 분석을 시작해보세요.</p>
+      <a href="pricing.html" class="mt-2 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+        크레딧 충전하기
+      </a>
+    </div>
+
+    <!-- 결제 목록 -->
+    <div id="list-container" class="hidden flex flex-col gap-3"></div>
+  </div>
+
+  <script type="module" src="payment-history.js"></script>
+</body>
+</html>
