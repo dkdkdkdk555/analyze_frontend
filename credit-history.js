@@ -1,4 +1,5 @@
 import { initHeader } from './components/header.js';
+import { initFooter } from './components/footer.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -22,6 +23,7 @@ function typeLabel(type) {
 
 async function init() {
   await initHeader({ page: 'credit-history', apiBaseUrl: API_BASE_URL });
+  initFooter();
 
   const token = localStorage.getItem('auth_token');
 

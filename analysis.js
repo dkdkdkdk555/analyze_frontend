@@ -1,5 +1,6 @@
 import { renderRatingChart } from './components/rating-chart.js';
 import { initHeader } from './components/header.js';
+import { initFooter } from './components/footer.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const params = new URLSearchParams(window.location.search);
@@ -622,6 +623,7 @@ document.getElementById('download-pdf-btn')?.addEventListener('click', downloadA
 
 // Initialize header (search + mobile menu)
 initHeader({ page: 'analysis', apiBaseUrl: API_BASE_URL });
+initFooter();
 
 // Pre-flight check: verify logged-in user has quota before starting analysis
 async function checkAnalyzeQuota() {

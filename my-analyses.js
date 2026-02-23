@@ -1,4 +1,5 @@
 import { initHeader } from './components/header.js';
+import { initFooter } from './components/footer.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -220,6 +221,7 @@ async function loadDetail(id) {
 
 async function init() {
   await initHeader({ page: 'my-analyses', apiBaseUrl: API_BASE_URL });
+  initFooter();
 
   const token = await getAuthToken();
 

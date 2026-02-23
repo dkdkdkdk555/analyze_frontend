@@ -1,5 +1,6 @@
 import { initSearchBar } from './components/search-bar.js';
 import { initHeader } from './components/header.js';
+import { initFooter } from './components/footer.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const AB_TEXT = 'default_v1';
@@ -21,4 +22,5 @@ async function sendExposureEvent() {
 sendExposureEvent();
 
 initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
+initFooter();
 initSearchBar(API_BASE_URL);
