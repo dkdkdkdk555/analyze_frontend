@@ -137,8 +137,9 @@ async function renderPositioningMap(posMap, apps) {
   ctx.fillText(posMap.xAxis?.label || '', W / 2, H - 8);
 
   // Y axis (horizontal labels — no rotation)
+  ctx.textAlign = 'center';
+  ctx.fillText(posMap.yAxis?.label || '', W / 2, 14);
   ctx.textAlign = 'left';
-  ctx.fillText(posMap.yAxis?.label || '', 4, 14);
   ctx.fillText(posMap.yAxis?.high || '', PAD + 8, PAD + 12);
   ctx.fillText(posMap.yAxis?.low || '', PAD + 8, H - PAD - 4);
 

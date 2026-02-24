@@ -72,10 +72,19 @@ function setupEventListeners() {
   const confirmAddBtn = document.getElementById('confirm-add-btn');
   const cancelAddBtn = document.getElementById('cancel-add-btn');
   const closeNoCreditsBtn = document.getElementById('close-no-credits-btn');
+  const confirmStartBtn = document.getElementById('confirm-start-btn');
+  const cancelStartBtn = document.getElementById('cancel-start-btn');
 
   groupNameInput.addEventListener('input', updateStartButton);
 
-  startBtn.addEventListener('click', startAnalysis);
+  startBtn.addEventListener('click', showConfirmStartModal);
+  confirmStartBtn.addEventListener('click', () => {
+    document.getElementById('confirm-start-modal').classList.add('hidden');
+    startAnalysis();
+  });
+  cancelStartBtn.addEventListener('click', () => {
+    document.getElementById('confirm-start-modal').classList.add('hidden');
+  });
 
   confirmAddBtn.addEventListener('click', (e) => {
     e.stopPropagation(); // 드롭다운이 닫히지 않도록
@@ -183,20 +192,55 @@ async function searchGroupPlayStore(query) {
 }
 
 function mergeGroupSearchResults(iTunesResults, playStoreResults) {
-  const normalize = name => name.toLowerCase().replace(/[^a-z0-9가-힣]/g, '').slice(0, 50);
+  const normalize = name => name
+    .replace(/\s*\([^)]*\)/g, '')           // 괄호 부제목 제거
+    .replace(/\s+[-:\/·]\s+.+$/, '')        // 대시·콜론 이후 부제목 제거
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]/g, '')
+    .slice(0, 50);
+
+  const getBigrams = str => {
+    const s = new Set();
+    for (let i = 0; i < str.length - 1; i++) s.add(str.slice(i, i + 2));
+    return s;
+  };
+
+  // ── 최적화 1: Play Store 이름을 한 번만 정규화 ──────────────────────────────
+  // 기존: normalize()가 iTunes 결과 수 × PlayStore 결과 수만큼 반복 호출
+  // 개선: O(n+m) 으로 줄임
+  const playEntries = playStoreResults.map(app => ({
+    normalized: normalize(app.appName),
+    bigrams: null, // ── 최적화 2: 바이그램은 lazy 생성 (substring 체크 실패 시에만)
+  }));
+
+  const isMatch = (n1, b1Ref, entry) => {
+    const n2 = entry.normalized;
+    if (n1 === n2) return true;
+    const longer = n1.length >= n2.length ? n1 : n2;
+    const shorter = n1.length >= n2.length ? n2 : n1;
+    // 저비용 substring 체크 먼저 — 성공하면 Dice는 건너뜀
+    if (shorter.length >= 2 && longer.includes(shorter) && shorter.length >= longer.length * 0.3) return true;
+    // 고비용 Dice 유사도는 substring 실패 시에만, 바이그램도 그때 생성·캐싱
+    if (shorter.length >= 3) {
+      if (!b1Ref.val) b1Ref.val = getBigrams(n1);
+      if (!entry.bigrams) entry.bigrams = getBigrams(n2);
+      let intersection = 0;
+      b1Ref.val.forEach(b => { if (entry.bigrams.has(b)) intersection++; });
+      if ((2 * intersection) / (b1Ref.val.size + entry.bigrams.size) >= 0.6) return true;
+    }
+    return false;
+  };
+
   const merged = [];
   const usedIndices = new Set();
 
   iTunesResults.forEach(iTunesApp => {
     const mergedApp = { ...iTunesApp };
     const n1 = normalize(iTunesApp.appName);
-    const matchIndex = playStoreResults.findIndex((playApp, idx) => {
+    const b1Ref = { val: null }; // 레퍼런스 객체로 캐싱 — 같은 iTunes 항목의 반복 매칭에서 재활용
+    const matchIndex = playEntries.findIndex((entry, idx) => {
       if (usedIndices.has(idx)) return false;
-      const n2 = normalize(playApp.appName);
-      if (n1 === n2) return true;
-      const longer = n1.length > n2.length ? n1 : n2;
-      const shorter = n1.length > n2.length ? n2 : n1;
-      return shorter.length >= 3 && longer.includes(shorter) && shorter.length >= longer.length * 0.5;
+      return isMatch(n1, b1Ref, entry);
     });
     if (matchIndex !== -1) {
       mergedApp.playStoreUrl = playStoreResults[matchIndex].playStoreUrl;
@@ -208,8 +252,8 @@ function mergeGroupSearchResults(iTunesResults, playStoreResults) {
     merged.push(mergedApp);
   });
 
-  playStoreResults.forEach((playApp, idx) => {
-    if (!usedIndices.has(idx)) merged.push({ ...playApp });
+  playStoreResults.forEach((_, idx) => {
+    if (!usedIndices.has(idx)) merged.push({ ...playStoreResults[idx] });
   });
 
   return merged.slice(0, 10);
@@ -301,11 +345,10 @@ function refreshGroupDropdown() {
 
 // ── Add / Remove App ──────────────────────────────────────────────────────────
 function addApp(app) {
-  if (selectedApps.length >= 5) return;
   if (selectedApps.some(a => a.appName.toLowerCase() === app.appName.toLowerCase())) return;
 
-  // Show category warning after first app
-  if (selectedApps.length >= 1) {
+  // Show category warning only when adding the second app
+  if (selectedApps.length === 1) {
     pendingApp = app;
     document.getElementById('category-mismatch-modal').classList.remove('hidden');
     return;
@@ -407,17 +450,40 @@ function updateCreditPreview() {
 function updateStartButton() {
   const startBtn = document.getElementById('start-btn');
   const groupName = document.getElementById('group-name-input').value.trim();
-  const bottomCount = document.getElementById('bottom-app-count');
   const bottomInfo = document.getElementById('bottom-info');
   const n = selectedApps.length;
 
-  bottomCount.textContent = String(n);
+  // innerHTML을 항상 새로 쓰는 방식으로 통일 (이전에 innerHTML 교체 후 #bottom-app-count가 null이 되는 버그 수정)
   if (n >= 2) {
     bottomInfo.innerHTML = `앱 <strong class="text-[#111318]">${n}</strong>개 · <strong class="text-[#111318]">${n + 1}</strong> 크레딧 차감 예정`;
+  } else {
+    bottomInfo.innerHTML = `앱 <strong class="text-[#111318]">${n}</strong>개 선택됨`;
   }
 
   const canStart = groupName.length > 0 && n >= 2 && currentUser;
   startBtn.disabled = !canStart;
+}
+
+// ── Confirm Start Modal ───────────────────────────────────────────────────────
+function showConfirmStartModal() {
+  const groupName = document.getElementById('group-name-input').value.trim();
+  const n = selectedApps.length;
+  const creditRequired = n + 1;
+  const balance = currentUser?.credit_balance ?? 0;
+
+  if ((balance) < creditRequired) {
+    document.getElementById('no-credits-detail').innerHTML = `
+      그룹 분석에 <strong>${creditRequired} 크레딧</strong>이 필요하지만<br>
+      현재 <strong>${balance} 크레딧</strong>만 남아있어요.
+    `;
+    document.getElementById('no-credits-modal').classList.remove('hidden');
+    return;
+  }
+
+  document.getElementById('confirm-start-detail').innerHTML =
+    `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 분석해요.<br>` +
+    `<strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`;
+  document.getElementById('confirm-start-modal').classList.remove('hidden');
 }
 
 // ── Start Analysis ─────────────────────────────────────────────────────────────
@@ -426,16 +492,6 @@ async function startAnalysis() {
   const token = localStorage.getItem('auth_token');
 
   if (!token || !currentUser) return;
-
-  const creditRequired = selectedApps.length + 1;
-  if ((currentUser.credit_balance ?? 0) < creditRequired) {
-    document.getElementById('no-credits-detail').innerHTML = `
-      그룹 분석에 <strong>${creditRequired} 크레딧</strong>이 필요하지만<br>
-      현재 <strong>${currentUser.credit_balance ?? 0} 크레딧</strong>만 남아있어요.
-    `;
-    document.getElementById('no-credits-modal').classList.remove('hidden');
-    return;
-  }
 
   // Show progress view
   document.getElementById('creation-view').classList.add('hidden');

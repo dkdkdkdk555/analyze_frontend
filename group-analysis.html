@@ -63,7 +63,7 @@
 
     <div class="mb-8">
       <h1 class="text-2xl font-black text-[#111318] mb-1">그룹 분석 설정</h1>
-      <p class="text-[#636e88] text-sm">비교할 앱들을 추가하고 시장을 함께 분석해보세요. 최소 2개, 최대 5개 앱을 선택할 수 있어요.</p>
+      <p class="text-[#636e88] text-sm">비교할 앱들을 추가하고 시장을 함께 분석해보세요. 최소 2개 이상의 앱을 선택할 수 있어요.</p>
     </div>
 
     <!-- 그룹명 입력 -->
@@ -237,6 +237,28 @@
         </a>
         <button id="close-no-credits-btn" class="w-full py-2.5 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors">
           닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Start Modal -->
+  <div id="confirm-start-modal" class="hidden fixed inset-0 bg-black/40 z-[200] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-7 max-w-sm w-full text-center">
+      <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-primary" style="font-size:24px">rocket_launch</span>
+      </div>
+      <h3 class="text-base font-bold text-[#111318] mb-2">분석을 시작할까요?</h3>
+      <p id="confirm-start-detail" class="text-sm text-[#636e88] leading-relaxed mb-3"></p>
+      <p class="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 mb-5">
+        분석이 시작되면 취소할 수 없어요. 페이지를 이탈해도 분석은 백그라운드에서 계속 진행돼요.
+      </p>
+      <div class="flex gap-2">
+        <button id="cancel-start-btn" class="flex-1 py-2.5 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors">
+          취소
+        </button>
+        <button id="confirm-start-btn" class="flex-1 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
+          시작하기
         </button>
       </div>
     </div>
