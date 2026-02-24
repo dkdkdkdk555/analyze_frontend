@@ -156,6 +156,10 @@
               </a>
             </div>
           </div>
+          <button id="group-analyze-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 border border-primary text-primary text-xs md:text-sm font-bold hover:bg-primary/5 transition-colors">
+            <span class="material-symbols-outlined mr-2 text-lg">group_work</span>
+            그룹분석 시작하기
+          </button>
           <button id="download-pdf-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">download</span>
             PDF 다운로드
@@ -412,6 +416,18 @@
           <button onclick="window.location.href='/'" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors">홈으로 돌아가기</button>
           <button id="close-no-credits-modal" class="w-full py-3 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition-colors">닫기</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Coming Soon Modal (그룹 분석 준비중) -->
+    <div id="coming-soon-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl text-center">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-primary" style="font-size:28px">construction</span>
+        </div>
+        <h3 class="text-base font-black text-[#111318] mb-2">준비 중인 기능이에요</h3>
+        <p class="text-sm text-[#636e88] leading-relaxed mb-5">그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!</p>
+        <button id="close-coming-soon-modal" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors">확인</button>
       </div>
     </div>
   </main>

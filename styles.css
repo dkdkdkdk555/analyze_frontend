@@ -351,7 +351,12 @@ a:focus-visible {
 
   header,
   .user-feedback,
-  #email-popup {
+  #email-popup,
+  #app-header,
+  #app-footer,
+  #back-btn,
+  #list-view,
+  .no-print {
     display: none !important;
   }
 
@@ -362,6 +367,10 @@ a:focus-visible {
   main {
     padding: 0;
     max-width: 100%;
+  }
+
+  #detail-view {
+    display: block !important;
   }
 }
 

@@ -621,6 +621,35 @@ document.getElementById('skip-stage')?.addEventListener('click', hideEmailPopup)
 // PDF Download functionality
 document.getElementById('download-pdf-btn')?.addEventListener('click', downloadAsPDF);
 
+// Group analysis button: check feature flag then navigate
+document.getElementById('group-analyze-btn')?.addEventListener('click', async () => {
+  const enabled = await checkGroupAnalysisFeature();
+  if (!enabled) {
+    document.getElementById('coming-soon-modal')?.classList.remove('hidden');
+    return;
+  }
+  const groupParams = new URLSearchParams();
+  if (appName) groupParams.set('appName', appName);
+  if (appStoreUrl) groupParams.set('appStoreUrl', appStoreUrl);
+  if (playStoreUrl) groupParams.set('playStoreUrl', playStoreUrl);
+  if (iconUrl) groupParams.set('iconUrl', iconUrl);
+  window.location.href = `/group-analysis.html?${groupParams.toString()}`;
+});
+
+document.getElementById('close-coming-soon-modal')?.addEventListener('click', () => {
+  document.getElementById('coming-soon-modal')?.classList.add('hidden');
+});
+
+async function checkGroupAnalysisFeature() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/features`);
+    const data = await res.json();
+    return data.groupAnalysis === true;
+  } catch {
+    return false;
+  }
+}
+
 // Initialize header (search + mobile menu)
 initHeader({ page: 'analysis', apiBaseUrl: API_BASE_URL });
 initFooter();

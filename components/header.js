@@ -285,7 +285,7 @@ function buildDesktopNavLinks({ page }) {
   const inactive = 'text-[#111318] hover:text-primary';
 
   const links = [];
-  links.push(`<a class="${base} ${inactive}" href="#">서비스</a>`);
+  links.push(`<a class="${base} ${page === 'services' ? active : inactive}" href="services.html">서비스</a>`);
   links.push(`<a class="${base} ${page === 'pricing' ? active : inactive}" href="pricing.html">이용 플랜</a>`);
   links.push(`<a class="${base} ${page === 'blog' ? active : inactive}" href="blog.html">블로그</a>`);
   return links.join('');
@@ -332,8 +332,8 @@ function buildMobileDrawer({ page }) {
 
   const mobileNavLinks = `
     <nav class="flex flex-col px-5 py-2 flex-1">
-      <a href="#" class="flex items-center gap-3 py-4 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
-        <span class="material-symbols-outlined text-lg">apps</span>
+      <a href="services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-lg ${page === 'services' ? 'text-primary' : ''}">apps</span>
         서비스
       </a>
       <a href="pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
