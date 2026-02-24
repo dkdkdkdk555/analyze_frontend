@@ -15,6 +15,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <!-- Toss Payments SDK -->
+  <script src="https://js.tosspayments.com/v2/standard"></script>
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -128,7 +130,7 @@
               <p class="text-[#636e88] text-[13px] md:text-xs leading-relaxed md:flex-1">
                 아이디어를 빠르게 검증해보는 소규모 분석에 적합합니다.
               </p>
-              <button
+              <button data-product-id="starter"
                 class="w-full flex items-center justify-center h-12 rounded-lg md:h-auto md:py-3.5 md:rounded-xl bg-[#f0f1f4] md:bg-slate-50 text-[#111318] text-sm font-bold hover:bg-gray-200 md:hover:bg-slate-100 active:scale-[0.98] transition-colors">
                 충전하기
               </button>
@@ -155,7 +157,7 @@
               <p class="text-[#636e88] text-[13px] md:text-xs leading-relaxed md:flex-1">
                 시장을 제대로 읽고 싶은 창업자에게 가장 많이 선택되는 균형 잡힌 플랜입니다.
               </p>
-              <button
+              <button data-product-id="growth"
                 class="w-full flex items-center justify-center h-12 rounded-lg md:h-auto md:py-3.5 md:rounded-xl bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25 hover:bg-blue-700 active:scale-[0.98] transition-colors">
                 충전하기
               </button>
@@ -178,7 +180,7 @@
               <p class="text-[#636e88] text-[13px] md:text-xs leading-relaxed md:flex-1">
                 시장을 반복해서 깊게 분석하는 분께 적합한 플랜입니다.
               </p>
-              <button
+              <button data-product-id="pro"
                 class="w-full flex items-center justify-center h-12 rounded-lg md:h-auto md:py-3.5 md:rounded-xl bg-[#f0f1f4] md:bg-slate-50 text-[#111318] text-sm font-bold hover:bg-gray-200 md:hover:bg-slate-100 active:scale-[0.98] transition-colors">
                 충전하기
               </button>
@@ -201,7 +203,7 @@
               <p class="text-[#636e88] text-[13px] md:text-xs leading-relaxed md:flex-1">
                 여러 프로젝트를 동시에 대량으로 분석하는 분께 최적화된 플랜입니다.
               </p>
-              <button
+              <button data-product-id="power"
                 class="w-full flex items-center justify-center h-12 rounded-lg md:h-auto md:py-3.5 md:rounded-xl bg-[#f0f1f4] md:bg-slate-50 text-[#111318] text-sm font-bold hover:bg-gray-200 md:hover:bg-slate-100 active:scale-[0.98] transition-colors">
                 충전하기
               </button>

@@ -20,8 +20,13 @@ export function initFooter() {
           <p class="text-[#636e88] text-[10px] md:text-xs max-w-xs">
             데이터로 증명하는 앱 성장 파트너. 시장 조사부터 경쟁사 분석까지 한 번에 해결하세요.
           </p>
-          <p class="text-[#636e88] text-[10px]">© 2026 분석드가? All rights reserved.</p>
-          <p class="text-[#636e88] text-[10px]">(운영사 : HealthTier Labs)</p>
+          <p class="text-[#636e88] text-[10px]">
+            © 2026 분석드가? All rights reserved.</p>
+          <p class="text-[#636e88] text-[10px]">(운영사 : HealthTier Labs<br>
+            사업자 등록번호 : 136-15-09172<br>
+            대표자 : 박욱현<br>
+            사업장 주소 : 서울특별시 관악구 쑥고개로30길 34, 1층 101호<br>
+            유선번호 : 010-2868-8557)</p>
         </div>
         <div class="flex flex-col gap-2 md:gap-3 items-end text-right">
           <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">Contact</span>
