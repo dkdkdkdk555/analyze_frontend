@@ -186,13 +186,14 @@ function buildMobileAuth(user) {
 
 function buildHeaderHTML({ page }) {
   const logoHTML = `
-    <a href="index.html" class="flex items-center gap-2 md:gap-3 text-primary shrink-0">
-      <div class="size-5 md:size-6">
-        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path>
-        </svg>
-      </div>
-      <span class="text-[#111318] font-black text-base md:text-lg tracking-tight">분석드가?</span>
+    <a href="https://taloninsight.com" class="flex items-center gap-2 md:gap-3 shrink-0">
+      <svg class="size-7 md:size-8" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 8 C14 8 11 16 10 24 C9 30 12 36 15 38 C16 38.5 17 38 17 37 C17 35 15 32 15 28 C15 22 17 14 18 10 C18.5 8.5 17 7 16 7.5 C15 8 14 8 14 8Z" fill="#3b82f6"/>
+        <path d="M22 5 C22 5 20 14 19.5 23 C19 30 21 37 24 40 C25 41 26.5 40.5 26.5 39 C26.5 37 24.5 33 24.5 28 C24.5 21 26 12 26.5 7 C26.8 5.5 25 4 24 4.5 C23 5 22 5 22 5Z" fill="#1a56db"/>
+        <path d="M31 8 C31 8 33 16 34 24 C35 30 33 36 30 38 C29 38.5 28 38 28 37 C28 35 30 32 30 28 C30 22 28 14 27 10 C26.5 8.5 28 7 29 7.5 C30 8 31 8 31 8Z" fill="#60a5fa"/>
+        <path d="M12 36 C12 36 16 39 24 39 C32 39 36 36 36 36 C36 38 34 42 24 42 C14 42 12 38 12 36Z" fill="#1e3a8a"/>
+      </svg>
+      <div class="wm text-base md:text-lg"><span class="t">Talon</span><span class="i">Insight</span></div>
     </a>
   `;
 
@@ -294,13 +295,14 @@ function buildDesktopNavLinks({ page }) {
 function buildMobileDrawer({ page }) {
   const drawerLogoHTML = `
     <div class="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
-      <a href="index.html" class="flex items-center gap-2 text-primary">
-        <div class="size-5">
-          <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path>
-          </svg>
-        </div>
-        <span class="text-[#111318] font-black text-base tracking-tight">분석드가?</span>
+      <a href="https://taloninsight.com" class="flex items-center gap-2">
+        <svg class="size-7" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 8 C14 8 11 16 10 24 C9 30 12 36 15 38 C16 38.5 17 38 17 37 C17 35 15 32 15 28 C15 22 17 14 18 10 C18.5 8.5 17 7 16 7.5 C15 8 14 8 14 8Z" fill="#3b82f6"/>
+          <path d="M22 5 C22 5 20 14 19.5 23 C19 30 21 37 24 40 C25 41 26.5 40.5 26.5 39 C26.5 37 24.5 33 24.5 28 C24.5 21 26 12 26.5 7 C26.8 5.5 25 4 24 4.5 C23 5 22 5 22 5Z" fill="#1a56db"/>
+          <path d="M31 8 C31 8 33 16 34 24 C35 30 33 36 30 38 C29 38.5 28 38 28 37 C28 35 30 32 30 28 C30 22 28 14 27 10 C26.5 8.5 28 7 29 7.5 C30 8 31 8 31 8Z" fill="#60a5fa"/>
+          <path d="M12 36 C12 36 16 39 24 39 C32 39 36 36 36 36 C36 38 34 42 24 42 C14 42 12 38 12 36Z" fill="#1e3a8a"/>
+        </svg>
+        <div class="wm text-base"><span class="t">Talon</span><span class="i">Insight</span></div>
       </a>
       <button id="mobile-menu-close" class="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f0f1f4] transition-colors" aria-label="메뉴 닫기">
         <span class="material-symbols-outlined text-[#111318]">close</span>

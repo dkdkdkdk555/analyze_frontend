@@ -1,3 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;800&display=swap');
+
+/* Logo Wordmark */
+.wm {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  line-height: 1;
+}
+.wm .t {
+  color: #0f1420;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.wm .i {
+  color: #1a56db;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
 /* CSS Variables */
 :root {
   --theme-color: #1E5AE8;
