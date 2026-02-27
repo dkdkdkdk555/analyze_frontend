@@ -191,7 +191,7 @@ function renderDetailComplaintCard(icon, title, complaint) {
 
 window.downloadDetailAsPDF = function(appName) {
   const title = document.title;
-  document.title = `${appName} 분석결과 - 분석드가?`;
+  document.title = `${appName} 분석결과 - TalonInsight`;
   window.print();
   document.title = title;
 };

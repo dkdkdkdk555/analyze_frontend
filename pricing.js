@@ -83,7 +83,7 @@ async function handlePurchase(productId) {
       method: 'CARD',
       amount: { currency: 'KRW', value: product.amount },
       orderId,
-      orderName: `분석드가? ${product.name} 크레딧 ${product.credits}개 (운영사 : HealthTier labs)`,
+      orderName: `TalonInsight ${product.name} 크레딧 ${product.credits}개 (운영사 : HealthTier labs)`,
       successUrl: `${window.location.origin}/payment-success.html`,
       failUrl: `${window.location.origin}/payment-fail.html`,
     });

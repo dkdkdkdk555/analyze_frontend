@@ -734,7 +734,7 @@ async function downloadAsPDF() {
         <div class="max-w-4xl mx-auto">
           <div class="text-center mb-8">
             <h1 class="text-2xl font-bold text-gray-900">${analysisData.appName || '앱'} 분석 리포트</h1>
-            <p class="text-gray-500 mt-2">${new Date().toLocaleDateString('ko-KR')} | 분석드가?</p>
+            <p class="text-gray-500 mt-2">${new Date().toLocaleDateString('ko-KR')} | TalonInsight</p>
           </div>
           ${printContent.innerHTML}
         </div>
