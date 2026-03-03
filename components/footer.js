@@ -23,16 +23,27 @@ export function initFooter() {
           </p>
           <p class="text-[#636e88] text-[10px]">
             © 2026 TalonInsight All rights reserved.</p>
-          <!-- <p class="text-[#636e88] text-[10px]">(운영사 : HealthTier Labs<br>
-            사업자 등록번호 : 136-15-09172<br>
-            대표자 : 박욱현<br>
-            사업장 주소 : 서울특별시 관악구 쑥고개로30길 34, 1층 101호<br>
-            유선번호 : 010-2868-8557)</p> -->
+          <p class="text-[#636e88] text-[10px] leading-relaxed">
+            사업자등록번호 136-15-09172<br>
+            서울특별시 관악구 쑥고개로30길 34, 1층 101호(봉천동)
+          </p>
+          <p class="text-[#636e88] text-[10px] leading-relaxed">
+            본 서비스의 주문 및 결제는 <strong>Paddle.com</strong> 및 <strong>PayPal</strong>에서 처리됩니다.<br>
+            Paddle은 법적 판매자(MoR)로서 결제 문의 및 환불을 책임집니다.
+          </p>
         </div>
-        <div class="flex flex-col gap-2 md:gap-3 items-end text-right">
-          <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">Contact</span>
-          <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors"
-            href="mailto:healthtier25@gmail.com">healthtier25@gmail.com</a>
+        <div class="flex flex-row gap-10 md:gap-16 items-start">
+          <div class="flex flex-col gap-2 md:gap-3">
+            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">Policy</span>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/terms">이용약관</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/privacy">개인정보처리방침</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/refund">환불정책</a>
+          </div>
+          <div class="flex flex-col gap-2 md:gap-3 items-end text-right">
+            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">Contact</span>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors"
+              href="mailto:healthtier25@gmail.com">taloninsight@gmail.com</a>
+          </div>
         </div>
       </div>
     </footer>
