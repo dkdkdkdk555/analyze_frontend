@@ -44,7 +44,7 @@ const TRANSLATIONS = {
     'footer.tagline':       '데이터로 증명하는 앱 성장 파트너. 시장 조사부터 경쟁사 분석까지 한 번에 해결하세요.',
     'footer.biz_number':    '사업자등록번호 136-15-09172',
     'footer.address':       '서울특별시 관악구 쑥고개로30길 34, 1층 101호(봉천동)',
-    'footer.paddle_notice': '본 서비스의 주문 및 결제는 <strong>Paddle.com</strong> 및 <strong>PayPal</strong>에서 처리됩니다.<br>Paddle은 법적 판매자(MoR)로서 결제 문의 및 환불을 책임집니다.',
+    'footer.paddle_notice': '본 서비스의 주문 및 결제는 글로벌 결제 대행사 <strong>Paddle.com</strong> 및 <strong>PayPal</strong>에서 처리됩니다. Paddle은 법적 판매자로서 모든 결제 관련 문의와 환불을 책임집니다.',
     'footer.terms':         '이용약관',
     'footer.privacy':       '개인정보처리방침',
     'footer.refund':        '환불정책',
@@ -92,6 +92,12 @@ const TRANSLATIONS = {
     'pricing.payment_error':      '결제 시스템을 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.',
     'pricing.network_error':      '네트워크 오류가 발생했어요. 다시 시도해 주세요.',
     'pricing.prepare_error':      '결제 준비에 실패했어요.',
+
+    // ── Policy pages ─────────────────────────────────────────────────
+    'privacy.page_title':        '개인정보처리방침 - TalonInsight',
+    'refund.page_title':         '환불정책 - TalonInsight',
+    'terms.page_title':          '이용약관 - TalonInsight',
+    'policy.loading':            '불러오는 중...',
 
     // ── Services page ────────────────────────────────────────────────
     'services.page_title':       '서비스 - TalonInsight',
@@ -168,8 +174,8 @@ const TRANSLATIONS = {
     // ── Footer ───────────────────────────────────────────────────────
     'footer.tagline':       'Your data-driven app growth partner. From market research to competitor analysis — all in one place.',
     'footer.biz_number':    'Business Registration No. 136-15-09172',
-    'footer.address':       '34 Ssukgogae-ro 30-gil, Gwanak-gu, Seoul, South Korea',
-    'footer.paddle_notice': 'Orders and payments are processed by <strong>Paddle.com</strong> and <strong>PayPal</strong>.<br>Paddle acts as the Merchant of Record and is responsible for billing and refund inquiries.',
+    'footer.address':       '34 Ssukgogae-ro 30-gil, Gwanak-gu, Seoul, Republic of Korea',
+    'footer.paddle_notice': 'Our order process is conducted by our online reseller <strong>Paddle.com Market Limited</strong>. Paddle is the <strong>Merchant of Record</strong> for all our orders. Paddle provides all customer service inquiries and handles returns.',
     'footer.terms':         'Terms of Service',
     'footer.privacy':       'Privacy Policy',
     'footer.refund':        'Refund Policy',
@@ -217,6 +223,12 @@ const TRANSLATIONS = {
     'pricing.payment_error':      'Failed to load the payment system. Please try again in a moment.',
     'pricing.network_error':      'A network error occurred. Please try again.',
     'pricing.prepare_error':      'Failed to prepare your payment.',
+
+    // ── Policy pages ─────────────────────────────────────────────────
+    'privacy.page_title':        'Privacy Policy - TalonInsight',
+    'refund.page_title':         'Refund Policy - TalonInsight',
+    'terms.page_title':          'Terms of Service - TalonInsight',
+    'policy.loading':            'Loading...',
 
     // ── Services page ────────────────────────────────────────────────
     'services.page_title':       'Services - TalonInsight',
