@@ -1,29 +1,32 @@
 /**
- * 공통 헤더 컴포넌트
+ * Common header component
  * @param {Object} options
- * @param {'index' | 'analysis' | 'pricing' | 'blog'} options.page - 현재 페이지
- * @param {string} options.apiBaseUrl - API base URL
+ * @param {'index' | 'analysis' | 'pricing' | 'blog' | 'services'} options.page
+ * @param {string} options.apiBaseUrl
  */
+import { t, getLang, setLang } from './i18n.js';
+
 export async function initHeader({ page, apiBaseUrl }) {
   const headerEl = document.getElementById('app-header');
   if (!headerEl) return;
 
-  // 1. 헤더를 로그아웃 상태로 즉시 렌더 (레이아웃 안정)
+  // 1. Render header immediately (logged-out state for layout stability)
   headerEl.innerHTML = buildHeaderHTML({ page });
   attachMobileMenuHandlers();
+  attachLangSwitcherHandlers();
   if (page === 'analysis' && apiBaseUrl) initHeaderSearch(apiBaseUrl);
 
-  // 2. 토큰 처리 (URL에서 auth_token 수신 → localStorage 저장)
+  // 2. Process token from URL → localStorage
   const { handleTokenFromURL, fetchCurrentUser, logout } = await import('./auth.js');
   handleTokenFromURL();
 
-  // 3. 현재 사용자 비동기 조회 → 로그인 UI 업데이트
+  // 3. Fetch current user → update auth UI
   const user = apiBaseUrl ? await fetchCurrentUser(apiBaseUrl) : null;
   updateAuthUI(user);
 
-  // 이벤트 위임: 로그인 / 로그아웃 / 프로필 드롭다운
+  // Event delegation: login / logout / profile dropdown
   headerEl.addEventListener('click', (e) => {
-    const loginBtn = e.target.closest('[data-action="login"]');
+    const loginBtn  = e.target.closest('[data-action="login"]');
     const logoutBtn = e.target.closest('[data-action="logout"]');
     const profileBtn = e.target.closest('[data-action="profile"]');
 
@@ -32,7 +35,7 @@ export async function initHeader({ page, apiBaseUrl }) {
     }
 
     if (logoutBtn) {
-      if (window.confirm('로그아웃 하시겠습니까?')) {
+      if (window.confirm(t('auth.logout_confirm'))) {
         logout();
         updateAuthUI(null);
       }
@@ -44,9 +47,9 @@ export async function initHeader({ page, apiBaseUrl }) {
     }
   });
 
-  // 프로필 드롭다운 외부 클릭 시 닫기
+  // Close profile dropdown on outside click
   document.addEventListener('click', (e) => {
-    const dropdown = document.getElementById('profile-dropdown');
+    const dropdown  = document.getElementById('profile-dropdown');
     const container = document.getElementById('profile-menu-container');
     if (dropdown && container && !container.contains(e.target)) {
       dropdown.classList.add('hidden');
@@ -54,57 +57,50 @@ export async function initHeader({ page, apiBaseUrl }) {
   });
 }
 
-/**
- * 로그인/로그아웃 UI 영역만 업데이트
- */
+// ─── Auth UI ────────────────────────────────────────────────────────────────
+
 function updateAuthUI(user) {
   const desktopArea = document.getElementById('desktop-auth-area');
-  const mobileArea = document.getElementById('mobile-auth-area');
-
+  const mobileArea  = document.getElementById('mobile-auth-area');
   if (desktopArea) desktopArea.innerHTML = buildDesktopAuth(user);
-  if (mobileArea) mobileArea.innerHTML = buildMobileAuth(user);
+  if (mobileArea)  mobileArea.innerHTML  = buildMobileAuth(user);
 }
 
 function buildDesktopAuth(user) {
   if (user) {
     const initial = (user.name || user.email || '?')[0].toUpperCase();
-    const credit = user.credit_balance ?? 0;
+    const credit  = user.credit_balance ?? 0;
     return `
       <div id="profile-menu-container" class="relative max-md:hidden">
-        <!-- 프로필 버튼 -->
         <button data-action="profile" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f0f1f4] hover:bg-gray-200 transition-all cursor-pointer select-none">
           <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shrink-0">${initial}</div>
           <span class="text-xs font-medium text-[#111318] max-w-[90px] truncate">${user.name || user.email}</span>
           <span class="material-symbols-outlined text-[#636e88] text-sm leading-none">expand_more</span>
         </button>
 
-        <!-- 드롭다운 -->
         <div id="profile-dropdown" class="hidden absolute top-[calc(100%+8px)] right-0 w-52 bg-white rounded-xl border border-[#dcdee5] shadow-xl z-50 overflow-hidden">
-          <!-- 잔여 크레딧 -->
           <div class="px-4 py-3 bg-[#f8f9ff] border-b border-[#e8eaf0] flex items-center justify-between">
-            <span class="text-xs text-[#636e88] font-medium">잔여 크레딧</span>
+            <span class="text-xs text-[#636e88] font-medium">${t('auth.remaining_credits')}</span>
             <span class="text-sm font-black text-primary">${credit.toLocaleString()} C</span>
           </div>
-          <!-- 메뉴 -->
           <div class="py-1">
             <a href="my-analyses.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">analytics</span>
-              분석결과
+              ${t('auth.my_analyses')}
             </a>
             <a href="credit-history.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">toll</span>
-              크레딧 사용내역
+              ${t('auth.credit_history')}
             </a>
             <a href="payment-history.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">receipt_long</span>
-              결제 내역
+              ${t('auth.payment_history')}
             </a>
           </div>
-          <!-- 로그아웃 -->
           <div class="border-t border-[#f0f1f4] py-1">
             <button data-action="logout" class="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
               <span class="material-symbols-outlined text-lg">logout</span>
-              로그아웃
+              ${t('auth.logout')}
             </button>
           </div>
         </div>
@@ -127,10 +123,9 @@ function buildDesktopAuth(user) {
 function buildMobileAuth(user) {
   if (user) {
     const initial = (user.name || user.email || '?')[0].toUpperCase();
-    const credit = user.credit_balance ?? 0;
+    const credit  = user.credit_balance ?? 0;
     return `
       <div class="border-t border-[#e5e7eb]">
-        <!-- 프로필 + 잔여 크레딧 -->
         <div class="px-5 py-4 bg-[#f8f9ff] border-b border-[#e8eaf0]">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">${initial}</div>
@@ -140,30 +135,28 @@ function buildMobileAuth(user) {
             </div>
           </div>
           <div class="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-[#e8eaf0]">
-            <span class="text-xs text-[#636e88] font-medium">잔여 크레딧</span>
+            <span class="text-xs text-[#636e88] font-medium">${t('auth.remaining_credits')}</span>
             <span class="text-sm font-black text-primary">${credit.toLocaleString()} C</span>
           </div>
         </div>
-        <!-- 메뉴 링크 -->
         <div class="px-5 py-2">
           <a href="my-analyses.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">analytics</span>
-            분석결과
+            ${t('auth.my_analyses')}
           </a>
           <a href="credit-history.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">toll</span>
-            크레딧 사용내역
+            ${t('auth.credit_history')}
           </a>
           <a href="payment-history.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">receipt_long</span>
-            결제 내역
+            ${t('auth.payment_history')}
           </a>
         </div>
-        <!-- 로그아웃 -->
         <div class="px-5 py-3 border-t border-[#f0f1f4]">
           <button data-action="logout" class="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-600 transition-colors">
             <span class="material-symbols-outlined text-lg">logout</span>
-            로그아웃
+            ${t('auth.logout')}
           </button>
         </div>
       </div>
@@ -183,6 +176,8 @@ function buildMobileAuth(user) {
     </div>
   `;
 }
+
+// ─── Header HTML ─────────────────────────────────────────────────────────────
 
 function buildHeaderHTML({ page }) {
   const logoHTML = `
@@ -206,7 +201,7 @@ function buildHeaderHTML({ page }) {
         <input
           id="header-search-input"
           class="flex-1 bg-transparent border-none text-sm text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0"
-          placeholder="다른 앱 분석하기"
+          placeholder="${t('header.search_placeholder')}"
           type="text"
         >
       </div>
@@ -221,7 +216,6 @@ function buildHeaderHTML({ page }) {
   const mobileDrawerContent = buildMobileDrawer({ page });
 
   return `
-    <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-50 w-full bg-white border-b border-solid border-[#e5e7eb] px-4 sm:px-6 md:px-10 lg:px-20 xl:px-[100px] py-3">
       <div class="flex items-center justify-between gap-3 max-w-[1200px] mx-auto">
         ${logoHTML}
@@ -230,34 +224,183 @@ function buildHeaderHTML({ page }) {
           <nav class="flex items-center gap-4 lg:gap-6 max-md:hidden">
             ${desktopNavLinks}
           </nav>
-          <!-- 로그인/프로필 영역 (updateAuthUI로 채워짐) -->
+          ${buildLangSwitcher()}
+          <!-- Auth area (filled by updateAuthUI) -->
           <div id="desktop-auth-area" class="max-md:hidden">
-            <!-- 로딩 중 placeholder -->
             <div class="w-[140px] h-9 rounded-lg bg-[#f0f1f4] animate-pulse"></div>
           </div>
           <!-- Hamburger (mobile) -->
-          <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f0f1f4] transition-colors" aria-label="메뉴 열기">
+          <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f0f1f4] transition-colors" aria-label="${t('header.menu_open')}">
             <span class="material-symbols-outlined text-[#111318]">menu</span>
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 z-[60] hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
 
-    <!-- Mobile Menu Drawer -->
     <div id="mobile-menu-drawer" class="fixed top-0 right-0 h-full w-[85vw] max-w-[320px] bg-white z-[70] translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:hidden">
       ${mobileDrawerContent}
     </div>
   `;
 }
 
+// ─── Language switcher ────────────────────────────────────────────────────────
+
+const LANG_OPTIONS = [
+  { code: 'ko', label: '한국어' },
+  { code: 'en', label: 'English' },
+  // { code: 'ja', label: '日本語' },  // uncomment when ready
+];
+
+function buildLangSwitcher() {
+  const current = getLang();
+  const currentLabel = LANG_OPTIONS.find(l => l.code === current)?.label ?? 'EN';
+
+  const options = LANG_OPTIONS.map(l => `
+    <button
+      data-set-lang="${l.code}"
+      class="flex items-center justify-between gap-2 w-full px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors ${l.code === current ? 'font-bold text-primary' : ''}"
+    >
+      ${l.label}
+      ${l.code === current ? '<span class="material-symbols-outlined text-primary text-sm">check</span>' : ''}
+    </button>
+  `).join('');
+
+  return `
+    <div id="lang-menu-container" class="relative max-md:hidden">
+      <button id="lang-toggle" class="flex items-center gap-1 h-9 px-2.5 rounded-lg hover:bg-[#f0f1f4] transition-colors text-xs font-medium text-[#636e88]">
+        <span class="material-symbols-outlined text-base leading-none">language</span>
+        <span>${currentLabel}</span>
+        <span class="material-symbols-outlined text-sm leading-none">expand_more</span>
+      </button>
+      <div id="lang-dropdown" class="hidden absolute top-[calc(100%+8px)] right-0 bg-white rounded-xl border border-[#dcdee5] shadow-xl z-50 overflow-hidden min-w-[130px]">
+        ${options}
+      </div>
+    </div>
+  `;
+}
+
+function attachLangSwitcherHandlers() {
+  const toggle   = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  const container = document.getElementById('lang-menu-container');
+
+  toggle?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+
+  document.addEventListener('click', (e) => {
+    if (dropdown && container && !container.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-set-lang]');
+    if (btn) setLang(btn.dataset.setLang);
+  });
+}
+
+// ─── Desktop nav + Mobile drawer ─────────────────────────────────────────────
+
+function buildDesktopNavLinks({ page }) {
+  const base   = 'text-sm font-medium leading-normal transition-colors';
+  const active = 'text-primary font-bold border-b-2 border-primary pb-0.5';
+  const inact  = 'text-[#111318] hover:text-primary';
+
+  return [
+    `<a class="${base} ${page === 'services' ? active : inact}" href="services.html">${t('nav.services')}</a>`,
+    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="pricing.html">${t('nav.pricing')}</a>`,
+    `<a class="${base} ${page === 'blog'     ? active : inact}" href="blog.html">${t('nav.blog')}</a>`,
+  ].join('');
+}
+
+function buildMobileDrawer({ page }) {
+  const current = getLang();
+  const drawerLogoHTML = `
+    <div class="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
+      <a href="https://taloninsight.com" class="flex items-center gap-2">
+        <svg class="size-7" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 8 C14 8 11 16 10 24 C9 30 12 36 15 38 C16 38.5 17 38 17 37 C17 35 15 32 15 28 C15 22 17 14 18 10 C18.5 8.5 17 7 16 7.5 C15 8 14 8 14 8Z" fill="#3b82f6"/>
+          <path d="M22 5 C22 5 20 14 19.5 23 C19 30 21 37 24 40 C25 41 26.5 40.5 26.5 39 C26.5 37 24.5 33 24.5 28 C24.5 21 26 12 26.5 7 C26.8 5.5 25 4 24 4.5 C23 5 22 5 22 5Z" fill="#1a56db"/>
+          <path d="M31 8 C31 8 33 16 34 24 C35 30 33 36 30 38 C29 38.5 28 38 28 37 C28 35 30 32 30 28 C30 22 28 14 27 10 C26.5 8.5 28 7 29 7.5 C30 8 31 8 31 8Z" fill="#60a5fa"/>
+          <path d="M12 36 C12 36 16 39 24 39 C32 39 36 36 36 36 C36 38 34 42 24 42 C14 42 12 38 12 36Z" fill="#1e3a8a"/>
+        </svg>
+        <div class="wm text-base"><span class="t">Talon</span><span class="i">Insight</span></div>
+      </a>
+      <button id="mobile-menu-close" class="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f0f1f4] transition-colors" aria-label="${t('header.menu_close')}">
+        <span class="material-symbols-outlined text-[#111318]">close</span>
+      </button>
+    </div>
+  `;
+
+  const mobileSearchHTML = page === 'analysis' ? `
+    <div class="px-5 py-4 border-b border-[#e5e7eb]">
+      <p class="text-xs font-semibold text-[#636e88] mb-2 uppercase tracking-wider">${t('header.mobile_search_label')}</p>
+      <div id="mobile-search-section" class="relative">
+        <div class="flex items-center h-10 rounded-lg bg-[#f0f1f4] px-3 focus-within:ring-2 focus-within:ring-primary focus-within:bg-white transition-all">
+          <span class="material-symbols-outlined text-[#636e88] text-lg mr-2">search</span>
+          <input
+            id="mobile-search-input"
+            class="flex-1 bg-transparent border-none text-sm text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0"
+            placeholder="${t('header.mobile_search_placeholder')}"
+            type="text"
+          >
+        </div>
+        <div id="mobile-search-dropdown" class="hidden absolute top-[calc(100%+4px)] left-0 w-full overflow-hidden rounded-xl border border-[#dcdee5] bg-white shadow-2xl z-50">
+          <div class="p-2">
+            <div id="mobile-dropdown-items" class="flex flex-col max-h-[250px] overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ` : '';
+
+  const mobileNavLinks = `
+    <nav class="flex flex-col px-5 py-2 flex-1">
+      <a href="services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-lg ${page === 'services' ? 'text-primary' : ''}">apps</span>
+        ${t('nav.services')}
+      </a>
+      <a href="pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-lg ${page === 'pricing' ? 'text-primary' : ''}">credit_card</span>
+        ${t('nav.pricing')}
+      </a>
+      <a href="blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-lg ${page === 'blog' ? 'text-primary' : ''}">article</span>
+        ${t('nav.blog')}
+      </a>
+    </nav>
+  `;
+
+  // Mobile language switcher
+  const mobileLangSwitcher = `
+    <div class="px-5 py-3 border-t border-[#f0f1f4]">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[#636e88] text-lg">language</span>
+        <div class="flex items-center gap-1">
+          ${LANG_OPTIONS.map(l => `
+            <button
+              data-set-lang="${l.code}"
+              class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${l.code === current ? 'bg-primary text-white' : 'text-[#636e88] hover:bg-[#f0f1f4]'}"
+            >${l.label}</button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  const mobileAuthPlaceholder = `<div id="mobile-auth-area"></div>`;
+
+  return drawerLogoHTML + mobileSearchHTML + mobileNavLinks + mobileLangSwitcher + mobileAuthPlaceholder;
+}
+
+// ─── Mobile menu handlers ─────────────────────────────────────────────────────
+
 function attachMobileMenuHandlers() {
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenuBtn     = document.getElementById('mobile-menu-btn');
   const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-  const mobileMenuDrawer = document.getElementById('mobile-menu-drawer');
-  const mobileMenuClose = document.getElementById('mobile-menu-close');
+  const mobileMenuDrawer  = document.getElementById('mobile-menu-drawer');
+  const mobileMenuClose   = document.getElementById('mobile-menu-close');
 
   function openMobileMenu() {
     mobileMenuOverlay.classList.remove('hidden');
@@ -280,94 +423,18 @@ function attachMobileMenuHandlers() {
   mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
 }
 
-function buildDesktopNavLinks({ page }) {
-  const base = 'text-sm font-medium leading-normal transition-colors';
-  const active = 'text-primary font-bold border-b-2 border-primary pb-0.5';
-  const inactive = 'text-[#111318] hover:text-primary';
+// ─── Analysis page header search ─────────────────────────────────────────────
 
-  const links = [];
-  links.push(`<a class="${base} ${page === 'services' ? active : inactive}" href="services.html">서비스</a>`);
-  links.push(`<a class="${base} ${page === 'pricing' ? active : inactive}" href="pricing.html">이용 플랜</a>`);
-  links.push(`<a class="${base} ${page === 'blog' ? active : inactive}" href="blog.html">블로그</a>`);
-  return links.join('');
-}
-
-function buildMobileDrawer({ page }) {
-  const drawerLogoHTML = `
-    <div class="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
-      <a href="https://taloninsight.com" class="flex items-center gap-2">
-        <svg class="size-7" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M14 8 C14 8 11 16 10 24 C9 30 12 36 15 38 C16 38.5 17 38 17 37 C17 35 15 32 15 28 C15 22 17 14 18 10 C18.5 8.5 17 7 16 7.5 C15 8 14 8 14 8Z" fill="#3b82f6"/>
-          <path d="M22 5 C22 5 20 14 19.5 23 C19 30 21 37 24 40 C25 41 26.5 40.5 26.5 39 C26.5 37 24.5 33 24.5 28 C24.5 21 26 12 26.5 7 C26.8 5.5 25 4 24 4.5 C23 5 22 5 22 5Z" fill="#1a56db"/>
-          <path d="M31 8 C31 8 33 16 34 24 C35 30 33 36 30 38 C29 38.5 28 38 28 37 C28 35 30 32 30 28 C30 22 28 14 27 10 C26.5 8.5 28 7 29 7.5 C30 8 31 8 31 8Z" fill="#60a5fa"/>
-          <path d="M12 36 C12 36 16 39 24 39 C32 39 36 36 36 36 C36 38 34 42 24 42 C14 42 12 38 12 36Z" fill="#1e3a8a"/>
-        </svg>
-        <div class="wm text-base"><span class="t">Talon</span><span class="i">Insight</span></div>
-      </a>
-      <button id="mobile-menu-close" class="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f0f1f4] transition-colors" aria-label="메뉴 닫기">
-        <span class="material-symbols-outlined text-[#111318]">close</span>
-      </button>
-    </div>
-  `;
-
-  const mobileSearchHTML = page === 'analysis' ? `
-    <div class="px-5 py-4 border-b border-[#e5e7eb]">
-      <p class="text-xs font-semibold text-[#636e88] mb-2 uppercase tracking-wider">다른 앱 분석하기</p>
-      <div id="mobile-search-section" class="relative">
-        <div class="flex items-center h-10 rounded-lg bg-[#f0f1f4] px-3 focus-within:ring-2 focus-within:ring-primary focus-within:bg-white transition-all">
-          <span class="material-symbols-outlined text-[#636e88] text-lg mr-2">search</span>
-          <input
-            id="mobile-search-input"
-            class="flex-1 bg-transparent border-none text-sm text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0"
-            placeholder="앱 이름 검색"
-            type="text"
-          >
-        </div>
-        <div id="mobile-search-dropdown" class="hidden absolute top-[calc(100%+4px)] left-0 w-full overflow-hidden rounded-xl border border-[#dcdee5] bg-white shadow-2xl z-50">
-          <div class="p-2">
-            <div id="mobile-dropdown-items" class="flex flex-col max-h-[250px] overflow-y-auto"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ` : '';
-
-  const mobileNavLinks = `
-    <nav class="flex flex-col px-5 py-2 flex-1">
-      <a href="services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
-        <span class="material-symbols-outlined text-lg ${page === 'services' ? 'text-primary' : ''}">apps</span>
-        서비스
-      </a>
-      <a href="pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
-        <span class="material-symbols-outlined text-lg ${page === 'pricing' ? 'text-primary' : ''}">credit_card</span>
-        이용 플랜
-      </a>
-      <a href="blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
-        <span class="material-symbols-outlined text-lg ${page === 'blog' ? 'text-primary' : ''}">article</span>
-        블로그
-      </a>
-    </nav>
-  `;
-
-  // 모바일 auth 영역은 updateAuthUI가 채움
-  const mobileAuthPlaceholder = `<div id="mobile-auth-area"></div>`;
-
-  return drawerLogoHTML + mobileSearchHTML + mobileNavLinks + mobileAuthPlaceholder;
-}
-
-/**
- * analysis 페이지 헤더 검색창 기능 초기화
- */
 function initHeaderSearch(apiBaseUrl) {
   let debounceTimer;
 
-  const headerInput = document.getElementById('header-search-input');
-  const headerDropdown = document.getElementById('header-search-dropdown');
+  const headerInput        = document.getElementById('header-search-input');
+  const headerDropdown     = document.getElementById('header-search-dropdown');
   const headerDropdownItems = document.getElementById('header-dropdown-items');
   const headerSearchSection = document.getElementById('header-search-section');
 
-  const mobileInput = document.getElementById('mobile-search-input');
-  const mobileDropdown = document.getElementById('mobile-search-dropdown');
+  const mobileInput        = document.getElementById('mobile-search-input');
+  const mobileDropdown     = document.getElementById('mobile-search-dropdown');
   const mobileDropdownItems = document.getElementById('mobile-dropdown-items');
   const mobileSearchSection = document.getElementById('mobile-search-section');
 
@@ -403,7 +470,7 @@ function initHeaderSearch(apiBaseUrl) {
     dropdownItems.innerHTML = `
       <div class="flex items-center justify-center p-4 text-[#636e88]">
         <div class="w-4 h-4 border-2 border-gray-200 border-t-primary rounded-full animate-spin mr-2"></div>
-        검색 중...
+        ${t('header.searching')}
       </div>
     `;
     dropdown.classList.remove('hidden');
@@ -429,11 +496,11 @@ function initHeaderSearch(apiBaseUrl) {
       if (!response.ok) return [];
       const data = await response.json();
       return (data.results || []).map(app => ({
-        appName: app.trackName,
-        appStoreUrl: app.trackViewUrl,
+        appName:      app.trackName,
+        appStoreUrl:  app.trackViewUrl,
         playStoreUrl: null,
         iconImageUrl: app.artworkUrl512 || app.artworkUrl100,
-        developer: app.artistName,
+        developer:    app.artistName,
       }));
     } catch { return []; }
   }
@@ -471,7 +538,7 @@ function initHeaderSearch(apiBaseUrl) {
 
   function renderDropdown(results, dropdown, dropdownItems) {
     if (!results || results.length === 0) {
-      dropdownItems.innerHTML = `<div class="flex items-center justify-center p-4 text-[#636e88] text-sm">검색 결과가 없습니다</div>`;
+      dropdownItems.innerHTML = `<div class="flex items-center justify-center p-4 text-[#636e88] text-sm">${t('header.no_results')}</div>`;
       dropdown.classList.remove('hidden');
       return;
     }
@@ -492,11 +559,11 @@ function initHeaderSearch(apiBaseUrl) {
       item.addEventListener('click', () => {
         const app = JSON.parse(item.dataset.app.replace(/&apos;/g, "'"));
         const params = new URLSearchParams();
-        if (app.appStoreUrl) params.set('appStoreUrl', app.appStoreUrl);
+        if (app.appStoreUrl)  params.set('appStoreUrl', app.appStoreUrl);
         if (app.playStoreUrl) params.set('playStoreUrl', app.playStoreUrl);
-        if (app.appName) params.set('appName', app.appName);
+        if (app.appName)      params.set('appName', app.appName);
         if (app.iconImageUrl) params.set('iconUrl', app.iconImageUrl);
-        if (app.developer) params.set('developer', app.developer);
+        if (app.developer)    params.set('developer', app.developer);
         window.location.href = `/analysis.html?${params.toString()}`;
       });
     });

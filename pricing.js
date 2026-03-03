@@ -1,5 +1,6 @@
 import { initHeader } from './components/header.js';
 import { initFooter } from './components/footer.js';
+import { applyTranslations, t } from './components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -13,8 +14,10 @@ const PRODUCTS = [
 
 let tossClientKey = null;
 
+document.title = t('pricing.page_title');
 initHeader({ page: 'pricing', apiBaseUrl: API_BASE_URL });
 initFooter();
+applyTranslations();
 
 async function init() {
   // Toss 클라이언트 키 로드
@@ -42,13 +45,13 @@ function generateOrderId() {
 async function handlePurchase(productId) {
   const token = localStorage.getItem('auth_token');
   if (!token) {
-    alert('로그인 후 이용해 주세요.');
+    alert(t('pricing.login_required'));
     location.href = '/';
     return;
   }
 
   if (!tossClientKey) {
-    alert('결제 시스템을 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.');
+    alert(t('pricing.payment_error'));
     return;
   }
 
@@ -66,11 +69,11 @@ async function handlePurchase(productId) {
     });
     if (!prepRes.ok) {
       const err = await prepRes.json().catch(() => ({}));
-      alert(err.error || '결제 준비에 실패했어요.');
+      alert(err.error || t('pricing.prepare_error'));
       return;
     }
   } catch {
-    alert('네트워크 오류가 발생했어요. 다시 시도해 주세요.');
+    alert(t('pricing.network_error'));
     return;
   }
 

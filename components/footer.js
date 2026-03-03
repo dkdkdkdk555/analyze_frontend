@@ -1,6 +1,8 @@
 /**
- * 공통 푸터 컴포넌트
+ * Common footer component
  */
+import { t } from './i18n.js';
+
 export function initFooter() {
   const footerEl = document.getElementById('app-footer');
   if (!footerEl) return;
@@ -19,28 +21,28 @@ export function initFooter() {
             <div class="wm text-xs md:text-sm"><span class="t">Talon</span><span class="i">Insight</span></div>
           </div>
           <p class="text-[#636e88] text-[10px] md:text-xs max-w-xs">
-            데이터로 증명하는 앱 성장 파트너. 시장 조사부터 경쟁사 분석까지 한 번에 해결하세요.
+            ${t('footer.tagline')}
           </p>
           <p class="text-[#636e88] text-[10px]">
-            © 2026 TalonInsight All rights reserved.</p>
-          <p class="text-[#636e88] text-[10px] leading-relaxed">
-            사업자등록번호 136-15-09172<br>
-            서울특별시 관악구 쑥고개로30길 34, 1층 101호(봉천동)
+            © 2026 TalonInsight All rights reserved.
           </p>
           <p class="text-[#636e88] text-[10px] leading-relaxed">
-            본 서비스의 주문 및 결제는 <strong>Paddle.com</strong> 및 <strong>PayPal</strong>에서 처리됩니다.<br>
-            Paddle은 법적 판매자(MoR)로서 결제 문의 및 환불을 책임집니다.
+            ${t('footer.biz_number')}<br>
+            ${t('footer.address')}
+          </p>
+          <p class="text-[#636e88] text-[10px] leading-relaxed">
+            ${t('footer.paddle_notice')}
           </p>
         </div>
         <div class="flex flex-row gap-10 md:gap-16 items-start">
           <div class="flex flex-col gap-2 md:gap-3">
-            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">Policy</span>
-            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/terms">이용약관</a>
-            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/privacy">개인정보처리방침</a>
-            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/refund">환불정책</a>
+            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">${t('footer.policy')}</span>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/terms">${t('footer.terms')}</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/privacy">${t('footer.privacy')}</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/refund">${t('footer.refund')}</a>
           </div>
           <div class="flex flex-col gap-2 md:gap-3 items-end text-right">
-            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">Contact</span>
+            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">${t('footer.contact')}</span>
             <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors"
               href="mailto:healthtier25@gmail.com">taloninsight@gmail.com</a>
           </div>
