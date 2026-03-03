@@ -10,6 +10,15 @@ initFooter();
 applyTranslations();
 
 const lang = getLang();
-const res = await fetch(`/assets/policy/${lang}/terms.md`);
-const md = await res.text();
-document.getElementById('policy-content').innerHTML = marked.parse(md);
+console.log('[terms] lang =', lang);
+
+try {
+  const res = await fetch(`/assets/policy/en/terms.md`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const md = await res.text();
+  document.getElementById('policy-content').innerHTML = marked.parse(md);
+} catch (err) {
+  console.error('[terms] Failed to load policy content:', err);
+  document.getElementById('policy-content').innerHTML =
+    `<p class="text-red-500">Failed to load content (lang: ${lang}). Error: ${err.message}</p>`;
+}

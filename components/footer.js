@@ -37,9 +37,9 @@ export function initFooter() {
         <div class="flex flex-row gap-10 md:gap-16 items-start">
           <div class="flex flex-col gap-2 md:gap-3">
             <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">${t('footer.policy')}</span>
-            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/terms">${t('footer.terms')}</a>
-            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/privacy">${t('footer.privacy')}</a>
-            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors" href="/refund">${t('footer.refund')}</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors whitespace-nowrap" href="/terms">${t('footer.terms')}</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors whitespace-nowrap" href="/privacy">${t('footer.privacy')}</a>
+            <a class="text-[10px] md:text-xs text-[#636e88] hover:text-primary transition-colors whitespace-nowrap" href="/refund">${t('footer.refund')}</a>
           </div>
           <div class="flex flex-col gap-2 md:gap-3 items-end text-right">
             <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#111318]">${t('footer.contact')}</span>

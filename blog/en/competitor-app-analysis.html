@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <script>
     (function() {
       var saved = localStorage.getItem('lang');
       var browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
       var lang = saved || (browserLang.startsWith('ko') ? 'ko' : 'en');
-      if (lang === 'en') {
+      if (lang === 'ko') {
         var currentPath = window.location.pathname;
-        var newPath = currentPath.replace('/blog/', '/blog/en/');
+        var newPath = currentPath.replace('/blog/en/', '/blog/');
         window.location.replace(newPath);
       }
     })();
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기 | TalonInsight</title>
-  <meta name="description" content="상위 앱들은 무엇이 다를까요? 경쟁사 앱을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다. 무료 경쟁 앱 분석 방법 포함.">
+  <title>Competitor App Analysis: Finding Common Traits of Successful Apps | TalonInsight</title>
+  <meta name="description" content="What makes top apps different? A systematic framework for analyzing and benchmarking competitor apps. Free competitor analysis methods included.">
 
   <!-- Open Graph -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://analyze-dega.pages.dev/blog/competitor-app-analysis.html">
-  <meta property="og:title" content="경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기">
-  <meta property="og:description" content="상위 앱들을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다.">
+  <meta property="og:url" content="https://analyze-dega.pages.dev/blog/en/competitor-app-analysis.html">
+  <meta property="og:title" content="Competitor App Analysis: Finding Common Traits of Successful Apps">
+  <meta property="og:description" content="A systematic framework for analyzing and benchmarking top apps.">
   <meta property="og:image" content="https://analyze-dega.pages.dev/assets/images/blog1.png">
   <meta property="og:site_name" content="TalonInsight">
-  <meta property="og:locale" content="ko_KR">
+  <meta property="og:locale" content="en_US">
   <meta property="article:published_time" content="2026-02-04">
 
   <!-- SEO Meta Tags -->
-  <link rel="canonical" href="https://analyze-dega.pages.dev/blog/competitor-app-analysis.html">
+  <link rel="canonical" href="https://analyze-dega.pages.dev/blog/en/competitor-app-analysis.html">
   <meta name="robots" content="index, follow">
-  <meta name="keywords" content="경쟁사 앱 분석, 경쟁 앱 분석 방법, 앱 벤치마킹, 앱 경쟁 분석, 성공한 앱 분석, 앱 전략 수립">
+  <meta name="keywords" content="competitor app analysis, app competition analysis, app benchmarking, app competitive analysis, successful app analysis, app strategy">
   <meta name="author" content="TalonInsight">
   <meta name="theme-color" content="#1E5AE8">
 
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기",
-    "description": "상위 앱들을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다.",
+    "headline": "Competitor App Analysis: Finding Common Traits of Successful Apps",
+    "description": "A systematic framework for analyzing and benchmarking top apps.",
     "image": "https://analyze-dega.pages.dev/assets/images/blog1.png",
     "author": {"@type": "Organization", "name": "TalonInsight"},
     "publisher": {"@type": "Organization", "name": "TalonInsight"},
@@ -50,12 +50,12 @@
   }
   </script>
 
-  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../../styles.css">
   <script>
     tailwind.config = {
       theme: { extend: { colors: { "primary": "#1E5AE8", "background-light": "#f6f6f8" }, fontFamily: { "display": ["Inter", "Noto Sans KR", "sans-serif"] } } }
@@ -66,7 +66,7 @@
   <div class="relative flex min-h-screen w-full flex-col">
     <!-- Navigation -->
     <header class="sticky top-0 z-50 flex items-center justify-between border-b border-[#f0f1f4] bg-white/80 backdrop-blur-md px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-3 md:py-4">
-      <a href="../index.html" class="flex items-center gap-2 text-primary">
+      <a href="../../index.html" class="flex items-center gap-2 text-primary">
         <div class="size-6 md:size-8">
           <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path>
@@ -75,8 +75,8 @@
         <span class="text-[#111318] font-black text-base md:text-xl tracking-tight">TalonInsight</span>
       </a>
       <nav class="flex items-center gap-4 md:gap-8">
-        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../index.html">홈</a>
-        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../blog.html">블로그</a>
+        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../../index.html">Home</a>
+        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../../blog.html">Blog</a>
       </nav>
     </header>
 
@@ -84,33 +84,33 @@
       <article class="mx-auto max-w-[720px]">
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-sm mb-6 text-[#636e88]">
-          <a href="../index.html" class="hover:text-primary">홈</a><span>/</span>
-          <a href="../blog.html" class="hover:text-primary">블로그</a><span>/</span>
-          <span class="text-[#111318]">경쟁사 앱 분석</span>
+          <a href="../../index.html" class="hover:text-primary">Home</a><span>/</span>
+          <a href="../../blog.html" class="hover:text-primary">Blog</a><span>/</span>
+          <span class="text-[#111318]">Competitor App Analysis</span>
         </nav>
 
         <!-- Header -->
         <header class="mb-8 md:mb-10">
           <div class="flex items-center gap-2 mb-4">
-            <span class="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded">전략</span>
-            <span class="text-xs text-[#636e88]">2026.02.04</span>
-            <span class="text-xs text-[#636e88]">7분 읽기</span>
+            <span class="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded">Strategy</span>
+            <span class="text-xs text-[#636e88]">Feb 4, 2026</span>
+            <span class="text-xs text-[#636e88]">7 min read</span>
           </div>
-          <h1 class="text-2xl md:text-4xl font-black leading-tight mb-4">경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기</h1>
-          <p class="text-[#636e88] text-base md:text-lg">상위 앱들은 무엇이 다를까요? 체계적으로 분석하고 벤치마킹하는 프레임워크</p>
+          <h1 class="text-2xl md:text-4xl font-black leading-tight mb-4">Competitor App Analysis: Finding Common Traits of Successful Apps</h1>
+          <p class="text-[#636e88] text-base md:text-lg">What makes top apps different? A systematic framework for analyzing and benchmarking</p>
         </header>
 
         <!-- Featured Image -->
         <figure class="mb-8 md:mb-10">
-          <img src="../assets/images/blog1.png" alt="경쟁사 앱 분석 가이드" class="w-full rounded-xl shadow-sm">
+          <img src="../../assets/images/blog1.png" alt="Competitor App Analysis Guide" class="w-full rounded-xl shadow-sm">
         </figure>
 
         <!-- Content -->
         <div class="prose prose-lg max-w-none">
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">성공한 앱들의 3가지 공통점</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">3 Common Traits of Successful Apps</h2>
             <p class="text-[#444] leading-relaxed mb-4">
-              수천 개의 앱 중 상위 100위 안에 드는 앱들은 공통적인 특징을 가지고 있습니다.
+              Among thousands of apps, those that rank in the top 100 share common characteristics.
             </p>
 
             <div class="space-y-4 mb-6">
@@ -119,11 +119,11 @@
                   <span class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
                     <span class="material-symbols-outlined text-lg">target</span>
                   </span>
-                  명확한 핵심 가치 (Core Value)
+                  Clear Core Value
                 </h3>
                 <p class="text-[#636e88] text-sm">
-                  성공한 앱은 "이 앱을 왜 써야 하는가?"에 대한 답이 명확합니다.
-                  한 문장으로 설명할 수 없다면 핵심 가치가 불분명한 것입니다.
+                  Successful apps have a clear answer to "Why should I use this app?"
+                  If you can't explain it in one sentence, the core value is unclear.
                 </p>
               </div>
 
@@ -132,11 +132,11 @@
                   <span class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
                     <span class="material-symbols-outlined text-lg">bolt</span>
                   </span>
-                  즉각적인 가치 전달 (Time to Value)
+                  Immediate Value Delivery (Time to Value)
                 </h3>
                 <p class="text-[#636e88] text-sm">
-                  사용자가 앱을 설치하고 첫 번째 가치를 경험하기까지의 시간이 짧습니다.
-                  복잡한 온보딩 없이 바로 핵심 기능을 사용할 수 있습니다.
+                  The time from installing the app to experiencing the first value is short.
+                  Users can access core features immediately without complex onboarding.
                 </p>
               </div>
 
@@ -145,157 +145,157 @@
                   <span class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
                     <span class="material-symbols-outlined text-lg">repeat</span>
                   </span>
-                  반복 사용 유도 (Retention Loop)
+                  Retention Loop
                 </h3>
                 <p class="text-[#636e88] text-sm">
-                  사용자가 자연스럽게 다시 앱을 열게 만드는 메커니즘이 있습니다.
-                  알림, 습관 형성, 진행 상황 추적 등이 대표적입니다.
+                  There's a mechanism that naturally brings users back to the app.
+                  Notifications, habit formation, and progress tracking are typical examples.
                 </p>
               </div>
             </div>
           </section>
 
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">경쟁 앱 분석 체크리스트</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Competitor App Analysis Checklist</h2>
             <p class="text-[#444] leading-relaxed mb-4">
-              경쟁 앱을 분석할 때 다음 항목들을 체계적으로 확인하세요.
+              Use this checklist to systematically analyze competitor apps.
             </p>
 
             <div class="bg-white rounded-xl border border-[#dcdee5] overflow-hidden mb-6">
               <div class="bg-[#f6f6f8] px-5 py-3 font-bold border-b border-[#dcdee5]">
-                스토어 등록정보 분석
+                Store Listing Analysis
               </div>
               <ul class="divide-y divide-[#f0f1f4]">
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">앱 이름과 부제목에 어떤 키워드를 사용하는가?</span>
+                  <span class="text-sm">What keywords are used in the app name and subtitle?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">앱 설명에서 강조하는 핵심 가치는 무엇인가?</span>
+                  <span class="text-sm">What core value does the description emphasize?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">스크린샷에서 보여주는 주요 기능은?</span>
+                  <span class="text-sm">What main features do the screenshots show?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">업데이트 내역에서 최근 집중하는 영역은?</span>
+                  <span class="text-sm">What areas are they focusing on in recent updates?</span>
                 </li>
               </ul>
             </div>
 
             <div class="bg-white rounded-xl border border-[#dcdee5] overflow-hidden mb-6">
               <div class="bg-[#f6f6f8] px-5 py-3 font-bold border-b border-[#dcdee5]">
-                수익 모델 분석
+                Revenue Model Analysis
               </div>
               <ul class="divide-y divide-[#f0f1f4]">
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">무료/유료/프리미엄 중 어떤 모델인가?</span>
+                  <span class="text-sm">Is it free, paid, or freemium?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">인앱 결제 항목은 무엇인가?</span>
+                  <span class="text-sm">What in-app purchase items are available?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">구독 가격대는 어떻게 되는가?</span>
+                  <span class="text-sm">What's the subscription price range?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">광고 노출 방식은 어떠한가?</span>
+                  <span class="text-sm">How are ads displayed?</span>
                 </li>
               </ul>
             </div>
 
             <div class="bg-white rounded-xl border border-[#dcdee5] overflow-hidden">
               <div class="bg-[#f6f6f8] px-5 py-3 font-bold border-b border-[#dcdee5]">
-                사용자 반응 분석
+                User Response Analysis
               </div>
               <ul class="divide-y divide-[#f0f1f4]">
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">평균 평점과 리뷰 수는?</span>
+                  <span class="text-sm">What's the average rating and review count?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">긍정 리뷰에서 칭찬하는 포인트는?</span>
+                  <span class="text-sm">What do positive reviews praise?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">부정 리뷰에서 불만인 포인트는?</span>
+                  <span class="text-sm">What do negative reviews complain about?</span>
                 </li>
                 <li class="px-5 py-3 flex items-center gap-3">
                   <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                  <span class="text-sm">개발사의 리뷰 응대 방식은?</span>
+                  <span class="text-sm">How does the developer respond to reviews?</span>
                 </li>
               </ul>
             </div>
           </section>
 
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">경쟁 우위 찾기: SWOT 분석</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Finding Competitive Advantage: SWOT Analysis</h2>
             <p class="text-[#444] leading-relaxed mb-4">
-              경쟁 앱 분석 후, 내 앱의 포지셔닝을 정의하기 위해 SWOT 분석을 수행합니다.
+              After analyzing competitor apps, perform a SWOT analysis to define your app's positioning.
             </p>
 
             <div class="grid grid-cols-2 gap-3">
               <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h4 class="font-bold text-green-700 mb-2 text-sm">Strengths (강점)</h4>
-                <p class="text-xs text-green-600">경쟁 앱 대비 내가 더 잘할 수 있는 것</p>
+                <h4 class="font-bold text-green-700 mb-2 text-sm">Strengths</h4>
+                <p class="text-xs text-green-600">What can I do better than competitors?</p>
               </div>
               <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                <h4 class="font-bold text-red-700 mb-2 text-sm">Weaknesses (약점)</h4>
-                <p class="text-xs text-red-600">경쟁 앱 대비 부족한 것</p>
+                <h4 class="font-bold text-red-700 mb-2 text-sm">Weaknesses</h4>
+                <p class="text-xs text-red-600">Where am I lacking compared to competitors?</p>
               </div>
               <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 class="font-bold text-blue-700 mb-2 text-sm">Opportunities (기회)</h4>
-                <p class="text-xs text-blue-600">경쟁 앱이 놓치고 있는 시장 기회</p>
+                <h4 class="font-bold text-blue-700 mb-2 text-sm">Opportunities</h4>
+                <p class="text-xs text-blue-600">What market opportunities are competitors missing?</p>
               </div>
               <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <h4 class="font-bold text-orange-700 mb-2 text-sm">Threats (위협)</h4>
-                <p class="text-xs text-orange-600">진입을 어렵게 하는 장벽</p>
+                <h4 class="font-bold text-orange-700 mb-2 text-sm">Threats</h4>
+                <p class="text-xs text-orange-600">What barriers make entry difficult?</p>
               </div>
             </div>
           </section>
 
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">실전 팁: 틈새 시장 공략하기</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Pro Tip: Targeting Niche Markets</h2>
             <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-lg mb-4">
               <p class="text-[#111318] font-medium">
-                "모든 사람을 만족시키려 하지 마세요. 특정 사용자층을 완벽하게 만족시키는 것이 성공의 열쇠입니다."
+                "Don't try to please everyone. The key to success is perfectly satisfying a specific user segment."
               </p>
             </div>
             <ul class="list-disc pl-6 space-y-2 text-[#444]">
-              <li><strong>특정 직업군 타겟:</strong> 일반 가계부 → 프리랜서 전용 가계부</li>
-              <li><strong>특정 상황 타겟:</strong> 일반 운동 앱 → 홈트레이닝 전용 앱</li>
-              <li><strong>특정 연령대 타겟:</strong> 일반 건강 앱 → 시니어 전용 건강 관리 앱</li>
-              <li><strong>특정 기능 집중:</strong> 올인원 → 한 가지 기능을 극도로 잘하는 앱</li>
+              <li><strong>Target specific professions:</strong> General budget app → Freelancer-only budget app</li>
+              <li><strong>Target specific situations:</strong> General fitness app → Home workout-only app</li>
+              <li><strong>Target specific age groups:</strong> General health app → Senior-only health management app</li>
+              <li><strong>Focus on specific features:</strong> All-in-one → An app that does one thing extremely well</li>
             </ul>
           </section>
 
           <!-- CTA -->
           <div class="bg-primary rounded-xl p-6 md:p-8 text-center text-white">
-            <h3 class="text-xl font-bold mb-3">경쟁 앱 분석 자동화하기</h3>
-            <p class="text-white/80 mb-5 text-sm">TalonInsight가 경쟁 앱의 핵심 가치와 미해결 문제를 찾아드립니다</p>
-            <a href="../index.html" class="inline-flex items-center justify-center rounded-lg h-11 px-8 bg-white text-primary text-sm font-bold hover:bg-gray-100 transition-colors">
-              무료로 분석 시작
+            <h3 class="text-xl font-bold mb-3">Automate Competitor App Analysis</h3>
+            <p class="text-white/80 mb-5 text-sm">TalonInsight finds competitor apps' core value and unresolved problems for you</p>
+            <a href="../../index.html" class="inline-flex items-center justify-center rounded-lg h-11 px-8 bg-white text-primary text-sm font-bold hover:bg-gray-100 transition-colors">
+              Start Free Analysis
             </a>
           </div>
         </div>
 
         <!-- Related Posts -->
         <div class="mt-12 pt-8 border-t border-[#dcdee5]">
-          <h3 class="text-lg font-bold mb-6">관련 글</h3>
+          <h3 class="text-lg font-bold mb-6">Related Articles</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <a href="app-market-research-guide.html" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
               <div class="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-2xl text-primary">query_stats</span>
               </div>
               <div>
-                <h4 class="font-bold text-sm mb-1">앱 시장조사 완벽 가이드</h4>
-                <p class="text-[#636e88] text-xs line-clamp-2">1인 개발자를 위한 무료 분석 방법</p>
+                <h4 class="font-bold text-sm mb-1">Complete App Market Research Guide</h4>
+                <p class="text-[#636e88] text-xs line-clamp-2">Free analysis methods for solo developers</p>
               </div>
             </a>
             <a href="playstore-review-analysis.html" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
@@ -303,8 +303,8 @@
                 <span class="material-symbols-outlined text-2xl text-green-500">reviews</span>
               </div>
               <div>
-                <h4 class="font-bold text-sm mb-1">플레이스토어 리뷰 분석</h4>
-                <p class="text-[#636e88] text-xs line-clamp-2">사용자 니즈 파악하기</p>
+                <h4 class="font-bold text-sm mb-1">Play Store Review Analysis</h4>
+                <p class="text-[#636e88] text-xs line-clamp-2">Understanding user needs</p>
               </div>
             </a>
           </div>
@@ -315,7 +315,7 @@
     <footer class="border-t border-[#f0f1f4] bg-white py-8 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
       <div class="mx-auto max-w-[720px] flex justify-between items-start">
         <div>
-          <a href="../index.html" class="flex items-center gap-2 text-primary opacity-80 mb-2">
+          <a href="../../index.html" class="flex items-center gap-2 text-primary opacity-80 mb-2">
             <div class="size-5"><svg fill="none" viewBox="0 0 48 48"><path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path></svg></div>
             <span class="font-black text-xs">TalonInsight</span>
           </a>

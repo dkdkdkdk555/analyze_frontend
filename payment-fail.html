@@ -6,6 +6,7 @@
   <title>결제 실패 - TalonInsight</title>
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -14,7 +15,7 @@
       theme: {
         extend: {
           colors: { "primary": "#1E5AE8" },
-          fontFamily: { "display": ["Noto Sans KR", "sans-serif"] },
+          fontFamily: { "display": ["Inter", "Noto Sans KR", "sans-serif"] },
         }
       }
     }
@@ -25,22 +26,20 @@
     <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
       <span class="material-symbols-outlined text-red-400" style="font-size:36px">cancel</span>
     </div>
-    <h2 class="text-xl font-black text-[#111318] mb-2">결제가 취소됐어요</h2>
-    <p id="fail-msg" class="text-[#636e88] text-sm leading-relaxed mb-7">결제가 완료되지 않았어요. 크레딧은 차감되지 않았습니다.</p>
+    <h2 class="text-xl font-black text-[#111318] mb-2" data-i18n="payment.cancel_title">결제가 취소됐어요</h2>
+    <p id="fail-msg" class="text-[#636e88] text-sm leading-relaxed mb-7" data-i18n="payment.cancel_msg">결제가 완료되지 않았어요. 크레딧은 차감되지 않았습니다.</p>
     <a href="/pricing.html"
-      class="block w-full py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors mb-2">
+      class="block w-full py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors mb-2"
+      data-i18n="payment.retry">
       다시 시도
     </a>
     <a href="/"
-      class="block w-full py-3 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors">
+      class="block w-full py-3 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors"
+      data-i18n="payment.go_home">
       홈으로
     </a>
   </div>
 
-  <script>
-    const params = new URLSearchParams(location.search);
-    const msg = params.get('message');
-    if (msg) document.getElementById('fail-msg').textContent = decodeURIComponent(msg);
-  </script>
+  <script type="module" src="payment-fail.js"></script>
 </body>
 </html>

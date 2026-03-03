@@ -93,6 +93,25 @@ const TRANSLATIONS = {
     'pricing.network_error':      '네트워크 오류가 발생했어요. 다시 시도해 주세요.',
     'pricing.prepare_error':      '결제 준비에 실패했어요.',
 
+    // ── Payment result pages ──────────────────────────────────────────
+    'payment.success_page_title': '결제 완료 - TalonInsight',
+    'payment.fail_page_title':    '결제 실패 - TalonInsight',
+    'payment.loading':            '결제를 확인하는 중이에요...',
+    'payment.success_title':      '충전 완료!',
+    'payment.success_msg':        '{n}크레딧이 충전됐어요. 이제 분석을 마음껏 이용해 보세요!',
+    'payment.top_up_more':        '더 충전하기',
+    'payment.start_analysis':     '분석 시작하기',
+    'payment.error_title':        '결제 처리 실패',
+    'payment.error_default':      '결제 승인 중 오류가 발생했어요.',
+    'payment.cancel_title':       '결제가 취소됐어요',
+    'payment.cancel_msg':         '결제가 완료되지 않았어요. 크레딧은 차감되지 않았습니다.',
+    'payment.retry':              '다시 시도',
+    'payment.go_home':            '홈으로',
+    'payment.invalid_info':       '결제 정보가 올바르지 않아요.',
+    'payment.login_required':     '로그인이 필요해요.',
+    'payment.confirm_error':      '결제 승인에 실패했어요.',
+    'payment.network_error':      '네트워크 오류가 발생했어요.',
+
     // ── Policy pages ─────────────────────────────────────────────────
     'privacy.page_title':        '개인정보처리방침 - TalonInsight',
     'refund.page_title':         '환불정책 - TalonInsight',
@@ -141,6 +160,23 @@ const TRANSLATIONS = {
     'services.coming_title':     '준비 중인 기능이에요',
     'services.coming_desc':      '그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!',
     'services.coming_confirm':   '확인',
+
+    // ── Blog page ───────────────────────────────────────────────────────
+    'blog.page_title':           '블로그 - 앱 시장조사 & 분석 인사이트 | TalonInsight',
+    'blog.hero_title':           '앱 분석 인사이트',
+    'blog.hero_subtitle':        '앱 시장조사, 경쟁사 분석, 리뷰 분석에 대한 실용적인 가이드',
+    'blog.tag_guide':            '가이드',
+    'blog.tag_analysis':         '분석방법',
+    'blog.tag_strategy':         '전략',
+    'blog.post1_title':          '앱 시장조사 완벽 가이드: 1인 개발자를 위한 무료 분석 방법',
+    'blog.post1_desc':           '앱을 출시하기 전 반드시 해야 할 시장조사. 비용 없이 경쟁 앱을 분석하고 시장 기회를 찾는 방법을 알려드립니다.',
+    'blog.post2_title':          '플레이스토어 리뷰 분석으로 사용자 니즈 파악하기',
+    'blog.post2_desc':           '경쟁 앱의 리뷰를 분석해 사용자들이 정말 원하는 것을 찾고, 차별화 포인트를 발굴하는 방법을 소개합니다.',
+    'blog.post3_title':          '경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기',
+    'blog.post3_desc':           '상위 앱들은 무엇이 다를까요? 경쟁사 앱을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다.',
+    'blog.cta_title':            '지금 바로 앱 분석 시작하기',
+    'blog.cta_desc':             '분석하고 싶은 앱 이름만 입력하세요. AI가 시장 분석부터 리뷰 인사이트까지 제공합니다.',
+    'blog.cta_button':           '무료로 분석하기',
   },
 
   en: {
@@ -224,6 +260,25 @@ const TRANSLATIONS = {
     'pricing.network_error':      'A network error occurred. Please try again.',
     'pricing.prepare_error':      'Failed to prepare your payment.',
 
+    // ── Payment result pages ──────────────────────────────────────────
+    'payment.success_page_title': 'Payment Complete - TalonInsight',
+    'payment.fail_page_title':    'Payment Failed - TalonInsight',
+    'payment.loading':            'Verifying your payment...',
+    'payment.success_title':      'Credits Added!',
+    'payment.success_msg':        'Your {n} credits are ready. Start analyzing now!',
+    'payment.top_up_more':        'Top Up More',
+    'payment.start_analysis':     'Start Analyzing',
+    'payment.error_title':        'Payment Failed',
+    'payment.error_default':      'An error occurred while confirming your payment.',
+    'payment.cancel_title':       'Payment Cancelled',
+    'payment.cancel_msg':         'Your payment was not completed. No credits were charged.',
+    'payment.retry':              'Try Again',
+    'payment.go_home':            'Back to Home',
+    'payment.invalid_info':       'Invalid payment information.',
+    'payment.login_required':     'Login required.',
+    'payment.confirm_error':      'Payment confirmation failed.',
+    'payment.network_error':      'A network error occurred.',
+
     // ── Policy pages ─────────────────────────────────────────────────
     'privacy.page_title':        'Privacy Policy - TalonInsight',
     'refund.page_title':         'Refund Policy - TalonInsight',
@@ -272,6 +327,23 @@ const TRANSLATIONS = {
     'services.coming_title':     'Coming Soon',
     'services.coming_desc':      'Group analysis is almost ready.<br>Hang tight — we\'ll let you know when it\'s live!',
     'services.coming_confirm':   'Got it',
+
+    // ── Blog page ───────────────────────────────────────────────────────
+    'blog.page_title':           'Blog - App Market Research & Analysis Insights | TalonInsight',
+    'blog.hero_title':           'App Analysis Insights',
+    'blog.hero_subtitle':        'Practical guides on app market research, competitor analysis, and review analysis',
+    'blog.tag_guide':            'Guide',
+    'blog.tag_analysis':         'Analysis',
+    'blog.tag_strategy':         'Strategy',
+    'blog.post1_title':          'Complete App Market Research Guide: Free Analysis Methods for Solo Developers',
+    'blog.post1_desc':           'Essential market research before launching your app. Learn how to analyze competitor apps and find market opportunities for free.',
+    'blog.post2_title':          'Understanding User Needs Through Play Store Review Analysis',
+    'blog.post2_desc':           'Discover what users really want by analyzing competitor app reviews and find differentiation points.',
+    'blog.post3_title':          'Competitor App Analysis: Finding Common Traits of Successful Apps',
+    'blog.post3_desc':           'What makes top apps different? A systematic framework for analyzing and benchmarking competitor apps.',
+    'blog.cta_title':            'Start Analyzing Apps Now',
+    'blog.cta_desc':             'Just enter an app name. Our AI provides market analysis to review insights.',
+    'blog.cta_button':           'Analyze for Free',
   },
 };
 

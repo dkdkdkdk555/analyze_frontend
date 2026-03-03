@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <script>
     (function() {
       var saved = localStorage.getItem('lang');
       var browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
       var lang = saved || (browserLang.startsWith('ko') ? 'ko' : 'en');
-      if (lang === 'en') {
+      if (lang === 'ko') {
         var currentPath = window.location.pathname;
-        var newPath = currentPath.replace('/blog/', '/blog/en/');
+        var newPath = currentPath.replace('/blog/en/', '/blog/');
         window.location.replace(newPath);
       }
     })();
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>플레이스토어 리뷰 분석으로 사용자 니즈 파악하기 | TalonInsight</title>
-  <meta name="description" content="경쟁 앱의 플레이스토어 리뷰를 분석해 사용자들이 정말 원하는 것을 찾고, 차별화 포인트를 발굴하는 방법을 소개합니다. 무료 리뷰 분석 방법 포함.">
+  <title>Understanding User Needs Through Play Store Review Analysis | TalonInsight</title>
+  <meta name="description" content="Discover what users really want by analyzing competitor app reviews on Play Store. Learn how to find differentiation points and unmet needs.">
 
   <!-- Open Graph -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://analyze-dega.pages.dev/blog/playstore-review-analysis.html">
-  <meta property="og:title" content="플레이스토어 리뷰 분석으로 사용자 니즈 파악하기">
-  <meta property="og:description" content="경쟁 앱의 리뷰를 분석해 사용자들이 정말 원하는 것을 찾고, 차별화 포인트를 발굴하는 방법을 소개합니다.">
+  <meta property="og:url" content="https://analyze-dega.pages.dev/blog/en/playstore-review-analysis.html">
+  <meta property="og:title" content="Understanding User Needs Through Play Store Review Analysis">
+  <meta property="og:description" content="Discover what users really want by analyzing competitor app reviews and find differentiation points.">
   <meta property="og:image" content="https://analyze-dega.pages.dev/assets/images/blog2.png">
   <meta property="og:site_name" content="TalonInsight">
-  <meta property="og:locale" content="ko_KR">
+  <meta property="og:locale" content="en_US">
   <meta property="article:published_time" content="2026-02-04">
 
   <!-- SEO Meta Tags -->
-  <link rel="canonical" href="https://analyze-dega.pages.dev/blog/playstore-review-analysis.html">
+  <link rel="canonical" href="https://analyze-dega.pages.dev/blog/en/playstore-review-analysis.html">
   <meta name="robots" content="index, follow">
-  <meta name="keywords" content="플레이스토어 리뷰 분석, 앱 리뷰 분석 방법, 사용자 니즈 파악, 앱 리뷰 마이닝, 경쟁 앱 리뷰, 앱스토어 리뷰 분석">
+  <meta name="keywords" content="play store review analysis, app review analysis, user needs analysis, app review mining, competitor app reviews, app store review analysis">
   <meta name="author" content="TalonInsight">
   <meta name="theme-color" content="#1E5AE8">
 
@@ -40,8 +40,8 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "플레이스토어 리뷰 분석으로 사용자 니즈 파악하기",
-    "description": "경쟁 앱의 리뷰를 분석해 사용자들이 정말 원하는 것을 찾고, 차별화 포인트를 발굴하는 방법을 소개합니다.",
+    "headline": "Understanding User Needs Through Play Store Review Analysis",
+    "description": "Discover what users really want by analyzing competitor app reviews and find differentiation points.",
     "image": "https://analyze-dega.pages.dev/assets/images/blog2.png",
     "author": {"@type": "Organization", "name": "TalonInsight"},
     "publisher": {"@type": "Organization", "name": "TalonInsight"},
@@ -50,12 +50,12 @@
   }
   </script>
 
-  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/favicon.svg">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../../styles.css">
   <script>
     tailwind.config = {
       theme: { extend: { colors: { "primary": "#1E5AE8", "background-light": "#f6f6f8" }, fontFamily: { "display": ["Inter", "Noto Sans KR", "sans-serif"] } } }
@@ -66,7 +66,7 @@
   <div class="relative flex min-h-screen w-full flex-col">
     <!-- Navigation -->
     <header class="sticky top-0 z-50 flex items-center justify-between border-b border-[#f0f1f4] bg-white/80 backdrop-blur-md px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-3 md:py-4">
-      <a href="../index.html" class="flex items-center gap-2 text-primary">
+      <a href="../../index.html" class="flex items-center gap-2 text-primary">
         <div class="size-6 md:size-8">
           <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path>
@@ -75,8 +75,8 @@
         <span class="text-[#111318] font-black text-base md:text-xl tracking-tight">TalonInsight</span>
       </a>
       <nav class="flex items-center gap-4 md:gap-8">
-        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../index.html">홈</a>
-        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../blog.html">블로그</a>
+        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../../index.html">Home</a>
+        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../../blog.html">Blog</a>
       </nav>
     </header>
 
@@ -84,100 +84,100 @@
       <article class="mx-auto max-w-[720px]">
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-sm mb-6 text-[#636e88]">
-          <a href="../index.html" class="hover:text-primary">홈</a><span>/</span>
-          <a href="../blog.html" class="hover:text-primary">블로그</a><span>/</span>
-          <span class="text-[#111318]">리뷰 분석</span>
+          <a href="../../index.html" class="hover:text-primary">Home</a><span>/</span>
+          <a href="../../blog.html" class="hover:text-primary">Blog</a><span>/</span>
+          <span class="text-[#111318]">Review Analysis</span>
         </nav>
 
         <!-- Header -->
         <header class="mb-8 md:mb-10">
           <div class="flex items-center gap-2 mb-4">
-            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">분석방법</span>
-            <span class="text-xs text-[#636e88]">2026.02.04</span>
-            <span class="text-xs text-[#636e88]">8분 읽기</span>
+            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">Analysis</span>
+            <span class="text-xs text-[#636e88]">Feb 4, 2026</span>
+            <span class="text-xs text-[#636e88]">8 min read</span>
           </div>
-          <h1 class="text-2xl md:text-4xl font-black leading-tight mb-4">플레이스토어 리뷰 분석으로 사용자 니즈 파악하기</h1>
-          <p class="text-[#636e88] text-base md:text-lg">경쟁 앱의 리뷰를 분석해 사용자들이 정말 원하는 것을 찾고, 차별화 포인트를 발굴하는 방법</p>
+          <h1 class="text-2xl md:text-4xl font-black leading-tight mb-4">Understanding User Needs Through Play Store Review Analysis</h1>
+          <p class="text-[#636e88] text-base md:text-lg">Discover what users really want by analyzing competitor app reviews and find differentiation points</p>
         </header>
 
         <!-- Featured Image -->
         <figure class="mb-8 md:mb-10">
-          <img src="../assets/images/blog2.png" alt="플레이스토어 리뷰 분석 가이드" class="w-full rounded-xl shadow-sm">
+          <img src="../../assets/images/blog2.png" alt="Play Store Review Analysis Guide" class="w-full rounded-xl shadow-sm">
         </figure>
 
         <!-- Content -->
         <div class="prose prose-lg max-w-none">
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">리뷰 분석이 중요한 이유</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Why Review Analysis Matters</h2>
             <p class="text-[#444] leading-relaxed mb-4">
-              앱 리뷰는 <strong>사용자의 진짜 목소리</strong>입니다. 마케팅 문구나 앱 설명과 달리, 리뷰에는 실제 사용 경험과 솔직한 피드백이 담겨 있습니다.
+              App reviews are <strong>the authentic voice of users</strong>. Unlike marketing copy or app descriptions, reviews contain real usage experiences and honest feedback.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div class="bg-green-50 border border-green-200 rounded-lg p-4">
                 <h4 class="font-bold text-green-700 mb-2 flex items-center gap-2">
-                  <span class="material-symbols-outlined text-lg">thumb_up</span> 긍정 리뷰에서
+                  <span class="material-symbols-outlined text-lg">thumb_up</span> From Positive Reviews
                 </h4>
                 <ul class="text-sm text-green-700 space-y-1">
-                  <li>사용자가 가치있게 느끼는 핵심 기능</li>
-                  <li>경쟁 우위 요소</li>
-                  <li>마케팅에 활용할 수 있는 문구</li>
+                  <li>Core features users value</li>
+                  <li>Competitive advantages</li>
+                  <li>Phrases useful for marketing</li>
                 </ul>
               </div>
               <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                  <span class="material-symbols-outlined text-lg">thumb_down</span> 부정 리뷰에서
+                  <span class="material-symbols-outlined text-lg">thumb_down</span> From Negative Reviews
                 </h4>
                 <ul class="text-sm text-red-700 space-y-1">
-                  <li>미해결된 사용자 문제</li>
-                  <li>UX 개선 기회</li>
-                  <li>새로운 시장 진입 포인트</li>
+                  <li>Unresolved user problems</li>
+                  <li>UX improvement opportunities</li>
+                  <li>New market entry points</li>
                 </ul>
               </div>
             </div>
           </section>
 
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">리뷰 분석 4단계 프로세스</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">4-Step Review Analysis Process</h2>
 
             <div class="space-y-6">
               <div class="bg-white rounded-xl border border-[#dcdee5] p-5">
                 <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
                   <span class="w-7 h-7 rounded-full bg-green-500 text-white text-sm font-bold flex items-center justify-center">1</span>
-                  리뷰 수집하기
+                  Collect Reviews
                 </h3>
-                <p class="text-[#444] mb-3">경쟁 앱의 최근 리뷰를 수집합니다. 특히 <strong>1-2점 리뷰</strong>와 <strong>4-5점 리뷰</strong>를 구분해서 봅니다.</p>
+                <p class="text-[#444] mb-3">Gather recent reviews from competitor apps. Separate <strong>1-2 star reviews</strong> from <strong>4-5 star reviews</strong>.</p>
                 <div class="bg-[#f6f6f8] rounded-lg p-3 text-sm">
-                  <strong>Tip:</strong> 최근 3-6개월 리뷰에 집중하세요. 오래된 리뷰는 이미 해결된 문제일 수 있습니다.
+                  <strong>Tip:</strong> Focus on reviews from the last 3-6 months. Older reviews might address already-fixed issues.
                 </div>
               </div>
 
               <div class="bg-white rounded-xl border border-[#dcdee5] p-5">
                 <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
                   <span class="w-7 h-7 rounded-full bg-green-500 text-white text-sm font-bold flex items-center justify-center">2</span>
-                  카테고리별 분류하기
+                  Categorize by Type
                 </h3>
-                <p class="text-[#444] mb-3">수집한 리뷰를 다음 카테고리로 분류합니다:</p>
+                <p class="text-[#444] mb-3">Sort collected reviews into these categories:</p>
                 <ul class="list-disc pl-6 space-y-1 text-[#636e88] text-sm">
-                  <li><strong>기능 요청:</strong> "~기능이 있었으면", "~할 수 있으면 좋겠다"</li>
-                  <li><strong>버그/오류:</strong> "~가 안 된다", "~에서 튕긴다"</li>
-                  <li><strong>UX 불만:</strong> "~가 불편하다", "~찾기 어렵다"</li>
-                  <li><strong>가격 불만:</strong> "~가 너무 비싸다", "광고가 많다"</li>
-                  <li><strong>칭찬:</strong> "~가 좋다", "~때문에 쓴다"</li>
+                  <li><strong>Feature requests:</strong> "I wish it had~", "Would be great if~"</li>
+                  <li><strong>Bugs/Errors:</strong> "~doesn't work", "Crashes when~"</li>
+                  <li><strong>UX complaints:</strong> "~is inconvenient", "Hard to find~"</li>
+                  <li><strong>Pricing complaints:</strong> "Too expensive", "Too many ads"</li>
+                  <li><strong>Praise:</strong> "Love the~", "Using it because~"</li>
                 </ul>
               </div>
 
               <div class="bg-white rounded-xl border border-[#dcdee5] p-5">
                 <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
                   <span class="w-7 h-7 rounded-full bg-green-500 text-white text-sm font-bold flex items-center justify-center">3</span>
-                  빈도 분석하기
+                  Analyze Frequency
                 </h3>
-                <p class="text-[#444] mb-3">같은 내용의 피드백이 몇 번 반복되는지 세어봅니다. 빈도가 높을수록 중요한 이슈입니다.</p>
+                <p class="text-[#444] mb-3">Count how often the same feedback appears. Higher frequency means more important issues.</p>
                 <div class="bg-[#f6f6f8] rounded-lg p-4">
-                  <p class="text-sm font-medium mb-2">예시: 가계부 앱 리뷰 분석 결과</p>
+                  <p class="text-sm font-medium mb-2">Example: Budget App Review Analysis</p>
                   <ul class="text-sm text-[#636e88] space-y-1">
-                    <li>"위젯 기능 추가해주세요" - 47회 언급</li>
-                    <li>"카드 자동 연동이 안 돼요" - 32회 언급</li>
-                    <li>"광고가 너무 많아요" - 28회 언급</li>
+                    <li>"Please add widget feature" - 47 mentions</li>
+                    <li>"Card auto-sync doesn't work" - 32 mentions</li>
+                    <li>"Too many ads" - 28 mentions</li>
                   </ul>
                 </div>
               </div>
@@ -185,49 +185,49 @@
               <div class="bg-white rounded-xl border border-[#dcdee5] p-5">
                 <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
                   <span class="w-7 h-7 rounded-full bg-green-500 text-white text-sm font-bold flex items-center justify-center">4</span>
-                  인사이트 도출하기
+                  Extract Insights
                 </h3>
-                <p class="text-[#444] mb-3">분석 결과를 바탕으로 다음 질문에 답합니다:</p>
+                <p class="text-[#444] mb-3">Based on analysis results, answer these questions:</p>
                 <ul class="list-disc pl-6 space-y-1 text-[#636e88] text-sm">
-                  <li>경쟁 앱이 해결하지 못하는 문제는 무엇인가?</li>
-                  <li>내 앱에서 이 문제를 해결할 수 있는가?</li>
-                  <li>이 문제를 해결하면 얼마나 많은 사용자를 확보할 수 있는가?</li>
+                  <li>What problems aren't competitors solving?</li>
+                  <li>Can my app solve these problems?</li>
+                  <li>How many users could I capture by solving these issues?</li>
                 </ul>
               </div>
             </div>
           </section>
 
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">리뷰에서 발견하는 기회의 신호</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Opportunity Signals in Reviews</h2>
             <div class="bg-white rounded-xl border border-[#dcdee5] overflow-hidden">
               <table class="w-full">
                 <thead class="bg-[#f6f6f8]">
                   <tr>
-                    <th class="text-left p-4 font-bold text-sm">리뷰 패턴</th>
-                    <th class="text-left p-4 font-bold text-sm">의미</th>
-                    <th class="text-left p-4 font-bold text-sm">기회</th>
+                    <th class="text-left p-4 font-bold text-sm">Review Pattern</th>
+                    <th class="text-left p-4 font-bold text-sm">Meaning</th>
+                    <th class="text-left p-4 font-bold text-sm">Opportunity</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-[#f0f1f4] text-sm">
                   <tr>
-                    <td class="p-4">"예전엔 좋았는데..."</td>
-                    <td class="p-4 text-[#636e88]">업데이트로 인한 불만족</td>
-                    <td class="p-4 text-green-600">이전 버전의 장점 계승</td>
+                    <td class="p-4">"It used to be great..."</td>
+                    <td class="p-4 text-[#636e88]">Dissatisfaction after update</td>
+                    <td class="p-4 text-green-600">Inherit previous version's strengths</td>
                   </tr>
                   <tr>
-                    <td class="p-4">"다른 앱에서 넘어왔는데..."</td>
-                    <td class="p-4 text-[#636e88]">경쟁 앱 이탈 사유</td>
-                    <td class="p-4 text-green-600">경쟁 앱의 약점 파악</td>
+                    <td class="p-4">"Switched from another app..."</td>
+                    <td class="p-4 text-[#636e88]">Reason for leaving competitor</td>
+                    <td class="p-4 text-green-600">Identify competitor weaknesses</td>
                   </tr>
                   <tr>
-                    <td class="p-4">"프리미엄 기능이 비싸서..."</td>
-                    <td class="p-4 text-[#636e88]">가격 민감도</td>
-                    <td class="p-4 text-green-600">다른 수익 모델 적용</td>
+                    <td class="p-4">"Premium is too expensive..."</td>
+                    <td class="p-4 text-[#636e88]">Price sensitivity</td>
+                    <td class="p-4 text-green-600">Alternative revenue model</td>
                   </tr>
                   <tr>
-                    <td class="p-4">"~만 있으면 완벽한데"</td>
-                    <td class="p-4 text-[#636e88]">핵심 기능 요청</td>
-                    <td class="p-4 text-green-600">차별화 기능 개발</td>
+                    <td class="p-4">"Would be perfect if only~"</td>
+                    <td class="p-4 text-[#636e88]">Key feature request</td>
+                    <td class="p-4 text-green-600">Differentiating feature</td>
                   </tr>
                 </tbody>
               </table>
@@ -235,41 +235,40 @@
           </section>
 
           <section class="mb-10">
-            <h2 class="text-xl md:text-2xl font-bold mb-4">AI로 리뷰 분석 자동화하기</h2>
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Automate Review Analysis with AI</h2>
             <p class="text-[#444] leading-relaxed mb-4">
-              수백, 수천 개의 리뷰를 일일이 읽는 것은 비효율적입니다.
-              <strong>TalonInsight</strong>를 사용하면 AI가 자동으로 리뷰를 분석하고,
-              핵심 인사이트를 정리해줍니다.
+              Reading hundreds or thousands of reviews manually is inefficient.
+              With <strong>TalonInsight</strong>, AI automatically analyzes reviews and summarizes key insights.
             </p>
             <ul class="list-disc pl-6 space-y-2 text-[#444]">
-              <li>평점별 리뷰 요약</li>
-              <li>주요 불만 카테고리 자동 분류</li>
-              <li>미해결 문제점 도출</li>
-              <li>시장 진입 전략 제안</li>
+              <li>Review summaries by rating</li>
+              <li>Auto-categorization of major complaints</li>
+              <li>Unresolved problem extraction</li>
+              <li>Market entry strategy suggestions</li>
             </ul>
           </section>
 
           <!-- CTA -->
           <div class="bg-primary rounded-xl p-6 md:p-8 text-center text-white">
-            <h3 class="text-xl font-bold mb-3">AI로 리뷰 분석 시작하기</h3>
-            <p class="text-white/80 mb-5 text-sm">분석하고 싶은 앱 이름만 입력하세요</p>
-            <a href="../index.html" class="inline-flex items-center justify-center rounded-lg h-11 px-8 bg-white text-primary text-sm font-bold hover:bg-gray-100 transition-colors">
-              무료로 분석 시작
+            <h3 class="text-xl font-bold mb-3">Start AI Review Analysis</h3>
+            <p class="text-white/80 mb-5 text-sm">Just enter the app name you want to analyze</p>
+            <a href="../../index.html" class="inline-flex items-center justify-center rounded-lg h-11 px-8 bg-white text-primary text-sm font-bold hover:bg-gray-100 transition-colors">
+              Start Free Analysis
             </a>
           </div>
         </div>
 
         <!-- Related Posts -->
         <div class="mt-12 pt-8 border-t border-[#dcdee5]">
-          <h3 class="text-lg font-bold mb-6">관련 글</h3>
+          <h3 class="text-lg font-bold mb-6">Related Articles</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <a href="app-market-research-guide.html" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
               <div class="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-2xl text-primary">query_stats</span>
               </div>
               <div>
-                <h4 class="font-bold text-sm mb-1">앱 시장조사 완벽 가이드</h4>
-                <p class="text-[#636e88] text-xs line-clamp-2">1인 개발자를 위한 무료 분석 방법</p>
+                <h4 class="font-bold text-sm mb-1">Complete App Market Research Guide</h4>
+                <p class="text-[#636e88] text-xs line-clamp-2">Free analysis methods for solo developers</p>
               </div>
             </a>
             <a href="competitor-app-analysis.html" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
@@ -277,8 +276,8 @@
                 <span class="material-symbols-outlined text-2xl text-orange-500">compare</span>
               </div>
               <div>
-                <h4 class="font-bold text-sm mb-1">경쟁사 앱 분석</h4>
-                <p class="text-[#636e88] text-xs line-clamp-2">성공하는 앱들의 공통점 찾기</p>
+                <h4 class="font-bold text-sm mb-1">Competitor App Analysis</h4>
+                <p class="text-[#636e88] text-xs line-clamp-2">Finding common traits of successful apps</p>
               </div>
             </a>
           </div>
@@ -289,7 +288,7 @@
     <footer class="border-t border-[#f0f1f4] bg-white py-8 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
       <div class="mx-auto max-w-[720px] flex justify-between items-start">
         <div>
-          <a href="../index.html" class="flex items-center gap-2 text-primary opacity-80 mb-2">
+          <a href="../../index.html" class="flex items-center gap-2 text-primary opacity-80 mb-2">
             <div class="size-5"><svg fill="none" viewBox="0 0 48 48"><path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path></svg></div>
             <span class="font-black text-xs">TalonInsight</span>
           </a>
