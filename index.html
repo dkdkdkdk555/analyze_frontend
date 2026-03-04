@@ -157,6 +157,19 @@
             <!-- Search Box & Dropdown Logic Container -->
             <div id="search-section" class="relative w-full max-w-[640px] z-40 px-2 sm:px-0">
               <div class="search-box group relative flex h-14 sm:h-16 w-full items-center rounded-xl bg-white px-4 sm:px-6 shadow-2xl ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary transition-all">
+                <!-- Market selector -->
+                <select id="market-select" class="shrink-0 border-none bg-transparent text-sm font-semibold text-[#636e88] focus:outline-none focus:ring-0 cursor-pointer mr-2 sm:mr-3 pr-1">
+                  <option value="kr">🇰🇷 KR</option>
+                  <option value="us">🇺🇸 US</option>
+                  <option value="jp">🇯🇵 JP</option>
+                  <option value="gb">🇬🇧 GB</option>
+                  <option value="de">🇩🇪 DE</option>
+                  <option value="fr">🇫🇷 FR</option>
+                  <option value="au">🇦🇺 AU</option>
+                  <option value="in">🇮🇳 IN</option>
+                  <option value="br">🇧🇷 BR</option>
+                </select>
+                <div class="w-px h-5 bg-[#dcdee5] shrink-0 mr-2 sm:mr-3"></div>
                 <span class="material-symbols-outlined text-[#636e88] text-xl sm:text-2xl mr-2 sm:mr-3 shrink-0">search</span>
                 <input
                   id="search-input"

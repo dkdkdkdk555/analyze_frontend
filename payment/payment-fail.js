@@ -1,4 +1,4 @@
-import { applyTranslations, t } from './components/i18n.js';
+import { applyTranslations, t } from '../components/i18n.js';
 
 document.title = t('payment.fail_page_title');
 applyTranslations();

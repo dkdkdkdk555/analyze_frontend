@@ -1,6 +1,6 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
-import { applyTranslations, t } from './components/i18n.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
+import { applyTranslations, t } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -25,7 +25,7 @@ document.getElementById('group-analysis-start-btn')?.addEventListener('click', a
     document.getElementById('coming-soon-modal')?.classList.remove('hidden');
     return;
   }
-  location.href = '/group-analysis.html';
+  location.href = '/analysis/group-analysis.html';
 });
 
 document.getElementById('close-coming-soon-modal')?.addEventListener('click', () => {

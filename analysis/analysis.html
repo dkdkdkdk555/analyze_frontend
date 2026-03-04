@@ -28,13 +28,13 @@
   <meta name="author" content="TalonInsight">
   <meta name="theme-color" content="#1E5AE8">
   
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/images/logo.png">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="apple-touch-icon" href="../assets/images/logo.png">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../styles.css">
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7850046432758723"
     crossorigin="anonymous"></script>
@@ -127,7 +127,7 @@
     <div id="results" class="hidden">
       <!-- Breadcrumbs -->
       <div class="flex flex-wrap gap-2 pb-4 md:pb-6 items-center text-sm">
-        <a class="text-[#636e88] font-medium hover:text-primary" href="index.html">홈</a>
+        <a class="text-[#636e88] font-medium hover:text-primary" href="/">홈</a>
         <span class="text-[#636e88]">/</span>
         <span id="breadcrumb-app-name" class="text-[#111318] font-bold">앱 분석</span>
       </div>
@@ -158,11 +158,11 @@
           </div>
           <button id="group-analyze-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 border border-primary text-primary text-xs md:text-sm font-bold hover:bg-primary/5 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">group_work</span>
-            그룹분석 시작하기
+            <span data-i18n="analysis.group_analysis_btn">그룹분석 시작하기</span>
           </button>
           <button id="download-pdf-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">download</span>
-            PDF 다운로드
+            <span data-i18n="analysis.download_pdf">PDF 다운로드</span>
           </button>
           <input type="hidden" id="is-cached-result" value="false">
         </div>
@@ -172,7 +172,7 @@
       <section id="market-definition" class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">01.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">시장 정의</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.market_definition">시장 정의</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div id="tam-card" class="flex flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dcdee5] bg-white">
@@ -192,7 +192,7 @@
       <section id="core-value" class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">02.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">핵심 가치</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.core_value">핵심 가치</h2>
         </div>
         <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-8">
             <p id="core-value-statement" class="text-primary text-base md:text-xl lg:text-2xl font-bold leading-relaxed"></p>
@@ -206,7 +206,7 @@
         <section id="core-features">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">03.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">핵심 기능</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.core_features">핵심 기능</h2>
           </div>
           <div class="bg-white border border-[#dcdee5] rounded-xl overflow-hidden">
             <ul id="core-features-list" class="divide-y divide-gray-100">
@@ -219,7 +219,7 @@
         <section id="unresolved-problems">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">04.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">미해결 문제</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.unresolved">미해결 문제</h2>
           </div>
           <div id="unresolved-problems-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <!-- Problems will be dynamically inserted here -->
@@ -233,14 +233,14 @@
         <div id="ratings-chart" class="lg:col-span-1">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">05.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">평점 분포</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.rating_dist">평점 분포</h2>
           </div>
           <div class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-8 flex flex-col items-center">
             <div class="relative w-32 h-32 md:w-40 md:h-40">
               <div id="ratings-pie" class="w-full h-full rounded-full"></div>
               <div class="absolute inset-3 md:inset-4 bg-white rounded-full flex flex-col items-center justify-center">
                 <span id="overall-rating" class="text-2xl md:text-3xl font-bold"></span>
-                <span class="text-[10px] md:text-xs text-gray-500">평균 평점</span>
+                <span class="text-[10px] md:text-xs text-gray-500" data-i18n="analysis.avg_rating">평균 평점</span>
               </div>
             </div>
             <div id="ratings-legend" class="mt-4 md:mt-6 w-full space-y-1.5 md:space-y-2">
@@ -253,7 +253,7 @@
         <div id="reviews-by-rating" class="lg:col-span-2">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">06.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">평점별 리뷰 요약</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.reviews_by_rating">평점별 리뷰 요약</h2>
           </div>
           <div id="reviews-list" class="bg-white border border-[#dcdee5] rounded-xl divide-y divide-gray-100">
             <!-- Reviews will be dynamically inserted here -->
@@ -265,7 +265,7 @@
       <section id="complaints" class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">07.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]">불만 카테고리</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.complaints">불만 카테고리</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           <!-- UI/UX -->
@@ -307,7 +307,7 @@
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="material-symbols-outlined text-lg md:text-xl">lightbulb</span>
-              <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider">전략 제안</h2>
+              <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider" data-i18n="analysis.strategy">전략 제안</h2>
             </div>
             <p id="strategy-oneline" class="text-lg md:text-2xl font-bold leading-snug"></p>
             <p id="strategy-reasoning" class="mt-2 md:mt-4 text-sm md:text-base opacity-90"></p>

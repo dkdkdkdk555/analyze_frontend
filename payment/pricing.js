@@ -1,6 +1,6 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
-import { applyTranslations, t } from './components/i18n.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
+import { applyTranslations, t } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -87,8 +87,8 @@ async function handlePurchase(productId) {
       amount: { currency: 'KRW', value: product.amount },
       orderId,
       orderName: `TalonInsight ${product.name} 크레딧 ${product.credits}개 (운영사 : HealthTier labs)`,
-      successUrl: `${window.location.origin}/payment-success.html`,
-      failUrl: `${window.location.origin}/payment-fail.html`,
+      successUrl: `${window.location.origin}/payment/payment-success.html`,
+      failUrl: `${window.location.origin}/payment/payment-fail.html`,
     });
   } catch (err) {
     // 사용자가 결제창을 닫은 경우 — 조용히 처리

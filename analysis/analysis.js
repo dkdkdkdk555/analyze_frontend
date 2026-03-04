@@ -1,6 +1,7 @@
-import { renderRatingChart } from './components/rating-chart.js';
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
+import { renderRatingChart } from '../components/rating-chart.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
+import { getLang, applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const params = new URLSearchParams(window.location.search);
@@ -79,6 +80,7 @@ async function analyzeApp() {
         appStoreUrl,
         playStoreUrl,
         abText: AB_TEXT,
+        lang: getLang(),
         // 메타데이터 전달 (iTunes API 실패 시 fallback)
         metadata: appName ? { appName, iconUrl, developer } : undefined
       })
@@ -633,7 +635,7 @@ document.getElementById('group-analyze-btn')?.addEventListener('click', async ()
   if (appStoreUrl) groupParams.set('appStoreUrl', appStoreUrl);
   if (playStoreUrl) groupParams.set('playStoreUrl', playStoreUrl);
   if (iconUrl) groupParams.set('iconUrl', iconUrl);
-  window.location.href = `/group-analysis.html?${groupParams.toString()}`;
+  window.location.href = `/analysis/group-analysis.html?${groupParams.toString()}`;
 });
 
 document.getElementById('close-coming-soon-modal')?.addEventListener('click', () => {
@@ -649,6 +651,9 @@ async function checkGroupAnalysisFeature() {
     return false;
   }
 }
+
+// Apply i18n translations to static section labels
+applyTranslations();
 
 // Initialize header (search + mobile menu)
 initHeader({ page: 'analysis', apiBaseUrl: API_BASE_URL });

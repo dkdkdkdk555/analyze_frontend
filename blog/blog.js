@@ -1,6 +1,6 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
-import { getLang, applyTranslations, t } from './components/i18n.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
+import { getLang, applyTranslations, t } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 

@@ -1,5 +1,5 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -65,7 +65,7 @@ async function init() {
       </div>
       <div class="flex items-center justify-between pt-3 border-t border-[#f0f1f4]">
         <div class="flex items-center gap-1.5">
-          <img src="assets/images/credit.png" class="w-4 h-4" alt="크레딧">
+          <img src="/assets/images/credit.png" class="w-4 h-4" alt="크레딧">
           <span class="text-sm font-semibold text-primary">${(p.credit_amount || 0).toLocaleString()} C 지급</span>
         </div>
         <p class="text-base font-bold text-[#111318]">

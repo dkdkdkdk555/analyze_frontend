@@ -1,5 +1,6 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
+import { applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -7,6 +8,7 @@ const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const APP_COLORS = ['#1E5AE8', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 async function init() {
+  applyTranslations();
   await initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
   initFooter();
 
@@ -349,7 +351,7 @@ function renderIndividualApps(apps) {
 
     // Link to user analysis history using the stored userAnalysisId
     const analysisHref = app.userAnalysisId
-      ? `/my-analyses.html?id=${app.userAnalysisId}`
+      ? `/mypage/my-analyses.html?id=${app.userAnalysisId}`
       : '#';
 
     return `

@@ -4,7 +4,7 @@
  * @param {'index' | 'analysis' | 'pricing' | 'blog' | 'services'} options.page
  * @param {string} options.apiBaseUrl
  */
-import { t, getLang, setLang } from './i18n.js';
+import { t, getLang, setLang, getMarket } from './i18n.js';
 
 export async function initHeader({ page, apiBaseUrl }) {
   const headerEl = document.getElementById('app-header');
@@ -84,15 +84,15 @@ function buildDesktopAuth(user) {
             <span class="text-sm font-black text-primary">${credit.toLocaleString()} C</span>
           </div>
           <div class="py-1">
-            <a href="my-analyses.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
+            <a href="/mypage/my-analyses.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">analytics</span>
               ${t('auth.my_analyses')}
             </a>
-            <a href="credit-history.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
+            <a href="/mypage/credit-history.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">toll</span>
               ${t('auth.credit_history')}
             </a>
-            <a href="payment-history.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
+            <a href="/payment/payment-history.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">receipt_long</span>
               ${t('auth.payment_history')}
             </a>
@@ -140,15 +140,15 @@ function buildMobileAuth(user) {
           </div>
         </div>
         <div class="px-5 py-2">
-          <a href="my-analyses.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
+          <a href="/mypage/my-analyses.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">analytics</span>
             ${t('auth.my_analyses')}
           </a>
-          <a href="credit-history.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
+          <a href="/mypage/credit-history.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">toll</span>
             ${t('auth.credit_history')}
           </a>
-          <a href="payment-history.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] hover:text-primary transition-colors">
+          <a href="/payment/payment-history.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">receipt_long</span>
             ${t('auth.payment_history')}
           </a>
@@ -308,9 +308,9 @@ function buildDesktopNavLinks({ page }) {
   const inact  = 'text-[#111318] hover:text-primary';
 
   return [
-    `<a class="${base} ${page === 'services' ? active : inact}" href="services.html">${t('nav.services')}</a>`,
-    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="pricing.html">${t('nav.pricing')}</a>`,
-    `<a class="${base} ${page === 'blog'     ? active : inact}" href="blog.html">${t('nav.blog')}</a>`,
+    `<a class="${base} ${page === 'services' ? active : inact}" href="/services/services.html">${t('nav.services')}</a>`,
+    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="/payment/pricing.html">${t('nav.pricing')}</a>`,
+    `<a class="${base} ${page === 'blog'     ? active : inact}" href="/blog/blog.html">${t('nav.blog')}</a>`,
   ].join('');
 }
 
@@ -357,15 +357,15 @@ function buildMobileDrawer({ page }) {
 
   const mobileNavLinks = `
     <nav class="flex flex-col px-5 py-2 flex-1">
-      <a href="services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+      <a href="/services/services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'services' ? 'text-primary' : ''}">apps</span>
         ${t('nav.services')}
       </a>
-      <a href="pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+      <a href="/payment/pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'pricing' ? 'text-primary' : ''}">credit_card</span>
         ${t('nav.pricing')}
       </a>
-      <a href="blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+      <a href="/blog/blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'blog' ? 'text-primary' : ''}">article</span>
         ${t('nav.blog')}
       </a>
@@ -490,8 +490,9 @@ function initHeaderSearch(apiBaseUrl) {
 
   async function searchiTunes(query) {
     try {
+      const country = getMarket();
       const response = await fetch(
-        `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=kr&media=software&limit=10`
+        `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=${country}&media=software&limit=10`
       );
       if (!response.ok) return [];
       const data = await response.json();
@@ -507,7 +508,8 @@ function initHeaderSearch(apiBaseUrl) {
 
   async function searchPlayStore(apiBaseUrl, query) {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/apps/search?query=${encodeURIComponent(query)}`);
+      const country = getMarket();
+      const response = await fetch(`${apiBaseUrl}/api/apps/search?query=${encodeURIComponent(query)}&country=${country}`);
       if (!response.ok) return [];
       return await response.json();
     } catch { return []; }
@@ -564,7 +566,7 @@ function initHeaderSearch(apiBaseUrl) {
         if (app.appName)      params.set('appName', app.appName);
         if (app.iconImageUrl) params.set('iconUrl', app.iconImageUrl);
         if (app.developer)    params.set('developer', app.developer);
-        window.location.href = `/analysis.html?${params.toString()}`;
+        window.location.href = `/analysis/analysis.html?${params.toString()}`;
       });
     });
   }

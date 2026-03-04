@@ -1,3 +1,5 @@
+import { getMarket, setMarket } from './i18n.js';
+
 let debounceTimer;
 
 export function initSearchBar(apiBaseUrl) {
@@ -5,6 +7,15 @@ export function initSearchBar(apiBaseUrl) {
   const dropdown = document.getElementById('search-dropdown');
   const errorMessage = document.getElementById('error-message');
   const dropdownMore = document.getElementById('dropdown-more');
+  const marketSelect = document.getElementById('market-select');
+
+  // Restore saved market
+  if (marketSelect) {
+    marketSelect.value = getMarket();
+    marketSelect.addEventListener('change', (e) => {
+      setMarket(e.target.value);
+    });
+  }
 
   let allResults = []; // 전체 검색 결과 저장
   let isExpanded = false; // 드롭다운 확장 상태
@@ -76,8 +87,9 @@ export function initSearchBar(apiBaseUrl) {
    */
   async function searchiTunes(query) {
     try {
+      const country = getMarket();
       const response = await fetch(
-        `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=kr&media=software&limit=10`
+        `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=${country}&media=software&limit=10`
       );
 
       if (!response.ok) {
@@ -106,8 +118,9 @@ export function initSearchBar(apiBaseUrl) {
    */
   async function searchPlayStore(apiBaseUrl, query) {
     try {
+      const country = getMarket();
       const response = await fetch(
-        `${apiBaseUrl}/api/apps/search?query=${encodeURIComponent(query)}`
+        `${apiBaseUrl}/api/apps/search?query=${encodeURIComponent(query)}&country=${country}`
       );
 
       if (!response.ok) {
@@ -336,7 +349,7 @@ export function initSearchBar(apiBaseUrl) {
           if (app.appName) params.set('appName', app.appName);
           if (app.iconImageUrl) params.set('iconUrl', app.iconImageUrl);
           if (app.developer) params.set('developer', app.developer);
-          window.location.href = `/analysis.html?${params.toString()}`;
+          window.location.href = `/analysis/analysis.html?${params.toString()}`;
         }
       });
     });

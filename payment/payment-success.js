@@ -1,4 +1,4 @@
-import { applyTranslations, t } from './components/i18n.js';
+import { applyTranslations, t } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 

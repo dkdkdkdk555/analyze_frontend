@@ -1,5 +1,5 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 

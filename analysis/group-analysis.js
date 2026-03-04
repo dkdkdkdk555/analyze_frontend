@@ -1,5 +1,6 @@
-import { initHeader } from './components/header.js';
-import { initFooter } from './components/footer.js';
+import { initHeader } from '../components/header.js';
+import { initFooter } from '../components/footer.js';
+import { getLang, getMarket, setMarket, t, applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -21,6 +22,7 @@ async function checkGroupAnalysisFeature() {
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
+  applyTranslations();
   await initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
   initFooter();
 
@@ -118,6 +120,12 @@ const GROUP_SEARCH_INITIAL_LIMIT = 5;
 function initGroupSearch() {
   const input = document.getElementById('app-search-input');
   const dropdownMore = document.getElementById('group-dropdown-more');
+  const marketSelect = document.getElementById('group-market-select');
+
+  if (marketSelect) {
+    marketSelect.value = getMarket();
+    marketSelect.addEventListener('change', (e) => setMarket(e.target.value));
+  }
 
   input.addEventListener('input', (e) => {
     clearTimeout(groupSearchDebounceTimer);
@@ -162,7 +170,7 @@ function showGroupSearchLoading() {
   if (items) items.innerHTML = `
     <div class="flex items-center justify-center p-6 text-[#636e88]">
       <div class="w-5 h-5 border-2 border-gray-200 border-t-primary rounded-full animate-spin mr-2"></div>
-      검색 중...
+      ${t('group_page.searching')}
     </div>`;
   if (more) more.classList.add('hidden');
   document.getElementById('group-search-dropdown')?.classList.remove('hidden');
@@ -170,7 +178,8 @@ function showGroupSearchLoading() {
 
 async function searchGroupiTunes(query) {
   try {
-    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=kr&media=software&limit=10`);
+    const country = getMarket();
+    const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&country=${country}&media=software&limit=10`);
     if (!res.ok) return [];
     const data = await res.json();
     return (data.results || []).map(app => ({
@@ -185,7 +194,8 @@ async function searchGroupiTunes(query) {
 
 async function searchGroupPlayStore(query) {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/apps/search?query=${encodeURIComponent(query)}`);
+    const country = getMarket();
+    const res = await fetch(`${API_BASE_URL}/api/apps/search?query=${encodeURIComponent(query)}&country=${country}`);
     if (!res.ok) return [];
     return await res.json();
   } catch { return []; }
@@ -266,7 +276,7 @@ function renderGroupDropdown(results) {
   const dropdown = document.getElementById('group-search-dropdown');
 
   if (!results || !results.length) {
-    if (items) items.innerHTML = `<div class="flex items-center justify-center p-6 text-[#636e88]">검색 결과가 없어요</div>`;
+    if (items) items.innerHTML = `<div class="flex items-center justify-center p-6 text-[#636e88]">${t('group_page.no_results')}</div>`;
     more?.classList.add('hidden');
     dropdown?.classList.remove('hidden');
     return;
@@ -312,8 +322,8 @@ function renderGroupDropdown(results) {
     if (hasMore) {
       more.classList.remove('hidden');
       moreBtn.textContent = groupSearchExpanded
-        ? '접기'
-        : `결과 더 보기 (+${results.length - GROUP_SEARCH_INITIAL_LIMIT}개)`;
+        ? t('group_page.collapse')
+        : (getLang() === 'ko' ? `결과 더 보기 (+${results.length - GROUP_SEARCH_INITIAL_LIMIT}개)` : `Show more (+${results.length - GROUP_SEARCH_INITIAL_LIMIT})`);
     } else {
       more.classList.add('hidden');
     }
@@ -375,13 +385,13 @@ function renderSelectedApps() {
   const container = document.getElementById('selected-apps');
   const badge = document.getElementById('app-count-badge');
 
-  badge.textContent = `${selectedApps.length}개 앱`;
+  badge.textContent = getLang() === 'ko' ? `${selectedApps.length}개 앱` : `${selectedApps.length} apps`;
 
   if (!selectedApps.length) {
     container.innerHTML = `
       <div id="empty-placeholder" class="w-full flex flex-col items-center justify-center py-4 gap-2 text-[#636e88]">
         <span class="material-symbols-outlined text-4xl text-[#e5e7eb]">add_circle</span>
-        <p class="text-sm">위에서 앱을 검색해서 추가하세요</p>
+        <p class="text-sm">${t('group_page.empty_placeholder')}</p>
       </div>`;
     container.className = 'flex flex-wrap gap-4 min-h-[100px] p-4 border-2 border-dashed border-[#e5e7eb] rounded-xl bg-background-light items-start content-start';
     return;
@@ -425,17 +435,26 @@ function updateCreditPreview() {
   numEl.textContent = n < 2 ? '0' : String(total);
 
   if (n < 2) {
-    breakdownEl.textContent = '앱을 2개 이상 추가하면 크레딧이 표시됩니다.';
+    breakdownEl.textContent = t('group_page.credits_hint_initial');
     return;
   }
 
   const afterBalance = balance - total;
-  breakdownEl.innerHTML = `
-    앱 ${n}개 × 1 크레딧 = ${n} 크레딧<br>
-    종합 분석 = 1 크레딧<br>
-    <strong class="text-[#111318]">합계: ${total} 크레딧</strong>
-    ${currentUser ? ` (잔여 ${balance} → 분석 후 ${afterBalance})` : ''}
-  `;
+  if (getLang() === 'ko') {
+    breakdownEl.innerHTML = `
+      앱 ${n}개 × 1 크레딧 = ${n} 크레딧<br>
+      종합 분석 = 1 크레딧<br>
+      <strong class="text-[#111318]">합계: ${total} 크레딧</strong>
+      ${currentUser ? ` (잔여 ${balance} → 분석 후 ${afterBalance})` : ''}
+    `;
+  } else {
+    breakdownEl.innerHTML = `
+      ${n} apps × 1 credit = ${n} credits<br>
+      Group analysis = 1 credit<br>
+      <strong class="text-[#111318]">Total: ${total} credits</strong>
+      ${currentUser ? ` (balance: ${balance} → ${afterBalance} after)` : ''}
+    `;
+  }
 
   if (currentUser && afterBalance < 0) {
     numEl.classList.add('text-red-500');
@@ -455,9 +474,13 @@ function updateStartButton() {
 
   // innerHTML을 항상 새로 쓰는 방식으로 통일 (이전에 innerHTML 교체 후 #bottom-app-count가 null이 되는 버그 수정)
   if (n >= 2) {
-    bottomInfo.innerHTML = `앱 <strong class="text-[#111318]">${n}</strong>개 · <strong class="text-[#111318]">${n + 1}</strong> 크레딧 차감 예정`;
+    bottomInfo.innerHTML = getLang() === 'ko'
+      ? `앱 <strong class="text-[#111318]">${n}</strong>개 · <strong class="text-[#111318]">${n + 1}</strong> 크레딧 차감 예정`
+      : `<strong class="text-[#111318]">${n}</strong> apps · <strong class="text-[#111318]">${n + 1}</strong> credits to be used`;
   } else {
-    bottomInfo.innerHTML = `앱 <strong class="text-[#111318]">${n}</strong>개 선택됨`;
+    bottomInfo.innerHTML = getLang() === 'ko'
+      ? `앱 <strong class="text-[#111318]">${n}</strong>개 선택됨`
+      : `<strong class="text-[#111318]">${n}</strong> apps selected`;
   }
 
   const canStart = groupName.length > 0 && n >= 2 && currentUser;
@@ -472,17 +495,16 @@ function showConfirmStartModal() {
   const balance = currentUser?.credit_balance ?? 0;
 
   if ((balance) < creditRequired) {
-    document.getElementById('no-credits-detail').innerHTML = `
-      그룹 분석에 <strong>${creditRequired} 크레딧</strong>이 필요하지만<br>
-      현재 <strong>${balance} 크레딧</strong>만 남아있어요.
-    `;
+    document.getElementById('no-credits-detail').innerHTML = getLang() === 'ko'
+      ? `그룹 분석에 <strong>${creditRequired} 크레딧</strong>이 필요하지만<br>현재 <strong>${balance} 크레딧</strong>만 남아있어요.`
+      : `Group analysis requires <strong>${creditRequired} credits</strong>,<br>but you only have <strong>${balance} credits</strong>.`;
     document.getElementById('no-credits-modal').classList.remove('hidden');
     return;
   }
 
-  document.getElementById('confirm-start-detail').innerHTML =
-    `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 분석해요.<br>` +
-    `<strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`;
+  document.getElementById('confirm-start-detail').innerHTML = getLang() === 'ko'
+    ? `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 분석해요.<br><strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`
+    : `Analyzing <strong>${n}</strong> apps in the <strong>${groupName}</strong> group.<br><strong class="text-[#111318]">${creditRequired} credits</strong> will be used.`;
   document.getElementById('confirm-start-modal').classList.remove('hidden');
 }
 
@@ -507,17 +529,17 @@ async function startAnalysis() {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ groupName, apps: selectedApps }),
+      body: JSON.stringify({ groupName, apps: selectedApps, lang: getLang() }),
     });
 
     if (res.status === 402) {
-      showError('크레딧이 부족해요. 크레딧을 충전해 주세요.');
+      showError(t('group_page.err_no_credits'));
       return;
     }
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      showError(err.error || '분석 시작에 실패했어요');
+      showError(err.error || t('group_page.err_start_failed'));
       return;
     }
 
@@ -574,13 +596,13 @@ async function startAnalysis() {
             break;
 
           case 'error':
-            showError(event.message || '분석 중 오류가 발생했어요');
+            showError(event.message || t('group_page.err_progress'));
             break;
         }
       }
     }
   } catch (err) {
-    showError('네트워크 오류가 발생했어요. 다시 시도해 주세요.');
+    showError(t('group_page.err_network'));
   }
 }
 
@@ -609,7 +631,7 @@ function buildProgressGrid() {
           </div>
         </div>
         <p class="text-xs font-medium text-[#111318] text-center max-w-[72px] truncate">${app.appName}</p>
-        <p class="app-status text-xs text-[#636e88]">대기 중</p>
+        <p class="app-status text-xs text-[#636e88]">${t('group_page.waiting')}</p>
       </div>`;
   }).join('');
 }
@@ -627,20 +649,20 @@ function setAppStatus(index, status) {
     icon.style.filter = 'blur(2px)';
     icon.style.opacity = '0.5';
     spinner.classList.remove('hidden');
-    statusText.textContent = '분석 중...';
+    statusText.textContent = t('group_page.analyzing');
   } else if (status === 'done') {
     icon.style.filter = 'none';
     icon.style.opacity = '1';
     spinner.classList.add('hidden');
     check.classList.remove('hidden');
-    statusText.textContent = '완료';
+    statusText.textContent = t('group_page.done');
     statusText.classList.add('text-green-500');
   } else if (status === 'error') {
     icon.style.filter = 'none';
     icon.style.opacity = '0.5';
     spinner.classList.add('hidden');
     errorLayer.classList.remove('hidden');
-    statusText.textContent = '실패';
+    statusText.textContent = t('group_page.failed');
     statusText.classList.add('text-red-400');
   }
 }
@@ -654,10 +676,10 @@ function showError(message) {
   document.getElementById('progress-view').innerHTML = `
     <div class="flex flex-col items-center gap-4 text-center p-8">
       <span class="material-symbols-outlined text-5xl text-red-400">error</span>
-      <p class="text-base font-semibold text-[#111318]">분석 실패</p>
+      <p class="text-base font-semibold text-[#111318]">${t('group_page.error_title')}</p>
       <p class="text-sm text-[#636e88]">${message}</p>
-      <button onclick="location.href='/group-analysis.html'" class="mt-2 px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
-        다시 시도
+      <button onclick="location.href='/analysis/group-analysis.html'" class="mt-2 px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
+        ${t('group_page.retry')}
       </button>
     </div>`;
 }
