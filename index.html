@@ -158,7 +158,15 @@
             <div id="search-section" class="relative w-full max-w-[640px] z-40 px-2 sm:px-0">
               <div class="search-box group relative flex h-14 sm:h-16 w-full items-center rounded-xl bg-white px-4 sm:px-6 shadow-2xl ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary transition-all">
                 <!-- Market selector -->
-                <select id="market-select" class="shrink-0 border-none bg-transparent text-sm font-semibold text-[#636e88] focus:outline-none focus:ring-0 cursor-pointer mr-2 sm:mr-3 pr-1">
+                <div class="shrink-0 flex items-center gap-0.5 mr-2 sm:mr-3 relative">
+                  <!-- Tooltip balloon -->
+                  <div id="market-tooltip" class="hidden absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 z-50 pointer-events-none">
+                    <div class="bg-[#111318] text-white text-xs font-medium rounded-lg px-3 py-2 whitespace-nowrap shadow-lg relative">
+                      <span data-i18n="index.market_tooltip">검색할 앱의 타겟 마켓이에요</span>
+                      <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#111318]"></div>
+                    </div>
+                  </div>
+                  <select id="market-select" class="appearance-none border-none bg-transparent text-sm font-semibold text-[#636e88]">
                   <option value="kr">🇰🇷 KR</option>
                   <option value="us">🇺🇸 US</option>
                   <option value="jp">🇯🇵 JP</option>
@@ -169,6 +177,7 @@
                   <option value="in">🇮🇳 IN</option>
                   <option value="br">🇧🇷 BR</option>
                 </select>
+                </div>
                 <div class="w-px h-5 bg-[#dcdee5] shrink-0 mr-2 sm:mr-3"></div>
                 <span class="material-symbols-outlined text-[#636e88] text-xl sm:text-2xl mr-2 sm:mr-3 shrink-0">search</span>
                 <input

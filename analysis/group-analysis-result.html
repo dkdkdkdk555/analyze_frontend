@@ -45,15 +45,15 @@
   <!-- Loading -->
   <div id="loading-view" class="flex flex-col items-center justify-center min-h-[60vh] gap-3">
     <div class="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-    <p class="text-sm text-[#636e88]">분석 결과를 불러오는 중...</p>
+    <p class="text-sm text-[#636e88]" data-i18n="group_result.loading">분석 결과를 불러오는 중...</p>
   </div>
 
   <!-- Error -->
   <div id="error-view" class="hidden flex flex-col items-center justify-center min-h-[60vh] gap-4">
     <span class="material-symbols-outlined text-5xl text-red-400">error</span>
-    <p class="text-base font-semibold text-[#111318]">결과를 불러올 수 없어요</p>
+    <p class="text-base font-semibold text-[#111318]" data-i18n="group_result.error_msg">결과를 불러올 수 없어요</p>
     <a href="/analysis/group-analysis.html" class="px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
-      새 그룹 분석 시작
+      <span data-i18n="group_result.error_btn">새 그룹 분석 시작</span>
     </a>
   </div>
 
@@ -62,9 +62,9 @@
 
     <!-- Breadcrumb -->
     <nav class="text-sm text-[#636e88] flex items-center gap-1 mb-6">
-      <a href="/" class="hover:text-primary transition-colors">홈</a>
+      <a href="/" class="hover:text-primary transition-colors" data-i18n="group_result.breadcrumb_home">홈</a>
       <span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
-      <a href="/analysis/group-analysis.html" class="hover:text-primary transition-colors">그룹 분석</a>
+      <a href="/analysis/group-analysis.html" class="hover:text-primary transition-colors" data-i18n="group_result.breadcrumb_group">그룹 분석</a>
       <span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
       <span class="text-[#111318] font-medium" id="breadcrumb-group-name"></span>
     </nav>
@@ -73,7 +73,7 @@
     <div class="bg-white border border-[#e5e7eb] rounded-2xl p-6 mb-6">
       <div class="flex items-start justify-between gap-4 mb-4">
         <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">그룹 분석 결과</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-primary mb-1" data-i18n="group_result.label">그룹 분석 결과</p>
           <h1 id="group-name-title" class="text-2xl font-black text-[#111318]"></h1>
         </div>
         <div id="print-actions" class="flex gap-2 flex-shrink-0">
@@ -103,7 +103,7 @@
         <span class="material-symbols-outlined" style="font-size:14px">scatter_plot</span>
         01 · <span data-i18n="group.positioning_map">포지셔닝 맵</span>
       </div>
-      <p class="text-xs text-[#636e88] mb-5">각 앱의 시장 내 포지션과 기회 공간을 시각화한 분석입니다.</p>
+      <p class="text-xs text-[#636e88] mb-5" data-i18n="group_result.positioning_desc">각 앱의 시장 내 포지션과 기회 공간을 시각화한 분석입니다.</p>
       <div class="relative mx-auto" style="max-width:500px">
         <canvas id="positioning-canvas" width="500" height="500" class="w-full border border-[#e5e7eb] rounded-xl"></canvas>
       </div>
@@ -116,7 +116,7 @@
         <span class="material-symbols-outlined" style="font-size:14px">report_problem</span>
         02-1 · <span data-i18n="group.pain_points">공통 페인포인트</span>
       </div>
-      <p class="text-xs text-[#636e88] mb-5">여러 앱에서 공통으로 발견된 미해결 문제들입니다.</p>
+      <p class="text-xs text-[#636e88] mb-5" data-i18n="group_result.pain_points_desc">여러 앱에서 공통으로 발견된 미해결 문제들입니다.</p>
       <div id="pain-points-section" class="flex flex-col gap-4"></div>
     </div>
 
@@ -126,7 +126,7 @@
         <span class="material-symbols-outlined" style="font-size:14px">pie_chart</span>
         02-2 · <span data-i18n="group.market_share">시장 점유율 추정</span>
       </div>
-      <p class="text-xs text-[#636e88] mb-5">리뷰 수와 평점을 기반으로 추정한 시장 내 존재감입니다.</p>
+      <p class="text-xs text-[#636e88] mb-5" data-i18n="group_result.market_share_desc">리뷰 수와 평점을 기반으로 추정한 시장 내 존재감입니다.</p>
       <div id="market-share-section" class="flex flex-col gap-3 mb-4"></div>
       <div class="bg-background-light rounded-xl p-4">
         <p id="market-share-insight" class="text-sm text-[#636e88] leading-relaxed"></p>
@@ -139,7 +139,7 @@
         <span class="material-symbols-outlined" style="font-size:14px">rocket_launch</span>
         03 · <span data-i18n="group.opportunity">진입 기회 전략</span>
       </div>
-      <p class="text-xs text-[#636e88] mb-5">이 시장에 새로운 서비스로 진입한다면 고려할 핵심 전략입니다.</p>
+      <p class="text-xs text-[#636e88] mb-5" data-i18n="group_result.opportunity_desc">이 시장에 새로운 서비스로 진입한다면 고려할 핵심 전략입니다.</p>
       <div id="entry-opportunity-section"></div>
     </div>
 
@@ -149,7 +149,7 @@
         <span class="material-symbols-outlined" style="font-size:14px">shield_with_heart</span>
         04 · <span data-i18n="group.risks">진입 리스크</span>
       </div>
-      <p class="text-xs text-[#636e88] mb-5">시장 진입 시 주의해야 할 리스크 요인들입니다.</p>
+      <p class="text-xs text-[#636e88] mb-5" data-i18n="group_result.risks_desc">시장 진입 시 주의해야 할 리스크 요인들입니다.</p>
       <div id="entry-risks-section" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
     </div>
 
@@ -157,9 +157,9 @@
     <div class="bg-white border border-[#e5e7eb] rounded-2xl p-6 mb-6">
       <div class="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 flex items-center gap-1">
         <span class="material-symbols-outlined" style="font-size:14px">apps</span>
-        05 · 개별 앱 분석
+        05 · <span data-i18n="group_result.individual_title">개별 앱 분석</span>
       </div>
-      <p class="text-xs text-[#636e88] mb-5">각 앱의 상세 분석 결과를 확인하세요.</p>
+      <p class="text-xs text-[#636e88] mb-5" data-i18n="group_result.individual_desc">각 앱의 상세 분석 결과를 확인하세요.</p>
       <div id="individual-apps-section" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </div>
 
@@ -167,7 +167,7 @@
     <div class="text-center py-4">
       <a href="/analysis/group-analysis.html" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
         <span class="material-symbols-outlined" style="font-size:18px">add</span>
-        새 그룹 분석 시작
+        <span data-i18n="group_result.new_analysis">새 그룹 분석 시작</span>
       </a>
     </div>
 

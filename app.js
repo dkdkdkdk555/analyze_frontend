@@ -34,3 +34,24 @@ initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
 initFooter();
 initSearchBar(API_BASE_URL);
 applyTranslations();
+
+// Market selector tooltip
+const marketSelect = document.getElementById('market-select');
+const searchInput = document.getElementById('search-input');
+const marketTooltip = document.getElementById('market-tooltip');
+let tooltipTimer;
+
+function showMarketTooltip() {
+  if (!marketTooltip) return;
+  marketTooltip.classList.remove('hidden');
+  clearTimeout(tooltipTimer);
+  tooltipTimer = setTimeout(() => marketTooltip.classList.add('hidden'), 3000);
+}
+
+if (marketSelect) marketSelect.addEventListener('click', showMarketTooltip);
+if (searchInput) searchInput.addEventListener('focus', showMarketTooltip);
+document.addEventListener('click', (e) => {
+  if (marketTooltip && !marketSelect?.contains(e.target) && !searchInput?.contains(e.target)) {
+    marketTooltip.classList.add('hidden');
+  }
+});

@@ -1,7 +1,7 @@
 import { renderRatingChart } from '../components/rating-chart.js';
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
-import { getLang, applyTranslations } from '../components/i18n.js';
+import { getLang, getMarket, t, applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const params = new URLSearchParams(window.location.search);
@@ -28,11 +28,17 @@ let pendingAnalysisData = null; // Store analysis result while waiting for minim
 const MIN_LOADING_TIME_MS = 21000;
 const LOADING_MESSAGE_INTERVAL_MS = 7000;
 
-const loadingMessages = [
-  '스토어 등록정보를 분석 중 입니다..',
-  '각 스토어의 리뷰를 분석 중 입니다..',
-  '웹서치하여 정성데이터를 분석 중 입니다..'
-];
+const loadingMessages = getLang() === 'en'
+  ? [
+      'Analyzing app store listings..',
+      'Analyzing reviews from each store..',
+      'Web searching for qualitative data..'
+    ]
+  : [
+      '스토어 등록정보를 분석 중 입니다..',
+      '각 스토어의 리뷰를 분석 중 입니다..',
+      '웹서치하여 정성데이터를 분석 중 입니다..'
+    ];
 let currentLoadingMessageIndex = 0;
 
 // 페이지 노출 이벤트 전송 (A/B 테스트 추적)
@@ -81,6 +87,7 @@ async function analyzeApp() {
         playStoreUrl,
         abText: AB_TEXT,
         lang: getLang(),
+        market: getMarket(),
         // 메타데이터 전달 (iTunes API 실패 시 fallback)
         metadata: appName ? { appName, iconUrl, developer } : undefined
       })
@@ -150,8 +157,8 @@ function renderResults(data) {
   // App Header
   document.getElementById('app-icon').src = data.appIconUrl || '';
   document.getElementById('app-name').textContent = data.appName || '';
-  document.getElementById('breadcrumb-app-name').textContent = `앱 분석: ${data.appName || ''}`;
-  document.getElementById('app-meta').textContent = `분석 완료 | ${new Date().toLocaleDateString('ko-KR')}`;
+  document.getElementById('breadcrumb-app-name').textContent = `${t('analysis.app_analysis_prefix')}: ${data.appName || ''}`;
+  document.getElementById('app-meta').textContent = `${t('analysis.analysis_done')} | ${new Date().toLocaleDateString(getLang() === 'en' ? 'en-US' : 'ko-KR')}`;
 
   // Store links
   const appStoreLinkEl = document.getElementById('app-store-link');
@@ -226,7 +233,7 @@ function renderResults(data) {
     .sort(([a], [b]) => parseInt(b) - parseInt(a))
     .map(([rating, review]) => {
       const stars = renderStars(parseInt(rating));
-      const label = parseInt(rating) >= 4 ? '긍정' : parseInt(rating) >= 3 ? '중립' : '부정';
+      const label = parseInt(rating) >= 4 ? t('analysis.review_positive') : parseInt(rating) >= 3 ? t('analysis.review_neutral') : t('analysis.review_negative');
       return `
         <div class="p-3 md:p-4">
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -449,7 +456,7 @@ async function submitFeedback(usePurpose) {
 
     feedbackSubmitted = true;
     const feedbackSection = document.querySelector('.user-feedback');
-    feedbackSection.innerHTML = '<p class="text-center py-8 text-[#636e88] font-medium">피드백 감사합니다!</p>';
+    feedbackSection.innerHTML = `<p class="text-center py-8 text-[#636e88] font-medium">${t('analysis.feedback_thanks')}</p>`;
   } catch (error) {
     console.error('Feedback error:', error);
   }

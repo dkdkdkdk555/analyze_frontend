@@ -23,6 +23,7 @@ async function checkGroupAnalysisFeature() {
 // ── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
   applyTranslations();
+  document.title = t('group_page.page_title');
   await initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
   initFooter();
 
@@ -591,7 +592,7 @@ async function startAnalysis() {
           case 'group_done':
             updateProgressBar(100);
             setTimeout(() => {
-              location.href = `/group-analysis-result.html?id=${event.groupAnalysisId}`;
+              location.href = `/analysis/group-analysis-result.html?id=${event.groupAnalysisId}`;
             }, 500);
             break;
 

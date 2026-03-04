@@ -1,29 +1,27 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
+import { getLang, t, applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
 function formatDate(dateStr) {
   if (!dateStr) return '-';
   const d = new Date(dateStr);
-  return d.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  const locale = getLang() === 'en' ? 'en-US' : 'ko-KR';
+  return d.toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
-const TYPE_LABEL = {
-  charge: '충전',
-  use: '사용',
-  refund: '환불',
-  bonus: '보너스',
-  expire: '만료',
-};
-
 function typeLabel(type) {
-  return TYPE_LABEL[type] || type || '-';
+  const key = `credit.type_${type}`;
+  const label = t(key);
+  return label !== key ? label : (type || '-');
 }
 
 async function init() {
   await initHeader({ page: 'credit-history', apiBaseUrl: API_BASE_URL });
   initFooter();
+  applyTranslations();
+  document.title = t('credit.history_page_title');
 
   const token = localStorage.getItem('auth_token');
 

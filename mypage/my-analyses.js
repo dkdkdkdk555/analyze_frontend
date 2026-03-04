@@ -1,5 +1,6 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
+import { getLang, t, applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -10,7 +11,8 @@ async function getAuthToken() {
 function formatDate(dateStr) {
   if (!dateStr) return '-';
   const d = new Date(dateStr);
-  return d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const locale = getLang() === 'en' ? 'en-US' : 'ko-KR';
+  return d.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
 // ─── 목록 뷰 ───────────────────────────────────────────────────────────────
@@ -41,7 +43,7 @@ function renderList(analyses) {
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-0.5">
               <p class="text-base font-bold text-[#111318] truncate">${a.app_identifier}</p>
-              <span class="text-[10px] font-bold bg-primary text-white px-1.5 py-0.5 rounded-full flex-shrink-0">그룹</span>
+              <span class="text-[10px] font-bold bg-primary text-white px-1.5 py-0.5 rounded-full flex-shrink-0">${t('mypage.group_badge')}</span>
             </div>
             <div class="flex items-center gap-1 mb-0.5">${iconCollage}</div>
             <p class="text-xs text-[#636e88] mt-0.5">${formatDate(a.created_at)}</p>
@@ -57,6 +59,11 @@ function renderList(analyses) {
       : '';
     const fallbackHtml = `<div class="${iconUrl ? 'hidden' : 'flex'} w-12 h-12 rounded-xl bg-primary items-center justify-center text-white font-bold text-lg shrink-0">${(a.app_identifier || '?')[0].toUpperCase()}</div>`;
 
+    // Lang/Market badges
+    const langLabel = a.lang === 'en' ? 'EN' : 'KO';
+    const marketLabel = (a.market || 'kr').toUpperCase();
+    const langMarketBadge = `<span class="text-[10px] font-medium bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${langLabel} · ${marketLabel}</span>`;
+
     return `
       <button
         data-id="${a.id}"
@@ -67,7 +74,10 @@ function renderList(analyses) {
           ${fallbackHtml}
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-base font-bold text-[#111318] truncate">${a.app_identifier}</p>
+          <div class="flex items-center gap-2 mb-0.5">
+            <p class="text-base font-bold text-[#111318] truncate">${a.app_identifier}</p>
+            ${langMarketBadge}
+          </div>
           <p class="text-xs text-[#636e88] mt-0.5">${formatDate(a.created_at)}</p>
         </div>
         <span class="material-symbols-outlined text-[#c4c8d4] text-xl shrink-0">chevron_right</span>
@@ -145,7 +155,7 @@ function renderDetailRatings(ratings) {
         <div class="w-full h-full rounded-full" style="background:conic-gradient(${gradientParts.join(',')})"></div>
         <div class="absolute inset-3 md:inset-4 bg-white rounded-full flex flex-col items-center justify-center">
           <span class="text-2xl md:text-3xl font-bold">${avg.toFixed(1)}</span>
-          <span class="text-[10px] text-gray-500">평균 평점</span>
+          <span class="text-[10px] text-gray-500">${t('analysis.avg_rating')}</span>
         </div>
       </div>
       <div class="mt-4 w-full space-y-1.5">${legendRows}</div>
@@ -156,7 +166,7 @@ function renderDetailReviews(reviewsByRating) {
   const entries = Object.entries(reviewsByRating).sort(([a], [b]) => parseInt(b) - parseInt(a));
   if (!entries.length) return '';
   const rows = entries.map(([rating, review]) => {
-    const label = parseInt(rating) >= 4 ? '긍정' : parseInt(rating) >= 3 ? '중립' : '부정';
+    const label = parseInt(rating) >= 4 ? t('analysis.review_positive') : parseInt(rating) >= 3 ? t('analysis.review_neutral') : t('analysis.review_negative');
     const keywords = review.keywords?.length
       ? `<div class="flex flex-wrap gap-1 mt-1">${review.keywords.map(k => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${k}</span>`).join('')}</div>`
       : '';
@@ -178,7 +188,7 @@ function renderDetailComplaintCard(icon, title, complaint) {
   if (complaint.items) items.push(...complaint.items);
   const listHtml = items.slice(0, 3).map(item =>
     `<li class="flex gap-2"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div><p class="text-xs md:text-sm">${item}</p></li>`
-  ).join('') || '<li class="text-xs text-gray-400">데이터 없음</li>';
+  ).join('') || `<li class="text-xs text-gray-400">${t('mypage.data_none')}</li>`;
   return `
     <div class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5">
       <div class="flex items-center gap-2 mb-3 border-b pb-2 border-gray-100">
@@ -225,7 +235,7 @@ function renderDetail(analysis, data) {
       </div>
       <button onclick="downloadDetailAsPDF('${appName.replace(/'/g, "\\'")}')" class="no-print shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-[#dcdee5] rounded-lg text-[#636e88] hover:border-primary hover:text-primary transition-colors bg-white self-start">
         <span class="material-symbols-outlined text-sm">download</span>
-        PDF 저장
+        ${t('mypage.pdf_save')}
       </button>
     </div>`;
 
@@ -238,7 +248,7 @@ function renderDetail(analysis, data) {
       <section class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">01.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight">시장 정의</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.market_definition')}</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div class="flex flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dcdee5] bg-white">
@@ -261,7 +271,7 @@ function renderDetail(analysis, data) {
       <section class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">02.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight">핵심 가치</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.core_value')}</h2>
         </div>
         <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-8">
           <p class="text-primary text-base md:text-xl lg:text-2xl font-bold leading-relaxed">${data.coreValue.statement || ''}</p>
@@ -279,7 +289,7 @@ function renderDetail(analysis, data) {
       <section>
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">03.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight">핵심 기능</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.core_features')}</h2>
         </div>
         <div class="bg-white border border-[#dcdee5] rounded-xl overflow-hidden">
           <ul class="divide-y divide-gray-100">
@@ -299,7 +309,7 @@ function renderDetail(analysis, data) {
       <section>
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">04.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight">미해결 문제</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.unresolved')}</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
           ${data.unresolvedProblems.map(p => {
@@ -332,7 +342,7 @@ function renderDetail(analysis, data) {
         <div class="lg:col-span-1">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">05.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight">평점 분포</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.rating_dist')}</h2>
           </div>
           ${renderDetailRatings(data.ratings)}
         </div>
@@ -340,7 +350,7 @@ function renderDetail(analysis, data) {
         <div class="lg:col-span-2">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">06.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight">평점별 리뷰 요약</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.reviews_by_rating')}</h2>
           </div>
           ${reviewsHtml}
         </div>` : ''}
@@ -353,12 +363,12 @@ function renderDetail(analysis, data) {
       <section class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">07.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight">불만 카테고리</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.complaints')}</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           ${renderDetailComplaintCard('grid_view', 'UI / UX', data.complaints.uiUx)}
-          ${renderDetailComplaintCard('speed', '성능', data.complaints.performance)}
-          ${renderDetailComplaintCard('security', '안정성', data.complaints.stability)}
+          ${renderDetailComplaintCard('speed', t('analysis.performance'), data.complaints.performance)}
+          ${renderDetailComplaintCard('security', t('analysis.stability'), data.complaints.stability)}
         </div>
       </section>`);
   }
@@ -370,7 +380,7 @@ function renderDetail(analysis, data) {
         <div class="bg-primary rounded-xl p-4 md:p-8 shadow-lg shadow-primary/20 text-white">
           <div class="flex items-center gap-2 mb-2">
             <span class="material-symbols-outlined text-lg md:text-xl">lightbulb</span>
-            <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider">전략 제안</h2>
+            <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider">${t('analysis.strategy')}</h2>
           </div>
           <p class="text-lg md:text-2xl font-bold leading-snug">${data.strategySuggestion.oneLine || ''}</p>
           <p class="mt-2 md:mt-4 text-sm md:text-base opacity-90">${data.strategySuggestion.reasoning || ''}</p>
@@ -403,6 +413,7 @@ async function loadDetail(id) {
 // ─── 초기화 ──────────────────────────────────────────────────────────────────
 
 async function init() {
+  applyTranslations();
   await initHeader({ page: 'my-analyses', apiBaseUrl: API_BASE_URL });
   initFooter();
 

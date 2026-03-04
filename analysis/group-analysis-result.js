@@ -1,6 +1,6 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
-import { applyTranslations } from '../components/i18n.js';
+import { getLang, t, applyTranslations } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -59,8 +59,11 @@ async function renderResult(data) {
   }).join('');
 
   // Meta
-  const date = created_at ? new Date(created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-  document.getElementById('group-meta').textContent = `분석일: ${date} · 앱 ${apps.length}개`;
+  const locale = getLang() === 'en' ? 'en-US' : 'ko-KR';
+  const date = created_at ? new Date(created_at).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+  document.getElementById('group-meta').textContent = getLang() === 'en'
+    ? `Analyzed: ${date} · ${apps.length} apps`
+    : `분석일: ${date} · 앱 ${apps.length}개`;
 
   // Verdict
   document.getElementById('verdict-statement').textContent = result.verdict?.statement || '';
@@ -168,7 +171,7 @@ async function renderPositioningMap(posMap, apps) {
     ctx.fillStyle = '#1E5AE8';
     ctx.font = 'bold 10px Noto Sans KR, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('💡 기회', ox, oy + 3);
+    ctx.fillText(`💡 ${t('group_result.opportunity_label')}`, ox, oy + 3);
   }
 
   // App dots (icon circles or colored fallback)
@@ -235,7 +238,7 @@ async function renderPositioningMap(posMap, apps) {
   if (posMap.opportunityZone) {
     legendEl.innerHTML += `<span class="flex items-center gap-1.5 text-xs text-primary">
       <span class="w-3 h-3 rounded-full border border-primary flex-shrink-0" style="background:rgba(30,90,232,0.1)"></span>
-      💡 ${posMap.opportunityZone.label || '기회 영역'}
+      💡 ${posMap.opportunityZone.label || t('group_result.opportunity_area')}
     </span>`;
   }
 }
@@ -244,14 +247,14 @@ async function renderPositioningMap(posMap, apps) {
 function renderPainPoints(painPoints) {
   const el = document.getElementById('pain-points-section');
   if (!painPoints.length) {
-    el.innerHTML = '<p class="text-sm text-[#636e88]">공통 페인포인트를 분석하지 못했어요.</p>';
+    el.innerHTML = `<p class="text-sm text-[#636e88]">${t('group_result.pain_points_none')}</p>`;
     return;
   }
 
   const severityMap = {
-    strong: { label: '강', color: 'bg-red-100 text-red-600', dot: 'bg-red-500' },
-    medium: { label: '중', color: 'bg-yellow-100 text-yellow-600', dot: 'bg-yellow-500' },
-    weak: { label: '약', color: 'bg-gray-100 text-gray-500', dot: 'bg-gray-400' },
+    strong: { key: 'group_result.severity_strong', color: 'bg-red-100 text-red-600', dot: 'bg-red-500' },
+    medium: { key: 'group_result.severity_medium', color: 'bg-yellow-100 text-yellow-600', dot: 'bg-yellow-500' },
+    weak:   { key: 'group_result.severity_weak',   color: 'bg-gray-100 text-gray-500',   dot: 'bg-gray-400' },
   };
 
   el.innerHTML = painPoints.map(pp => {
@@ -264,10 +267,10 @@ function renderPainPoints(painPoints) {
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-1">
               <span class="font-semibold text-sm text-[#111318]">${pp.problem}</span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${sev.color}">${sev.label}</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${sev.color}">${t(sev.key)}</span>
             </div>
             <p class="text-xs text-[#636e88] leading-relaxed mb-2">${pp.description}</p>
-            ${affectedApps ? `<p class="text-[11px] text-[#636e88]">영향 앱: <span class="font-medium text-[#111318]">${affectedApps}</span></p>` : ''}
+            ${affectedApps ? `<p class="text-[11px] text-[#636e88]">${t('group_result.affected_apps')}: <span class="font-medium text-[#111318]">${affectedApps}</span></p>` : ''}
           </div>
         </div>
       </div>`;
@@ -299,10 +302,13 @@ function renderMarketShare(marketShare, insight) {
 // ── Entry Opportunity ─────────────────────────────────────────────────────────
 function renderEntryOpportunity(opportunity) {
   const el = document.getElementById('entry-opportunity-section');
-  if (!opportunity) { el.innerHTML = '<p class="text-sm text-[#636e88]">진입 기회 분석을 불러오지 못했어요.</p>'; return; }
+  if (!opportunity) {
+    el.innerHTML = `<p class="text-sm text-[#636e88]">${t('group_result.opportunity_none')}</p>`;
+    return;
+  }
 
-  const tags = (opportunity.tags || []).map(t =>
-    `<span class="px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">${t}</span>`
+  const tags = (opportunity.tags || []).map(tag =>
+    `<span class="px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">${tag}</span>`
   ).join('');
 
   el.innerHTML = `
@@ -318,14 +324,14 @@ function renderEntryOpportunity(opportunity) {
 function renderEntryRisks(risks) {
   const el = document.getElementById('entry-risks-section');
   if (!risks.length) {
-    el.innerHTML = '<p class="text-sm text-[#636e88]">리스크 분석을 불러오지 못했어요.</p>';
+    el.innerHTML = `<p class="text-sm text-[#636e88]">${t('group_result.risks_none')}</p>`;
     return;
   }
 
   const sevColors = {
-    HIGH: { bg: 'bg-red-50', border: 'border-red-200', badge: 'bg-red-100 text-red-600', label: '높음' },
-    MEDIUM: { bg: 'bg-yellow-50', border: 'border-yellow-200', badge: 'bg-yellow-100 text-yellow-600', label: '중간' },
-    LOW: { bg: 'bg-gray-50', border: 'border-gray-200', badge: 'bg-gray-100 text-gray-500', label: '낮음' },
+    HIGH:   { bg: 'bg-red-50',    border: 'border-red-200',    badge: 'bg-red-100 text-red-600',       key: 'group_result.severity_high' },
+    MEDIUM: { bg: 'bg-yellow-50', border: 'border-yellow-200', badge: 'bg-yellow-100 text-yellow-600', key: 'group_result.severity_mid' },
+    LOW:    { bg: 'bg-gray-50',   border: 'border-gray-200',   badge: 'bg-gray-100 text-gray-500',     key: 'group_result.severity_low' },
   };
 
   el.innerHTML = risks.map(risk => {
@@ -334,7 +340,7 @@ function renderEntryRisks(risks) {
       <div class="${sev.bg} border ${sev.border} rounded-xl p-4">
         <div class="flex items-start justify-between gap-2 mb-2">
           <p class="text-sm font-bold text-[#111318]">${risk.risk}</p>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${sev.badge}">${sev.label}</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${sev.badge}">${t(sev.key)}</span>
         </div>
         <p class="text-xs text-[#636e88] leading-relaxed">${risk.description}</p>
       </div>`;
@@ -359,7 +365,7 @@ function renderIndividualApps(apps) {
         ${iconHtml}
         <div class="flex-1 min-w-0">
           <p class="text-sm font-semibold text-[#111318] truncate">${app.appName}</p>
-          <p class="text-xs text-[#636e88] mt-0.5">개별 분석 보기</p>
+          <p class="text-xs text-[#636e88] mt-0.5">${t('group_result.individual_link')}</p>
         </div>
         <span class="material-symbols-outlined text-[#636e88] group-hover:text-primary transition-colors" style="font-size:18px">arrow_forward</span>
       </a>`;
