@@ -17,6 +17,35 @@ function typeLabel(type) {
   return label !== key ? label : (type || '-');
 }
 
+/**
+ * Translates credit description based on current language.
+ * Parses patterns like "앱 분석: AppName" or "그룹 분석: GroupName (2개 앱)"
+ */
+function translateDescription(desc) {
+  if (!desc) return '-';
+
+  // Pattern: "앱 분석: AppName" or just "앱 분석"
+  const appMatch = desc.match(/^앱 분석(?::\s*(.+))?$/);
+  if (appMatch) {
+    const appName = appMatch[1];
+    const prefix = t('credit.desc_app_analysis');
+    return appName ? `${prefix}: ${appName}` : prefix;
+  }
+
+  // Pattern: "그룹 분석: GroupName (N개 앱)"
+  const groupMatch = desc.match(/^그룹 분석:\s*(.+?)\s*\((\d+)개 앱\)$/);
+  if (groupMatch) {
+    const groupName = groupMatch[1];
+    const count = groupMatch[2];
+    const prefix = t('credit.desc_group_analysis');
+    const suffix = t('credit.desc_apps_suffix');
+    return `${prefix}: ${groupName} (${count} ${suffix})`;
+  }
+
+  // No pattern matched, return as-is
+  return desc;
+}
+
 async function init() {
   await initHeader({ page: 'credit-history', apiBaseUrl: API_BASE_URL });
   initFooter();
@@ -76,7 +105,7 @@ async function init() {
         <td class="px-5 py-4">
           <div class="flex items-center gap-2">
             <span class="inline-block px-2 py-0.5 text-xs font-medium rounded-full ${isPositive ? 'bg-green-100 text-green-700' : 'bg-[#f0f1f4] text-[#636e88]'}">${typeLabel(entry.type)}</span>
-            <span class="text-sm text-[#111318]">${entry.description || '-'}</span>
+            <span class="text-sm text-[#111318]">${translateDescription(entry.description)}</span>
           </div>
         </td>
         <td class="px-5 py-4 text-right text-sm ${amountClass}">${amountText}</td>

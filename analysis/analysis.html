@@ -76,7 +76,7 @@
     <!-- Loading State -->
     <div id="loading" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
       <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-[#f0f1f4] border-t-primary rounded-full animate-spin"></div>
-      <p id="loading-text" class="text-[#636e88] text-base md:text-lg transition-opacity duration-500 ease-in-out" data-i18n="analysis.loading_initial">스토어 등록정보를 분석 중 입니다..</p>
+      <p id="loading-text" class="text-[#636e88] text-base md:text-lg transition-opacity duration-500 ease-in-out" data-i18n="analysis.loading_initial">Analyzing app store listings..</p>
       <!-- Video Ad during loading (hidden by default, shown only if ad loads) -->
       <!-- 분석드가분석중 -->
       <!-- <div id="loading-ad-container" class="w-full max-w-[728px] mx-auto mt-4" style="min-height: 90px;">
@@ -107,19 +107,19 @@
     <!-- Error State -->
     <div id="error" class="hidden flex flex-col items-center justify-center min-h-[60vh] gap-6">
       <span class="material-symbols-outlined text-5xl md:text-6xl text-red-400">error</span>
-      <p class="text-[#636e88] text-base md:text-lg" data-i18n="analysis.error_msg">오류가 발생했습니다</p>
+      <p class="text-[#636e88] text-base md:text-lg" data-i18n="analysis.error_msg">An error occurred</p>
       <button id="retry-btn" class="flex items-center justify-center rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors" data-i18n="analysis.retry">
-        다시 시도
+        Retry
       </button>
     </div>
 
     <!-- Limited State -->
     <div id="limited" class="hidden flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4">
       <span class="material-symbols-outlined text-5xl md:text-6xl text-orange-400">lock</span>
-      <p class="text-[#111318] text-lg md:text-xl font-bold" data-i18n="analysis.limited_title">일일 무료 분석 한도를 초과했습니다</p>
-      <p class="text-[#636e88] text-sm md:text-base" data-i18n="analysis.limited_desc">정식 출시 시 알림을 받으시겠어요?</p>
+      <p class="text-[#111318] text-lg md:text-xl font-bold" data-i18n="analysis.limited_title">Daily free analysis limit reached</p>
+      <p class="text-[#636e88] text-sm md:text-base" data-i18n="analysis.limited_desc">Would you like to be notified when we launch?</p>
       <button id="email-signup-btn" class="flex items-center justify-center rounded-lg h-11 px-8 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors" data-i18n="analysis.email_signup_btn">
-        런칭 알림 받기
+        Get launch notification
       </button>
     </div>
 
@@ -127,9 +127,9 @@
     <div id="results" class="hidden">
       <!-- Breadcrumbs -->
       <div class="flex flex-wrap gap-2 pb-4 md:pb-6 items-center text-sm">
-        <a class="text-[#636e88] font-medium hover:text-primary" href="/" data-i18n="analysis.breadcrumb_home">홈</a>
+        <a class="text-[#636e88] font-medium hover:text-primary" href="/" data-i18n="analysis.breadcrumb_home">Home</a>
         <span class="text-[#636e88]">/</span>
-        <span id="breadcrumb-app-name" class="text-[#111318] font-bold" data-i18n="analysis.breadcrumb_analysis">앱 분석</span>
+        <span id="breadcrumb-app-name" class="text-[#111318] font-bold" data-i18n="analysis.breadcrumb_analysis">App Analysis</span>
       </div>
 
       <!-- Profile Header -->
@@ -158,11 +158,11 @@
           </div>
           <button id="group-analyze-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 border border-primary text-primary text-xs md:text-sm font-bold hover:bg-primary/5 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">group_work</span>
-            <span data-i18n="analysis.group_analysis_btn">그룹분석 시작하기</span>
+            <span data-i18n="analysis.group_analysis_btn">Start Group Analysis</span>
           </button>
           <button id="download-pdf-btn" class="flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
             <span class="material-symbols-outlined mr-2 text-lg">download</span>
-            <span data-i18n="analysis.download_pdf">PDF 다운로드</span>
+            <span data-i18n="analysis.download_pdf">Download PDF</span>
           </button>
           <input type="hidden" id="is-cached-result" value="false">
         </div>
@@ -172,7 +172,7 @@
       <section id="market-definition" class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">01.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.market_definition">시장 정의</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.market_definition">Market Definition</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div id="tam-card" class="flex flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dcdee5] bg-white">
@@ -192,7 +192,7 @@
       <section id="core-value" class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">02.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.core_value">핵심 가치</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.core_value">Core Value</h2>
         </div>
         <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-8">
             <p id="core-value-statement" class="text-primary text-base md:text-xl lg:text-2xl font-bold leading-relaxed"></p>
@@ -206,7 +206,7 @@
         <section id="core-features">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">03.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.core_features">핵심 기능</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.core_features">Core Features</h2>
           </div>
           <div class="bg-white border border-[#dcdee5] rounded-xl overflow-hidden">
             <ul id="core-features-list" class="divide-y divide-gray-100">
@@ -219,7 +219,7 @@
         <section id="unresolved-problems">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">04.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.unresolved">미해결 문제</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.unresolved">Unresolved Problems</h2>
           </div>
           <div id="unresolved-problems-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <!-- Problems will be dynamically inserted here -->
@@ -233,14 +233,14 @@
         <div id="ratings-chart" class="lg:col-span-1">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">05.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.rating_dist">평점 분포</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.rating_dist">Rating Distribution</h2>
           </div>
           <div class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-8 flex flex-col items-center">
             <div class="relative w-32 h-32 md:w-40 md:h-40">
               <div id="ratings-pie" class="w-full h-full rounded-full"></div>
               <div class="absolute inset-3 md:inset-4 bg-white rounded-full flex flex-col items-center justify-center">
                 <span id="overall-rating" class="text-2xl md:text-3xl font-bold"></span>
-                <span class="text-[10px] md:text-xs text-gray-500" data-i18n="analysis.avg_rating">평균 평점</span>
+                <span class="text-[10px] md:text-xs text-gray-500" data-i18n="analysis.avg_rating">Avg. Rating</span>
               </div>
             </div>
             <div id="ratings-legend" class="mt-4 md:mt-6 w-full space-y-1.5 md:space-y-2">
@@ -253,7 +253,7 @@
         <div id="reviews-by-rating" class="lg:col-span-2">
           <div class="flex items-center gap-2 mb-3 md:mb-4">
             <span class="text-primary font-bold text-sm md:text-base">06.</span>
-            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.reviews_by_rating">평점별 리뷰 요약</h2>
+            <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.reviews_by_rating">Reviews by Rating</h2>
           </div>
           <div id="reviews-list" class="bg-white border border-[#dcdee5] rounded-xl divide-y divide-gray-100">
             <!-- Reviews will be dynamically inserted here -->
@@ -265,7 +265,7 @@
       <section id="complaints" class="mb-8 md:mb-10">
         <div class="flex items-center gap-2 mb-3 md:mb-4">
           <span class="text-primary font-bold text-sm md:text-base">07.</span>
-          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.complaints">불만 카테고리</h2>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.complaints">Complaint Categories</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           <!-- UI/UX -->
@@ -282,7 +282,7 @@
           <div id="complaints-performance" class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5">
             <div class="flex items-center gap-2 mb-3 md:mb-4 border-b pb-2 md:pb-3 border-gray-100">
               <span class="material-symbols-outlined text-primary text-lg md:text-xl">speed</span>
-              <h3 class="font-bold text-sm md:text-base" data-i18n="analysis.performance">성능</h3>
+              <h3 class="font-bold text-sm md:text-base" data-i18n="analysis.performance">Performance</h3>
             </div>
             <ul id="complaints-performance-list" class="space-y-2 md:space-y-3">
               <!-- Complaints will be dynamically inserted here -->
@@ -292,7 +292,7 @@
           <div id="complaints-stability" class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5 sm:col-span-2 md:col-span-1">
             <div class="flex items-center gap-2 mb-3 md:mb-4 border-b pb-2 md:pb-3 border-gray-100">
               <span class="material-symbols-outlined text-primary text-lg md:text-xl">security</span>
-              <h3 class="font-bold text-sm md:text-base" data-i18n="analysis.stability">안정성</h3>
+              <h3 class="font-bold text-sm md:text-base" data-i18n="analysis.stability">Stability</h3>
             </div>
             <ul id="complaints-stability-list" class="space-y-2 md:space-y-3">
               <!-- Complaints will be dynamically inserted here -->
@@ -307,7 +307,7 @@
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="material-symbols-outlined text-lg md:text-xl">lightbulb</span>
-              <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider" data-i18n="analysis.strategy">전략 제안</h2>
+              <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider" data-i18n="analysis.strategy">Strategy Suggestion</h2>
             </div>
             <p id="strategy-oneline" class="text-lg md:text-2xl font-bold leading-snug"></p>
             <p id="strategy-reasoning" class="mt-2 md:mt-4 text-sm md:text-base opacity-90"></p>
@@ -320,24 +320,24 @@
         <div class="max-w-2xl mx-auto bg-white rounded-xl border border-dashed border-primary/40 p-4 md:p-8">
           <!-- Survey -->
           <div class="mb-6">
-            <p class="text-base md:text-lg font-bold mb-3 md:mb-4 text-center" data-i18n="analysis.survey_title">이 분석을 어떻게 활용하실 건가요?</p>
+            <p class="text-base md:text-lg font-bold mb-3 md:mb-4 text-center" data-i18n="analysis.survey_title">How will you use this analysis?</p>
             <div class="flex flex-wrap justify-center gap-2 md:gap-3">
-              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="앱 기획 참고" data-i18n="analysis.survey_btn_planning">앱 기획 참고</button>
-              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="경쟁사 분석" data-i18n="analysis.survey_btn_competitor">경쟁사 분석</button>
-              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="투자자료 준비" data-i18n="analysis.survey_btn_investor">투자자료 준비</button>
-              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="그냥 테스트" data-i18n="analysis.survey_btn_test">그냥 테스트</button>
-              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="기타" data-i18n="analysis.survey_btn_other">기타(직접입력)</button>
+              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="앱 기획 참고" data-i18n="analysis.survey_btn_planning">App Planning</button>
+              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="경쟁사 분석" data-i18n="analysis.survey_btn_competitor">Competitor Research</button>
+              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="투자자료 준비" data-i18n="analysis.survey_btn_investor">Investor Materials</button>
+              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="그냥 테스트" data-i18n="analysis.survey_btn_test">Just Testing</button>
+              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="기타" data-i18n="analysis.survey_btn_other">Other (custom)</button>
             </div>
             <div id="survey-other-input" class="hidden mt-3">
-              <input id="survey-other-text" type="text" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm p-3" data-i18n-placeholder="analysis.survey_other_placeholder" placeholder="직접 입력해주세요">
+              <input id="survey-other-text" type="text" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm p-3" data-i18n-placeholder="analysis.survey_other_placeholder" placeholder="Type your own answer">
             </div>
           </div>
           <!-- Curious content (always visible) -->
           <div class="flex flex-col gap-3">
-            <label class="text-xs md:text-sm font-medium text-gray-600" data-i18n="analysis.curious_label">추가로 궁금한 점이 있으신가요?</label>
+            <label class="text-xs md:text-sm font-medium text-gray-600" data-i18n="analysis.curious_label">Any other questions?</label>
             <div class="flex flex-col sm:flex-row gap-2">
-              <textarea id="curious-content" class="flex-1 rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm md:text-base p-3" data-i18n-placeholder="analysis.curious_placeholder" placeholder="질문을 입력해주세요." rows="2"></textarea>
-              <button id="submit-feedback" class="bg-primary text-white px-4 md:px-6 py-2 rounded-lg font-bold text-sm md:text-base whitespace-nowrap disabled:bg-gray-300 disabled:cursor-not-allowed" data-i18n="analysis.send" disabled>전송</button>
+              <textarea id="curious-content" class="flex-1 rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm md:text-base p-3" data-i18n-placeholder="analysis.curious_placeholder" placeholder="Ask anything about this analysis." rows="2"></textarea>
+              <button id="submit-feedback" class="bg-primary text-white px-4 md:px-6 py-2 rounded-lg font-bold text-sm md:text-base whitespace-nowrap disabled:bg-gray-300 disabled:cursor-not-allowed" data-i18n="analysis.send" disabled>Send</button>
             </div>
           </div>
         </div>
@@ -349,22 +349,22 @@
       <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
         <div class="text-center mb-5">
           <span class="material-symbols-outlined text-4xl text-primary mb-2 block">favorite</span>
-          <h2 class="text-base md:text-lg font-bold leading-snug whitespace-pre-line" data-i18n="analysis.reuse_title">두 번째 분석 중이시네요&#10;계속 사용하시는 이유가 궁금합니다</h2>
+          <h2 class="text-base md:text-lg font-bold leading-snug whitespace-pre-line" data-i18n="analysis.reuse_title">It's your second analysis!&#10;We'd love to know what keeps you coming back.</h2>
         </div>
         <div class="flex flex-col gap-3">
           <div class="flex flex-wrap gap-2">
-            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="앱 기획 참고" data-i18n="analysis.survey_btn_planning">앱 기획 참고</button>
-            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="경쟁사 분석" data-i18n="analysis.survey_btn_competitor">경쟁사 분석</button>
-            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="투자자료 준비" data-i18n="analysis.survey_btn_investor">투자자료 준비</button>
-            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="그냥 테스트" data-i18n="analysis.survey_btn_test">그냥 테스트</button>
-            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="기타" data-i18n="analysis.survey_btn_other">기타(직접입력)</button>
+            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="앱 기획 참고" data-i18n="analysis.survey_btn_planning">App Planning</button>
+            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="경쟁사 분석" data-i18n="analysis.survey_btn_competitor">Competitor Research</button>
+            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="투자자료 준비" data-i18n="analysis.survey_btn_investor">Investor Materials</button>
+            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="그냥 테스트" data-i18n="analysis.survey_btn_test">Just Testing</button>
+            <button class="reuse-why-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="기타" data-i18n="analysis.survey_btn_other">Other (custom)</button>
           </div>
           <div id="reuse-why-other-input" class="hidden">
-            <input id="reuse-why-other-text" type="text" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm p-3" data-i18n-placeholder="analysis.survey_other_placeholder" placeholder="직접 입력해주세요">
+            <input id="reuse-why-other-text" type="text" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm p-3" data-i18n-placeholder="analysis.survey_other_placeholder" placeholder="Type your own answer">
           </div>
           <div class="flex gap-2">
-            <button id="close-reuse-popup" class="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors" data-i18n="analysis.close">닫기</button>
-            <button id="submit-reuse-why" class="flex-1 py-2.5 rounded-lg bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" data-i18n="analysis.send" disabled>전송</button>
+            <button id="close-reuse-popup" class="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors" data-i18n="analysis.close">Close</button>
+            <button id="submit-reuse-why" class="flex-1 py-2.5 rounded-lg bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" data-i18n="analysis.send" disabled>Send</button>
           </div>
         </div>
       </div>
@@ -377,12 +377,12 @@
         <div id="email-popup-step1">
           <div class="text-center">
             <span class="material-symbols-outlined text-4xl md:text-5xl text-primary mb-4">mail</span>
-            <h2 class="text-lg md:text-xl font-bold mb-2" data-i18n="analysis.email_popup_title">런칭 알림 받기</h2>
-            <p class="text-[#636e88] text-sm md:text-base mb-4 md:mb-6" data-i18n="analysis.email_popup_desc">정식 런칭 시 이메일로 알려드립니다</p>
-            <input id="email-input" type="email" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm md:text-base p-3 mb-4" data-i18n-placeholder="analysis.email_placeholder" placeholder="이메일을 입력해주세요">
+            <h2 class="text-lg md:text-xl font-bold mb-2" data-i18n="analysis.email_popup_title">Get Launch Alerts</h2>
+            <p class="text-[#636e88] text-sm md:text-base mb-4 md:mb-6" data-i18n="analysis.email_popup_desc">We'll notify you by email when we officially launch</p>
+            <input id="email-input" type="email" class="w-full rounded-lg border-gray-200 bg-background-light focus:border-primary focus:ring-1 focus:ring-primary text-sm md:text-base p-3 mb-4" data-i18n-placeholder="analysis.email_placeholder" placeholder="Enter your email">
             <div class="flex gap-2 md:gap-3">
-              <button id="close-popup" class="flex-1 py-2.5 md:py-3 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm md:text-base hover:bg-gray-50 transition-colors" data-i18n="analysis.close">닫기</button>
-              <button id="submit-email" class="flex-1 py-2.5 md:py-3 rounded-lg bg-primary text-white font-bold text-sm md:text-base hover:bg-primary/90 transition-colors" data-i18n="analysis.submit_email">제출</button>
+              <button id="close-popup" class="flex-1 py-2.5 md:py-3 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm md:text-base hover:bg-gray-50 transition-colors" data-i18n="analysis.close">Close</button>
+              <button id="submit-email" class="flex-1 py-2.5 md:py-3 rounded-lg bg-primary text-white font-bold text-sm md:text-base hover:bg-primary/90 transition-colors" data-i18n="analysis.submit_email">Submit</button>
             </div>
           </div>
         </div>
@@ -390,16 +390,16 @@
         <div id="email-popup-step2" class="hidden">
           <div class="text-center mb-5">
             <span class="material-symbols-outlined text-4xl text-primary mb-2 block">flag</span>
-            <h2 class="text-base md:text-lg font-bold" data-i18n="analysis.stage_title">어떤 단계를 작업 중이신가요?</h2>
+            <h2 class="text-base md:text-lg font-bold" data-i18n="analysis.stage_title">What stage are you at?</h2>
           </div>
           <div class="flex flex-col gap-2">
-            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="아이디어 단계" data-i18n="analysis.stage_idea">아이디어 단계</button>
-            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="기획 단계" data-i18n="analysis.stage_planning">기획 단계</button>
-            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="개발 중" data-i18n="analysis.stage_dev">개발 중</button>
-            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="출시 준비" data-i18n="analysis.stage_launch_prep">출시 준비</button>
-            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="출시 후 개선" data-i18n="analysis.stage_post_launch">출시 후 개선</button>
+            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="아이디어 단계" data-i18n="analysis.stage_idea">Idea Stage</button>
+            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="기획 단계" data-i18n="analysis.stage_planning">Planning</button>
+            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="개발 중" data-i18n="analysis.stage_dev">In Development</button>
+            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="출시 준비" data-i18n="analysis.stage_launch_prep">Pre-Launch</button>
+            <button class="stage-btn w-full py-3 px-4 rounded-lg border border-gray-200 text-sm font-medium text-left hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors" data-value="출시 후 개선" data-i18n="analysis.stage_post_launch">Post-Launch Improvement</button>
           </div>
-          <button id="skip-stage" class="w-full mt-3 py-2 text-xs text-gray-400 hover:text-gray-600 transition-colors" data-i18n="analysis.skip">건너뛰기</button>
+          <button id="skip-stage" class="w-full mt-3 py-2 text-xs text-gray-400 hover:text-gray-600 transition-colors" data-i18n="analysis.skip">Skip</button>
         </div>
       </div>
     </div>

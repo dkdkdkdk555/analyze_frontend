@@ -39,14 +39,14 @@
     <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
       <span class="material-symbols-outlined text-primary" style="font-size:32px">construction</span>
     </div>
-    <h2 class="text-2xl font-black text-[#111318] mb-3" data-i18n="group_page.coming_soon_title">준비 중인 기능이에요</h2>
+    <h2 class="text-2xl font-black text-[#111318] mb-3" data-i18n="group_page.coming_soon_title">Coming Soon</h2>
     <p class="text-[#636e88] text-sm leading-relaxed mb-8" data-i18n-html="group_page.coming_soon_desc">
-      그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!
+      Group analysis is on its way.<br>Hang tight — we'll let you know when it's live!
     </p>
     <a href="/services/services.html"
       class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
       <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
-      <span data-i18n="group_page.back_to_services">서비스 목록으로</span>
+      <span data-i18n="group_page.back_to_services">Back to Services</span>
     </a>
   </div>
 
@@ -56,37 +56,37 @@
   <div id="creation-view" class="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-10 lg:px-20 xl:px-[100px] py-6 md:py-8 pb-32">
 
     <nav class="text-sm text-[#636e88] flex items-center gap-1 mb-6">
-      <a href="/" class="hover:text-primary transition-colors" data-i18n="group_page.breadcrumb_home">홈</a>
+      <a href="/" class="hover:text-primary transition-colors" data-i18n="group_page.breadcrumb_home">Home</a>
       <span class="material-symbols-outlined text-sm" style="font-size:16px">chevron_right</span>
-      <span class="text-[#111318] font-medium" data-i18n="group_page.breadcrumb">그룹 분석</span>
+      <span class="text-[#111318] font-medium" data-i18n="group_page.breadcrumb">Group Analysis</span>
     </nav>
 
     <div class="mb-8">
-      <h1 class="text-2xl font-black text-[#111318] mb-1" data-i18n="group_page.settings_title">그룹 분석 설정</h1>
-      <p class="text-[#636e88] text-sm" data-i18n="group_page.settings_desc">비교할 앱들을 추가하고 시장을 함께 분석해보세요. 최소 2개 이상의 앱을 선택할 수 있어요.</p>
+      <h1 class="text-2xl font-black text-[#111318] mb-1" data-i18n="group_page.settings_title">Group Analysis Setup</h1>
+      <p class="text-[#636e88] text-sm" data-i18n="group_page.settings_desc">Add apps to compare and analyze the market together. Select at least 2 apps.</p>
     </div>
 
     <!-- 그룹명 입력 -->
     <div class="bg-white border border-[#e5e7eb] rounded-2xl p-6 mb-4">
       <div class="text-[10px] font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-1">
         <span class="material-symbols-outlined" style="font-size:14px">label</span>
-        <span data-i18n="group_page.label_group_name">그룹 이름</span>
+        <span data-i18n="group_page.label_group_name">Group Name</span>
       </div>
       <input
         id="group-name-input"
         type="text"
         data-i18n-placeholder="group_page.placeholder_group_name"
-        placeholder="예: 2030 헬스 앱 시장"
+        placeholder="e.g. Health Apps for Millennials"
         class="w-full border border-[#e5e7eb] rounded-xl px-4 py-3 text-sm text-[#111318] focus:outline-none focus:border-primary transition-colors"
       />
-      <p class="text-xs text-[#636e88] mt-2" data-i18n="group_page.hint_group_name">어떤 시장을 분석하는지 이름을 지어주세요</p>
+      <p class="text-xs text-[#636e88] mt-2" data-i18n="group_page.hint_group_name">Give a name to the market you're analyzing</p>
     </div>
 
     <!-- 앱 검색 -->
     <div class="bg-white border border-[#e5e7eb] rounded-2xl p-6 mb-4">
       <div class="text-[10px] font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-1">
         <span class="material-symbols-outlined" style="font-size:14px">search</span>
-        <span data-i18n="group_page.label_add_app">앱 추가</span>
+        <span data-i18n="group_page.label_add_app">Add Apps</span>
       </div>
       <div id="group-search-section" class="relative">
         <div class="group relative flex h-12 w-full items-center rounded-xl bg-[#f6f6f8] px-4 ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary transition-all">
@@ -111,7 +111,7 @@
             id="app-search-input"
             class="flex-1 border-none bg-transparent text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0 text-sm"
             data-i18n-placeholder="group_page.placeholder_search"
-            placeholder="앱 이름으로 검색 (예: 배달의민족)"
+            placeholder="Search by app name (e.g. DoorDash)"
             type="text"
           >
         </div>
@@ -133,7 +133,7 @@
       <div class="flex items-center justify-between mb-3">
         <div class="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1">
           <span class="material-symbols-outlined" style="font-size:14px">folder_special</span>
-          <span data-i18n="group_page.label_group_setup">그룹 구성</span>
+          <span data-i18n="group_page.label_group_setup">Group Setup</span>
         </div>
         <span id="app-count-badge" class="text-xs font-semibold text-primary bg-blue-50 px-3 py-0.5 rounded-full">0개 앱</span>
       </div>
@@ -144,7 +144,7 @@
       >
         <div id="empty-placeholder" class="w-full flex flex-col items-center justify-center py-4 gap-2 text-[#636e88]">
           <span class="material-symbols-outlined text-4xl text-[#e5e7eb]">add_circle</span>
-          <p class="text-sm" data-i18n="group_page.empty_placeholder">위에서 앱을 검색해서 추가하세요</p>
+          <p class="text-sm" data-i18n="group_page.empty_placeholder">Search and add apps from above</p>
         </div>
       </div>
     </div>
@@ -153,14 +153,14 @@
     <div id="credit-preview" class="bg-white border border-[#e5e7eb] rounded-2xl p-5 mb-4">
       <div class="flex items-center justify-between gap-4">
         <div class="flex-1">
-          <p class="text-sm font-semibold text-[#111318] mb-1" data-i18n="group_page.label_credits">차감될 크레딧</p>
+          <p class="text-sm font-semibold text-[#111318] mb-1" data-i18n="group_page.label_credits">Credits to Use</p>
           <div id="credit-breakdown" class="text-xs text-[#636e88] leading-relaxed bg-background-light rounded-lg px-3 py-2" data-i18n="group_page.credits_hint_initial">
-            앱을 2개 이상 추가하면 크레딧이 표시됩니다.
+            Add 2 or more apps to see the credit cost.
           </div>
         </div>
         <div class="flex items-baseline gap-1 flex-shrink-0">
           <span id="credit-num" class="text-3xl font-black text-primary">0</span>
-          <span class="text-sm text-[#636e88] font-medium" data-i18n="group_page.credits_unit">크레딧</span>
+          <span class="text-sm text-[#636e88] font-medium" data-i18n="group_page.credits_unit">Credits</span>
         </div>
       </div>
     </div>
@@ -168,7 +168,7 @@
     <!-- 로그인 필요 안내 -->
     <div id="login-required-notice" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4 flex items-center gap-3">
       <span class="material-symbols-outlined text-amber-500" style="font-size:20px">info</span>
-      <p class="text-sm text-amber-700" data-i18n-html="group_page.login_notice">그룹 분석은 로그인 후 이용하실 수 있어요. <a href="/" class="underline font-semibold">로그인하기</a></p>
+      <p class="text-sm text-amber-700" data-i18n-html="group_page.login_notice">Group analysis requires login. <a href="/" class="underline font-semibold">Log in</a></p>
     </div>
 
   </div>
@@ -180,7 +180,7 @@
     </div>
     <div class="flex gap-2">
       <a href="/" class="px-4 py-2 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] hover:text-[#111318] transition-colors" data-i18n="group_page.cancel">
-        취소
+        Cancel
       </a>
       <button
         id="start-btn"
@@ -188,7 +188,7 @@
         class="flex items-center gap-2 px-5 py-2 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors disabled:bg-[#e5e7eb] disabled:cursor-not-allowed"
       >
         <span class="material-symbols-outlined" style="font-size:18px">rocket_launch</span>
-        <span data-i18n="group_page.start_analysis">분석 시작</span>
+        <span data-i18n="group_page.start_analysis">Start Analysis</span>
       </button>
     </div>
   </div>
@@ -196,8 +196,8 @@
   <!-- Progress View (hidden during creation) -->
   <div id="progress-view" class="hidden fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-8">
     <div class="w-full max-w-md">
-      <h2 class="text-xl font-black text-[#111318] text-center mb-2" data-i18n="group_page.progress_title">분석 중...</h2>
-      <p class="text-sm text-[#636e88] text-center mb-8" data-i18n="group_page.progress_desc">각 앱을 병렬로 분석하고 있어요. 페이지를 떠나도 분석은 계속됩니다.</p>
+      <h2 class="text-xl font-black text-[#111318] text-center mb-2" data-i18n="group_page.progress_title">Analyzing...</h2>
+      <p class="text-sm text-[#636e88] text-center mb-8" data-i18n="group_page.progress_desc">Analyzing apps in parallel. You can leave — analysis continues in the background.</p>
 
       <!-- App progress grid -->
       <div id="app-progress-grid" class="flex justify-center gap-6 mb-8 flex-wrap"></div>
@@ -205,8 +205,8 @@
       <!-- Group progress -->
       <div id="group-progress" class="hidden flex flex-col items-center gap-3 mb-6">
         <div class="w-10 h-10 border-3 border-[#e5e7eb] border-t-primary rounded-full animate-spin" style="border-width:3px"></div>
-        <p class="text-sm font-semibold text-[#111318]" data-i18n="group_page.group_progress_title">종합 분석 중...</p>
-        <p class="text-xs text-[#636e88]" data-i18n="group_page.group_progress_desc">시장 기회와 경쟁 구도를 분석하고 있어요</p>
+        <p class="text-sm font-semibold text-[#111318]" data-i18n="group_page.group_progress_title">Running group analysis...</p>
+        <p class="text-xs text-[#636e88]" data-i18n="group_page.group_progress_desc">Analyzing market opportunities and the competitive landscape</p>
       </div>
 
       <!-- Progress bar -->
@@ -222,18 +222,18 @@
       <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mx-auto mb-4">
         <span class="material-symbols-outlined text-red-400" style="font-size:24px">warning</span>
       </div>
-      <h3 class="text-base font-bold text-[#111318] mb-2" data-i18n="group_page.mismatch_title">카테고리가 다를 수 있어요</h3>
+      <h3 class="text-base font-bold text-[#111318] mb-2" data-i18n="group_page.mismatch_title">Different Category?</h3>
       <p class="text-sm text-[#636e88] leading-relaxed mb-5" data-i18n-html="group_page.mismatch_desc">
-        첫 번째 앱과 다른 카테고리일 수 있어요.<br>
-        같은 카테고리의 앱만 그룹으로 묶는 것이 좋아요.<br>
-        그래도 추가하시겠어요?
+        The app may be in a different category.<br>
+        It's best to group apps in the same category.<br>
+        Add anyway?
       </p>
       <div class="flex gap-2">
         <button id="cancel-add-btn" class="flex-1 py-2.5 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors" data-i18n="group_page.cancel">
-          취소
+          Cancel
         </button>
         <button id="confirm-add-btn" class="flex-1 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors" data-i18n="group_page.add">
-          추가
+          Add
         </button>
       </div>
     </div>
@@ -245,16 +245,16 @@
       <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mx-auto mb-4">
         <span class="material-symbols-outlined text-red-400" style="font-size:24px">toll</span>
       </div>
-      <h3 class="text-base font-bold text-[#111318] mb-2" data-i18n="group_page.no_credits_title">크레딧이 부족해요</h3>
+      <h3 class="text-base font-bold text-[#111318] mb-2" data-i18n="group_page.no_credits_title">Not Enough Credits</h3>
       <p id="no-credits-detail" class="text-sm text-[#636e88] leading-relaxed mb-5">
         그룹 분석을 시작하기 위한 크레딧이 부족해요.
       </p>
       <div class="flex flex-col gap-2">
         <a href="/payment/pricing.html" class="w-full py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors block" data-i18n="group_page.get_credits">
-          크레딧 충전하기
+          Top Up Credits
         </a>
         <button id="close-no-credits-btn" class="w-full py-2.5 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors" data-i18n="group_page.close">
-          닫기
+          Close
         </button>
       </div>
     </div>
@@ -266,18 +266,17 @@
       <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
         <span class="material-symbols-outlined text-primary" style="font-size:24px">rocket_launch</span>
       </div>
-      <h3 class="text-base font-bold text-[#111318] mb-2" data-i18n="group_page.confirm_title">분석을 시작할까요?</h3>
+      <h3 class="text-base font-bold text-[#111318] mb-2" data-i18n="group_page.confirm_title">Ready to start analysis?</h3>
       <p id="confirm-start-detail" class="text-sm text-[#636e88] leading-relaxed mb-3"></p>
       <p class="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 mb-5" data-i18n-html="group_page.confirm_warning">
-        분석이 시작되면 취소할 수 없어요.
-        페이지를 이탈해도 분석은 백그라운드에서 계속 진행돼요.
+        Once started, analysis cannot be cancelled. It will continue running in the background even if you leave the page.
       </p>
       <div class="flex gap-2">
         <button id="cancel-start-btn" class="flex-1 py-2.5 border border-[#e5e7eb] text-[#636e88] text-sm font-medium rounded-xl hover:border-[#111318] transition-colors" data-i18n="group_page.cancel">
-          취소
+          Cancel
         </button>
         <button id="confirm-start-btn" class="flex-1 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors" data-i18n="group_page.start">
-          시작하기
+          Start
         </button>
       </div>
     </div>

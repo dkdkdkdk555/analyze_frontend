@@ -32,28 +32,28 @@
   <div id="app-header"></div>
 
   <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-[#111318] mb-6" data-i18n="payment.history_title">결제 내역</h1>
+    <h1 class="text-2xl font-bold text-[#111318] mb-6" data-i18n="payment.history_title">Payment History</h1>
 
     <!-- 로딩 -->
     <div id="list-loading" class="flex flex-col items-center py-20 gap-3">
       <div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-      <p class="text-sm text-[#636e88]" data-i18n="common.loading">불러오는 중...</p>
+      <p class="text-sm text-[#636e88]" data-i18n="common.loading">Loading...</p>
     </div>
 
     <!-- 비로그인 -->
     <div id="list-unauth" class="hidden flex flex-col items-center py-20 gap-4 text-center">
       <span class="material-symbols-outlined text-5xl text-[#c4c8d4]">lock</span>
-      <p class="text-base font-medium text-[#111318]" data-i18n="common.login_required">로그인이 필요합니다</p>
-      <p class="text-sm text-[#636e88]" data-i18n="payment.history_unauth_msg">Google 로그인 후 결제 내역을 확인하세요.</p>
+      <p class="text-base font-medium text-[#111318]" data-i18n="common.login_required">Login Required</p>
+      <p class="text-sm text-[#636e88]" data-i18n="payment.history_unauth_msg">Sign in with Google to view your payment history.</p>
     </div>
 
     <!-- 빈 목록 -->
     <div id="list-empty" class="hidden flex flex-col items-center py-20 gap-4 text-center">
       <span class="material-symbols-outlined text-5xl text-[#c4c8d4]">receipt_long</span>
-      <p class="text-base font-medium text-[#111318]" data-i18n="payment.history_empty_title">결제 내역이 없습니다</p>
-      <p class="text-sm text-[#636e88]" data-i18n="payment.history_empty_msg">크레딧을 충전하고 분석을 시작해보세요.</p>
+      <p class="text-base font-medium text-[#111318]" data-i18n="payment.history_empty_title">No payment history</p>
+      <p class="text-sm text-[#636e88]" data-i18n="payment.history_empty_msg">Top up credits and start analyzing.</p>
       <a href="/payment/pricing.html" class="mt-2 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
-        <span data-i18n="payment.history_charge_btn">크레딧 충전하기</span>
+        <span data-i18n="payment.history_charge_btn">Top Up Credits</span>
       </a>
     </div>
 

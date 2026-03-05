@@ -4,44 +4,122 @@ import { applyTranslations, t } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
-// 상품 정의 (pricing.html 카드 순서와 동일)
+// 상품 정의 (amount = USD cents)
 const PRODUCTS = [
-  { id: 'starter', name: 'Starter',  amount: 3000,  credits: 10  },
-  { id: 'growth',  name: 'Growth',   amount: 5000,  credits: 20  },
-  { id: 'pro',     name: 'Pro',      amount: 12000, credits: 50  },
-  { id: 'power',   name: 'Power',    amount: 25000, credits: 120 },
+  { id: 'starter', name: 'Starter',  amount: 300,   credits: 10  },
+  { id: 'growth',  name: 'Growth',   amount: 590,   credits: 20  },
+  { id: 'pro',     name: 'Pro',      amount: 1450,  credits: 50  },
+  { id: 'power',   name: 'Power',    amount: 3360,  credits: 120 },
 ];
 
-let tossClientKey = null;
+let paypalClientId = null;
+let paypalSDKLoaded = false;
+let selectedProduct = null;
 
 document.title = t('pricing.page_title');
 initHeader({ page: 'pricing', apiBaseUrl: API_BASE_URL });
 initFooter();
 applyTranslations();
 
-async function init() {
-  // Toss 클라이언트 키 로드
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/payments/config`);
-    const data = await res.json();
-    tossClientKey = data.clientKey;
-  } catch {
-    console.error('[Pricing] Failed to load payment config');
-  }
+// ── Modal elements ─────────────────────────────────────────────────────────
+const modal             = document.getElementById('payment-modal');
+const modalBackdrop     = document.getElementById('modal-backdrop');
+const modalClose        = document.getElementById('modal-close');
+const modalPlanInfo     = document.getElementById('modal-plan-info');
+const modalPlanName     = document.getElementById('modal-plan-name');
+const modalPlanPrice    = document.getElementById('modal-plan-price');
+const modalSuccess      = document.getElementById('modal-success');
+const modalSuccessMsg   = document.getElementById('modal-success-msg');
+const modalSuccessClose = document.getElementById('modal-success-close');
+const modalError        = document.getElementById('modal-error');
+const modalErrorMsg     = document.getElementById('modal-error-msg');
+const modalRetry        = document.getElementById('modal-retry');
+const modalErrorClose   = document.getElementById('modal-error-close');
 
-  // 충전하기 버튼에 data-product-id 속성으로 핸들러 등록
-  const buttons = document.querySelectorAll('[data-product-id]');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => handlePurchase(btn.dataset.productId));
+function openModal()  { modal.classList.remove('hidden'); }
+function closeModal() { modal.classList.add('hidden'); }
+
+function showModalSuccess(creditAmount) {
+  modalPlanInfo.classList.add('hidden');
+  modalError.classList.add('hidden');
+  modalSuccess.classList.remove('hidden');
+  modalSuccessMsg.textContent = `${creditAmount} credits have been added to your account.`;
+}
+
+function showModalError(message) {
+  document.getElementById('paypal-button-container').innerHTML = '';
+  modalPlanInfo.classList.add('hidden');
+  modalSuccess.classList.add('hidden');
+  modalError.classList.remove('hidden');
+  modalErrorMsg.textContent = message;
+}
+
+function resetModal() {
+  document.getElementById('paypal-button-container').innerHTML = '';
+  modalPlanInfo.classList.remove('hidden');
+  modalSuccess.classList.add('hidden');
+  modalError.classList.add('hidden');
+}
+
+modalBackdrop.addEventListener('click', closeModal);
+modalClose.addEventListener('click', closeModal);
+modalSuccessClose.addEventListener('click', () => { closeModal(); location.reload(); });
+modalErrorClose.addEventListener('click', closeModal);
+modalRetry.addEventListener('click', () => { resetModal(); renderPayPalButtons(); });
+
+// ── PayPal SDK 동적 로드 ───────────────────────────────────────────────────
+function loadPayPalSDK(clientId) {
+  if (paypalSDKLoaded) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture`;
+    script.onload = () => { paypalSDKLoaded = true; resolve(); };
+    script.onerror = reject;
+    document.head.appendChild(script);
   });
 }
 
-function generateOrderId() {
-  const ts = Date.now().toString(36);
-  const rand = Math.random().toString(36).slice(2, 8);
-  return `ord-${ts}-${rand}`;
+// ── PayPal 버튼 렌더링 ─────────────────────────────────────────────────────
+function renderPayPalButtons() {
+  const token = localStorage.getItem('auth_token');
+
+  window.paypal.Buttons({
+    style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
+
+    createOrder: async () => {
+      const res = await fetch(`${API_BASE_URL}/api/payments/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ productId: selectedProduct.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to create order');
+      return data.paypalOrderId;
+    },
+
+    onApprove: async (data) => {
+      const res = await fetch(`${API_BASE_URL}/api/payments/capture-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ paypalOrderId: data.orderID }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Payment capture failed');
+      showModalSuccess(result.creditAmount);
+    },
+
+    onError: (err) => {
+      console.error('[Payment] PayPal error:', err);
+      showModalError('A payment error occurred. Please try again.');
+    },
+
+    onCancel: () => {
+      closeModal();
+    },
+  }).render('#paypal-button-container');
 }
 
+// ── 구매 핸들러 ────────────────────────────────────────────────────────────
 async function handlePurchase(productId) {
   const token = localStorage.getItem('auth_token');
   if (!token) {
@@ -50,52 +128,44 @@ async function handlePurchase(productId) {
     return;
   }
 
-  if (!tossClientKey) {
+  if (!paypalClientId) {
     alert(t('pricing.payment_error'));
     return;
   }
 
-  const product = PRODUCTS.find(p => p.id === productId);
-  if (!product) return;
+  selectedProduct = PRODUCTS.find(p => p.id === productId);
+  if (!selectedProduct) return;
 
-  const orderId = generateOrderId();
+  modalPlanName.textContent = `${selectedProduct.name} — ${selectedProduct.credits} Credits`;
+  modalPlanPrice.textContent = `$${(selectedProduct.amount / 100).toFixed(2)}`;
 
-  // 1. 서버에 pending 결제 저장 (금액 무결성 기준점)
+  resetModal();
+  openModal();
+
   try {
-    const prepRes = await fetch(`${API_BASE_URL}/api/payments/prepare`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ orderId, productId }),
-    });
-    if (!prepRes.ok) {
-      const err = await prepRes.json().catch(() => ({}));
-      alert(err.error || t('pricing.prepare_error'));
-      return;
-    }
+    await loadPayPalSDK(paypalClientId);
   } catch {
-    alert(t('pricing.network_error'));
+    showModalError(t('pricing.payment_error'));
     return;
   }
 
-  // 2. Toss SDK로 결제창 열기
-  try {
-    const tossPayments = window.TossPayments(tossClientKey);
-    const payment = tossPayments.payment({ customerKey: window.TossPayments.ANONYMOUS });
+  renderPayPalButtons();
+}
 
-    await payment.requestPayment({
-      method: 'CARD',
-      amount: { currency: 'KRW', value: product.amount },
-      orderId,
-      orderName: `TalonInsight ${product.name} 크레딧 ${product.credits}개 (운영사 : HealthTier labs)`,
-      successUrl: `${window.location.origin}/payment/payment-success.html`,
-      failUrl: `${window.location.origin}/payment/payment-fail.html`,
-    });
-  } catch (err) {
-    // 사용자가 결제창을 닫은 경우 — 조용히 처리
-    if (err?.code !== 'USER_CANCEL') {
-      console.error('[Pricing] Payment error:', err);
-    }
+// ── 초기화 ─────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/payments/config`);
+    const data = await res.json();
+    paypalClientId = data.paypalClientId;
+  } catch {
+    console.error('[Pricing] Failed to load payment config');
   }
+
+  const buttons = document.querySelectorAll('[data-product-id]');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => handlePurchase(btn.dataset.productId));
+  });
 }
 
 init();

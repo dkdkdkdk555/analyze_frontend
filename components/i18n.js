@@ -280,6 +280,9 @@ const TRANSLATIONS = {
     'credit.type_refund':          '환불',
     'credit.type_bonus':           '보너스',
     'credit.type_expire':          '만료',
+    'credit.desc_app_analysis':    '앱 분석',
+    'credit.desc_group_analysis':  '그룹 분석',
+    'credit.desc_apps_suffix':     '개 앱',
 
     // ── Group analysis result sections ───────────────────────────────────────
     'group.verdict':         '경쟁 구도',
@@ -634,6 +637,9 @@ const TRANSLATIONS = {
     'credit.type_refund':          'Refund',
     'credit.type_bonus':           'Bonus',
     'credit.type_expire':          'Expire',
+    'credit.desc_app_analysis':    'App Analysis',
+    'credit.desc_group_analysis':  'Group Analysis',
+    'credit.desc_apps_suffix':     'apps',
 
     // ── Group analysis result sections ───────────────────────────────────────
     'group.verdict':         'Competitive Landscape',
