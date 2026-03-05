@@ -24,19 +24,32 @@ export function clearToken() {
 
 /**
  * If the URL contains ?auth_token=..., store it and clean the URL.
- * Returns the token if found, null otherwise.
+ * If the URL contains ?consent_token=... (new user), the token is NOT stored —
+ * the caller must show a consent modal, call POST /api/auth/consent, then store
+ * the returned authToken.
+ * Returns { token, consentToken }.
  */
 export function handleTokenFromURL() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get('auth_token');
+  const consentToken = params.get('consent_token');
+
   if (token) {
     setToken(token);
     params.delete('auth_token');
     const clean = window.location.pathname + (params.toString() ? `?${params}` : '');
     window.history.replaceState({}, '', clean);
-    return token;
+    return { token, consentToken: null };
   }
-  return null;
+
+  if (consentToken) {
+    params.delete('consent_token');
+    const clean = window.location.pathname + (params.toString() ? `?${params}` : '');
+    window.history.replaceState({}, '', clean);
+    return { token: null, consentToken };
+  }
+
+  return { token: null, consentToken: null };
 }
 
 /**

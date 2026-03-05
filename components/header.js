@@ -17,12 +17,17 @@ export async function initHeader({ page, apiBaseUrl }) {
   if (page === 'analysis' && apiBaseUrl) initHeaderSearch(apiBaseUrl);
 
   // 2. Process token from URL → localStorage
-  const { handleTokenFromURL, fetchCurrentUser, logout } = await import('./auth.js');
-  handleTokenFromURL();
+  const { handleTokenFromURL, fetchCurrentUser, logout, setToken } = await import('./auth.js');
+  const { consentToken } = handleTokenFromURL();
 
   // 3. Fetch current user → update auth UI
   const user = apiBaseUrl ? await fetchCurrentUser(apiBaseUrl) : null;
   updateAuthUI(user);
+
+  // 4. If new user, show consent modal before creating account in DB
+  if (consentToken) {
+    showConsentModal(consentToken, apiBaseUrl, setToken, fetchCurrentUser, updateAuthUI);
+  }
 
   // Event delegation: login / logout / profile dropdown
   headerEl.addEventListener('click', (e) => {
@@ -175,6 +180,78 @@ function buildMobileAuth(user) {
       </button>
     </div>
   `;
+}
+
+// ─── Consent Modal ───────────────────────────────────────────────────────────
+
+function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateAuthUI) {
+  const modal = document.createElement('div');
+  modal.id = 'consent-modal';
+  modal.className = 'fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4';
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+      <h2 class="text-xl font-bold text-[#111318] mb-2">${t('auth.consent_title')}</h2>
+      <p class="text-sm text-[#636e88] mb-6">${t('auth.consent_desc')}</p>
+      <div class="space-y-4 mb-8">
+        <label class="flex items-start gap-3 cursor-pointer select-none">
+          <input type="checkbox" id="consent-terms-chk" class="mt-0.5 w-4 h-4 accent-primary rounded border-gray-300 shrink-0">
+          <span class="text-sm text-[#111318]">
+            <a href="/terms" target="_blank" class="text-primary underline hover:text-blue-700">${t('auth.consent_terms_link')}</a>${t('auth.consent_agree_suffix')}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 cursor-pointer select-none">
+          <input type="checkbox" id="consent-privacy-chk" class="mt-0.5 w-4 h-4 accent-primary rounded border-gray-300 shrink-0">
+          <span class="text-sm text-[#111318]">
+            <a href="/privacy" target="_blank" class="text-primary underline hover:text-blue-700">${t('auth.consent_privacy_link')}</a>${t('auth.consent_agree_suffix')}
+          </span>
+        </label>
+      </div>
+      <div class="flex flex-col gap-3">
+        <button id="consent-confirm-btn" disabled class="w-full h-11 rounded-xl bg-primary text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:enabled:bg-blue-700 transition-colors">
+          ${t('auth.consent_button')}
+        </button>
+        <button id="consent-cancel-btn" class="w-full h-11 rounded-xl border border-[#dcdee5] text-sm font-medium text-[#636e88] hover:bg-[#f0f1f4] transition-colors">
+          ${t('auth.consent_cancel')}
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const termsChk   = modal.querySelector('#consent-terms-chk');
+  const privacyChk = modal.querySelector('#consent-privacy-chk');
+  const confirmBtn = modal.querySelector('#consent-confirm-btn');
+  const cancelBtn  = modal.querySelector('#consent-cancel-btn');
+
+  function updateConfirmState() {
+    confirmBtn.disabled = !(termsChk.checked && privacyChk.checked);
+  }
+  termsChk.addEventListener('change', updateConfirmState);
+  privacyChk.addEventListener('change', updateConfirmState);
+
+  confirmBtn.addEventListener('click', async () => {
+    confirmBtn.disabled = true;
+    try {
+      const res = await fetch(`${apiBaseUrl}/api/auth/consent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consentToken: token }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.authToken) throw new Error(data.error || 'consent failed');
+      setToken(data.authToken);
+      modal.remove();
+      const user = apiBaseUrl ? await fetchCurrentUser(apiBaseUrl) : null;
+      updateAuthUI(user);
+    } catch (err) {
+      console.error('[Consent] Error:', err);
+      confirmBtn.disabled = false;
+    }
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    modal.remove();
+  });
 }
 
 // ─── Header HTML ─────────────────────────────────────────────────────────────

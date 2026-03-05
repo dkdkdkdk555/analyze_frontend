@@ -34,6 +34,13 @@ const TRANSLATIONS = {
     'auth.payment_history':     '결제 내역',
     'auth.logout':              '로그아웃',
     'auth.logout_confirm':      '로그아웃 하시겠습니까?',
+    'auth.consent_title':       '서비스 이용 동의',
+    'auth.consent_desc':        'TalonInsight를 이용하려면 아래 약관에 동의해 주세요.',
+    'auth.consent_terms_link':  '이용약관',
+    'auth.consent_privacy_link':'개인정보처리방침',
+    'auth.consent_agree_suffix':'에 동의합니다. (필수)',
+    'auth.consent_button':      '동의하고 시작하기',
+    'auth.consent_cancel':      '취소',
 
     // ── Language switcher ────────────────────────────────────────────
     'lang.ko': '한국어',
@@ -392,6 +399,13 @@ const TRANSLATIONS = {
     'auth.payment_history':     'Payment History',
     'auth.logout':              'Log out',
     'auth.logout_confirm':      'Are you sure you want to log out?',
+    'auth.consent_title':       'Terms & Privacy Agreement',
+    'auth.consent_desc':        'To use TalonInsight, please agree to the following.',
+    'auth.consent_terms_link':  'Terms of Service',
+    'auth.consent_privacy_link':'Privacy Policy',
+    'auth.consent_agree_suffix':' — I agree. (Required)',
+    'auth.consent_button':      'Agree & Continue',
+    'auth.consent_cancel':      'Cancel',
 
     // ── Language switcher ────────────────────────────────────────────
     'lang.ko': '한국어',
