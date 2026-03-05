@@ -129,7 +129,7 @@ async function handlePurchase(productId) {
   }
 
   if (!paypalClientId) {
-    alert(t('pricing.payment_error'));
+    alert(t('pricing.payment_error' + ':paypalClientId'));
     return;
   }
 
@@ -145,11 +145,22 @@ async function handlePurchase(productId) {
   try {
     await loadPayPalSDK(paypalClientId);
   } catch {
-    showModalError(t('pricing.payment_error'));
+    showModalError(t('pricing.payment_error' + ':loadPayPalSDK'));
     return;
   }
 
-  renderPayPalButtons();
+  // SDK 로드 후 window.paypal 초기화 확인
+  if (!window.paypal) {
+    showModalError(t('pricing.payment_error' + ':window.paypal'));
+    return;
+  }
+
+  try {
+    renderPayPalButtons();
+  } catch (err) {
+    console.error('[Payment] renderPayPalButtons error:', err);
+    showModalError(t('pricing.payment_error' + ':renderPayPalButtons'));
+  }
 }
 
 // ── 초기화 ─────────────────────────────────────────────────────────────────
