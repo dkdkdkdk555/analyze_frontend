@@ -29,6 +29,7 @@ const TRANSLATIONS = {
 
     // ── Auth UI ──────────────────────────────────────────────────────
     'auth.remaining_credits':   '잔여 크레딧',
+    'auth.my_page':             '마이페이지',
     'auth.my_analyses':         '분석결과',
     'auth.credit_history':      '크레딧 사용내역',
     'auth.payment_history':     '결제 내역',
@@ -252,6 +253,24 @@ const TRANSLATIONS = {
     'mypage.back_to_list':             '목록으로',
     'mypage.data_none':                '데이터 없음',
     'mypage.pdf_save':                 'PDF 저장',
+    'mypage.unauth_msg':               'Google 로그인 후 분석 기록을 확인하세요.',
+    'mypage.empty_title':              '아직 분석 기록이 없습니다',
+    'mypage.empty_msg':                '앱을 검색하고 첫 번째 분석을 시작해보세요.',
+    'mypage.start_analysis':           '분석 시작하기',
+    // ── My Page (profile + account delete) ──────────────────────────────────
+    'mypage.page_title':               '마이페이지 - TalonInsight',
+    'mypage.profile_title':            '내 계정',
+    'mypage.label_name':               '이름',
+    'mypage.label_email':              '이메일',
+    'mypage.label_joined':             '가입일',
+    'mypage.delete_account_btn':       '회원탈퇴',
+    'mypage.delete_title':             '회원탈퇴',
+    'mypage.delete_credit_warning':    '탈퇴 시 보유 중인 잔여 크레딧은 즉시 소멸되며 환불되지 않습니다.',
+    'mypage.delete_analysis_warning':  '모든 분석 기록이 삭제되며, 복구할 수 없습니다.',
+    'mypage.delete_confirm_btn':       '탈퇴하기',
+    'mypage.delete_cancel_btn':        '취소',
+    'mypage.delete_success':           '탈퇴가 완료됐습니다.',
+    'mypage.delete_error':             '탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
 
     // ── Common ──────────────────────────────────────────────────────────────
     'common.login_required':           '로그인이 필요합니다',
@@ -394,6 +413,7 @@ const TRANSLATIONS = {
 
     // ── Auth UI ──────────────────────────────────────────────────────
     'auth.remaining_credits':   'Credits Remaining',
+    'auth.my_page':             'My Page',
     'auth.my_analyses':         'My Analyses',
     'auth.credit_history':      'Credit History',
     'auth.payment_history':     'Payment History',
@@ -617,6 +637,24 @@ const TRANSLATIONS = {
     'mypage.back_to_list':             'Back to list',
     'mypage.data_none':                'No data',
     'mypage.pdf_save':                 'Save PDF',
+    'mypage.unauth_msg':               'Sign in with Google to view your analysis history.',
+    'mypage.empty_title':              'No analysis history yet',
+    'mypage.empty_msg':                'Search for an app to start your first analysis.',
+    'mypage.start_analysis':           'Start Analyzing',
+    // ── My Page (profile + account delete) ──────────────────────────────────
+    'mypage.page_title':               'My Page - TalonInsight',
+    'mypage.profile_title':            'My Account',
+    'mypage.label_name':               'Name',
+    'mypage.label_email':              'Email',
+    'mypage.label_joined':             'Member Since',
+    'mypage.delete_account_btn':       'Delete Account',
+    'mypage.delete_title':             'Delete Account',
+    'mypage.delete_credit_warning':    'All remaining credits will be permanently forfeited and cannot be refunded upon account deletion.',
+    'mypage.delete_analysis_warning':  'All analysis records will be permanently deleted and cannot be recovered.',
+    'mypage.delete_confirm_btn':       'Delete Account',
+    'mypage.delete_cancel_btn':        'Cancel',
+    'mypage.delete_success':           'Your account has been deleted.',
+    'mypage.delete_error':             'An error occurred while deleting your account. Please try again later.',
 
     // ── Common ──────────────────────────────────────────────────────────────
     'common.login_required':           'Login Required',

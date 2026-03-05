@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지 - TalonInsight</title>
+  <meta name="description" content="계정 정보를 확인하고 관리하세요.">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="apple-touch-icon" href="../assets/images/logo.png">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary": "#1E5AE8", "background-light": "#f6f6f8", "background-dark": "#111621" },
+          fontFamily: { "display": ["Inter", "Noto Sans KR", "sans-serif"] },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+          screens: { 'sm': '640px', 'md': '768px', 'lg': '1024px', 'xl': '1280px' }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display bg-background-light min-h-screen">
+
+  <div id="app-header"></div>
+
+  <div class="max-w-lg mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-[#111318] mb-6" data-i18n="mypage.profile_title">My Account</h1>
+
+    <!-- 로딩 -->
+    <div id="list-loading" class="flex flex-col items-center py-20 gap-3">
+      <div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm text-[#636e88]" data-i18n="mypage.loading">Loading...</p>
+    </div>
+
+    <!-- 비로그인 -->
+    <div id="list-unauth" class="hidden flex flex-col items-center py-20 gap-4 text-center">
+      <span class="material-symbols-outlined text-5xl text-[#c4c8d4]">lock</span>
+      <p class="text-base font-medium text-[#111318]" data-i18n="common.login_required">Login Required</p>
+    </div>
+
+    <!-- 프로필 카드 -->
+    <div id="profile-card" class="hidden bg-white rounded-2xl border border-[#e8eaf0] shadow-sm p-6 flex flex-col gap-5">
+      <!-- 아바타 + 이름 -->
+      <div class="flex items-center gap-4">
+        <div id="profile-avatar" class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold shrink-0">?</div>
+        <div>
+          <p id="profile-name" class="text-lg font-bold text-[#111318]"></p>
+          <p id="profile-email" class="text-sm text-[#636e88]"></p>
+        </div>
+      </div>
+
+      <!-- 정보 목록 -->
+      <div class="flex flex-col gap-3 border-t border-[#f0f1f4] pt-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-[#636e88]" data-i18n="mypage.label_name">Name</span>
+          <span id="info-name" class="text-sm font-medium text-[#111318]"></span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-[#636e88]" data-i18n="mypage.label_email">Email</span>
+          <span id="info-email" class="text-sm font-medium text-[#111318]"></span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-[#636e88]" data-i18n="mypage.label_joined">Member Since</span>
+          <span id="info-joined" class="text-sm font-medium text-[#111318]"></span>
+        </div>
+      </div>
+
+      <!-- 회원탈퇴 버튼 -->
+      <div class="border-t border-[#f0f1f4] pt-4">
+        <button id="delete-account-btn" class="text-xs text-red-400 hover:text-red-600 underline underline-offset-2 transition-colors" data-i18n="mypage.delete_account_btn">
+          Delete Account
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 회원탈퇴 모달 -->
+  <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-7 flex flex-col gap-5">
+      <h2 class="text-lg font-bold text-[#111318]" data-i18n="mypage.delete_title">Delete Account</h2>
+      <div class="flex flex-col gap-3">
+        <label class="flex items-start gap-3 cursor-pointer select-none">
+          <input type="checkbox" id="delete-confirm-chk" class="mt-0.5 w-4 h-4 accent-red-500 rounded border-gray-300 shrink-0">
+          <span class="text-sm text-[#636e88] leading-relaxed" data-i18n="mypage.delete_credit_warning">
+            All remaining credits will be permanently forfeited and cannot be refunded upon account deletion.
+          </span>
+        </label>
+        <label class="flex items-start gap-3 cursor-pointer select-none">
+          <input type="checkbox" id="delete-confirm-chk2" class="mt-0.5 w-4 h-4 accent-red-500 rounded border-gray-300 shrink-0">
+          <span class="text-sm text-[#636e88] leading-relaxed" data-i18n="mypage.delete_analysis_warning">
+            All analysis records will be permanently deleted and cannot be recovered.
+          </span>
+        </label>
+      </div>
+      <div class="flex flex-col gap-2.5">
+        <button id="delete-confirm-btn" disabled class="w-full h-11 rounded-xl bg-red-500 text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:enabled:bg-red-600 transition-colors" data-i18n="mypage.delete_confirm_btn">
+          Delete Account
+        </button>
+        <button id="delete-cancel-btn" class="w-full h-11 rounded-xl border border-[#dcdee5] text-sm font-medium text-[#636e88] hover:bg-[#f0f1f4] transition-colors" data-i18n="mypage.delete_cancel_btn">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-footer"></div>
+  <script type="module" src="mypage.js"></script>
+</body>
+</html>

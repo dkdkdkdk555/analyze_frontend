@@ -89,6 +89,10 @@ function buildDesktopAuth(user) {
             <span class="text-sm font-black text-primary">${credit.toLocaleString()} C</span>
           </div>
           <div class="py-1">
+            <a href="/mypage/mypage.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
+              <span class="material-symbols-outlined text-[#636e88] text-lg">person</span>
+              ${t('auth.my_page')}
+            </a>
             <a href="/mypage/my-analyses.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#111318] hover:bg-[#f0f1f4] transition-colors">
               <span class="material-symbols-outlined text-[#636e88] text-lg">analytics</span>
               ${t('auth.my_analyses')}
@@ -145,6 +149,10 @@ function buildMobileAuth(user) {
           </div>
         </div>
         <div class="px-5 py-2">
+          <a href="/mypage/mypage.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
+            <span class="material-symbols-outlined text-lg text-[#636e88]">person</span>
+            ${t('auth.my_page')}
+          </a>
           <a href="/mypage/my-analyses.html" class="flex items-center gap-3 py-3 text-sm font-medium text-[#111318] border-b border-[#f0f1f4] hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-lg text-[#636e88]">analytics</span>
             ${t('auth.my_analyses')}
