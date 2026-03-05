@@ -430,6 +430,59 @@
         <button id="close-coming-soon-modal" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors" data-i18n="analysis.coming_soon_confirm">OK</button>
       </div>
     </div>
+
+    <!-- Guest Signup Popup (가입 유도 팝업) -->
+    <div id="guest-signup-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+        <div class="text-center mb-5">
+          <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-primary" style="font-size:28px">lock_open</span>
+          </div>
+          <h2 class="text-lg md:text-xl font-bold text-[#111318] mb-3" data-i18n="guest.signup_popup_title">이 리포트의 핵심 결과는 가입 후 확인할 수 있어요</h2>
+          <ul class="text-left text-sm text-[#636e88] space-y-2 mb-4">
+            <li class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+              <span data-i18n="guest.signup_popup_benefit1">전체 분석 결과 확인</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+              <span data-i18n="guest.signup_popup_benefit2">리포트 저장</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+              <span data-i18n="guest.signup_popup_benefit3">추가 분석 가능</span>
+            </li>
+          </ul>
+          <p class="text-sm font-semibold text-primary" data-i18n="guest.signup_popup_credit">지금 가입하면 3크레딧을 바로 지급합니다.</p>
+        </div>
+        <div class="flex flex-col gap-2">
+          <button id="guest-signup-btn" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
+              <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+              <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+              <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+              <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+            </svg>
+            <span data-i18n="guest.signup_btn">가입하고 전체 보기</span>
+          </button>
+          <button id="close-guest-signup-modal" class="w-full py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors" data-i18n="analysis.close">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Duplicate Credit Popup (중복 크레딧 안내) -->
+    <div id="duplicate-credit-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
+        <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-amber-600" style="font-size:28px">info</span>
+        </div>
+        <h3 class="text-lg font-bold text-[#111318] mb-3" data-i18n="signup.duplicate_title">환영합니다!</h3>
+        <p class="text-sm text-[#636e88] leading-relaxed mb-5 whitespace-pre-line" data-i18n="signup.duplicate_msg">현재 접속하신 기기나 네트워크에서 이미 혜택이 지급된 이력이 확인되어 웰컴 크레딧이 자동으로 지급되지 않았습니다.
+
+혹시 서비스에 처음 방문하셨는데도 이 메시지가 보인다면, 아래 taloninsight@gmail.com으로 가입 이메일을 알려주세요. 확인 후 즉시 웰컴 크레딧을 지급해 드리겠습니다!</p>
+        <button id="close-duplicate-credit-modal" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors" data-i18n="signup.duplicate_confirm">확인</button>
+      </div>
+    </div>
   </main>
   <div id="app-footer"></div>
 

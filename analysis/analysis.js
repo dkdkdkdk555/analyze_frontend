@@ -2,6 +2,7 @@ import { renderRatingChart } from '../components/rating-chart.js';
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, getMarket, t, applyTranslations } from '../components/i18n.js';
+import { getVisitorId } from '../components/fingerprint.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const params = new URLSearchParams(window.location.search);
@@ -23,6 +24,7 @@ let exposureSent = false;
 let userHasEmail = false; // Flag to track if user already submitted email
 let loadingStartTime = null; // Track when loading started
 let pendingAnalysisData = null; // Store analysis result while waiting for minimum loading time
+let isGuestUser = false; // Track if current analysis is for a guest user
 
 // Minimum loading time: 21 seconds (7 seconds × 3 messages) to show video ad
 const MIN_LOADING_TIME_MS = 21000;
@@ -120,6 +122,7 @@ async function analyzeApp() {
     await waitForMinLoadingTime();
 
     analysisData = pendingAnalysisData;
+    isGuestUser = analysisData.isGuest === true;
     renderResults(analysisData);
   } catch (error) {
     console.error('Analysis error:', error);
@@ -229,36 +232,51 @@ function renderResults(data) {
 
   // 06. Reviews by Rating
   const reviews = data.reviewsByRating || {};
-  document.getElementById('reviews-list').innerHTML = Object.entries(reviews)
-    .sort(([a], [b]) => parseInt(b) - parseInt(a))
-    .map(([rating, review]) => {
-      const stars = renderStars(parseInt(rating));
-      const label = parseInt(rating) >= 4 ? t('analysis.review_positive') : parseInt(rating) >= 3 ? t('analysis.review_neutral') : t('analysis.review_negative');
-      return `
-        <div class="p-3 md:p-4">
-          <div class="flex items-center gap-2 mb-2 flex-wrap">
-            ${stars}
-            <span class="text-[10px] md:text-xs font-bold ml-1 md:ml-2">${rating}점 (${label})</span>
-          </div>
-          <p class="text-xs md:text-sm text-[#636e88] mb-2">${review.summary || ''}</p>
-          ${review.keywords?.length ? `
-            <div class="flex flex-wrap gap-1">
-              ${review.keywords.map(k => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${k}</span>`).join('')}
+  if (isGuestUser || !reviews || Object.keys(reviews).length === 0) {
+    // Guest user: show blur on content only (header stays visible)
+    renderReviewsListBlur('reviews-list');
+  } else {
+    document.getElementById('reviews-list').innerHTML = Object.entries(reviews)
+      .sort(([a], [b]) => parseInt(b) - parseInt(a))
+      .map(([rating, review]) => {
+        const stars = renderStars(parseInt(rating));
+        const label = parseInt(rating) >= 4 ? t('analysis.review_positive') : parseInt(rating) >= 3 ? t('analysis.review_neutral') : t('analysis.review_negative');
+        return `
+          <div class="p-3 md:p-4">
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              ${stars}
+              <span class="text-[10px] md:text-xs font-bold ml-1 md:ml-2">${rating}점 (${label})</span>
             </div>
-          ` : ''}
-        </div>
-      `;
-    }).join('');
+            <p class="text-xs md:text-sm text-[#636e88] mb-2">${review.summary || ''}</p>
+            ${review.keywords?.length ? `
+              <div class="flex flex-wrap gap-1">
+                ${review.keywords.map(k => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${k}</span>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+  }
 
   // 07. Complaints
   const complaints = data.complaints || {};
-  renderComplaintList('complaints-uiux-list', complaints.uiUx);
-  renderComplaintList('complaints-performance-list', complaints.performance);
-  renderComplaintList('complaints-stability-list', complaints.stability);
+  if (isGuestUser) {
+    // Guest user: show single blur overlay on all complaint cards
+    renderComplaintsBlur();
+  } else {
+    renderComplaintList('complaints-uiux-list', complaints.uiUx);
+    renderComplaintList('complaints-performance-list', complaints.performance);
+    renderComplaintList('complaints-stability-list', complaints.stability);
+  }
 
   // 08. Strategy Suggestion
-  document.getElementById('strategy-oneline').textContent = data.strategySuggestion?.oneLine || '';
-  document.getElementById('strategy-reasoning').textContent = data.strategySuggestion?.reasoning || '';
+  if (isGuestUser || !data.strategySuggestion) {
+    // Guest user: show blur on content only (header stays visible)
+    renderStrategyBlur();
+  } else {
+    document.getElementById('strategy-oneline').textContent = data.strategySuggestion?.oneLine || '';
+    document.getElementById('strategy-reasoning').textContent = data.strategySuggestion?.reasoning || '';
+  }
 
   // Scroll detection for email popup
   let emailPopupShown = false;
@@ -373,6 +391,133 @@ function renderComplaintList(elementId, complaint) {
   `).join('') || '<li class="text-xs md:text-sm text-gray-400">데이터 없음</li>';
 }
 
+/**
+ * Create blur overlay element with lock icon and message
+ */
+function createBlurOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'guest-blur-overlay absolute inset-0 bg-white/70 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer z-10 rounded-lg';
+  overlay.innerHTML = `
+    <span class="material-symbols-outlined text-2xl md:text-3xl text-primary mb-1.5">lock</span>
+    <p class="text-xs md:text-sm font-bold text-[#111318] mb-0.5">${t('guest.blur_unlock')}</p>
+    <p class="text-[10px] md:text-xs text-primary font-medium">${t('guest.blur_signup_credit')}</p>
+  `;
+  overlay.addEventListener('click', showGuestSignupModal);
+  return overlay;
+}
+
+/**
+ * Render blur overlay on all complaint cards for guest users
+ * Section header (07. Complaint Categories) stays visible, cards get single overlay
+ */
+function renderComplaintsBlur() {
+  const complaintsSection = document.getElementById('complaints');
+  if (!complaintsSection) return;
+
+  // Get the grid container (contains all 3 cards)
+  const grid = complaintsSection.querySelector('.grid');
+  if (!grid) return;
+
+  // Add placeholder items to each list
+  const lists = ['complaints-uiux-list', 'complaints-performance-list', 'complaints-stability-list'];
+  lists.forEach(listId => {
+    const list = document.getElementById(listId);
+    if (list) {
+      list.innerHTML = `
+        <li class="flex gap-2">
+          <div class="w-1.5 h-1.5 rounded-full bg-gray-200 mt-1.5 flex-shrink-0"></div>
+          <p class="text-xs md:text-sm text-gray-300">Sign up to view detailed analysis</p>
+        </li>
+        <li class="flex gap-2">
+          <div class="w-1.5 h-1.5 rounded-full bg-gray-200 mt-1.5 flex-shrink-0"></div>
+          <p class="text-xs md:text-sm text-gray-300">Unlock full complaint insights</p>
+        </li>
+      `;
+    }
+  });
+
+  // Make grid container relative and add single overlay covering all cards
+  grid.style.position = 'relative';
+  grid.appendChild(createBlurOverlay());
+}
+
+/**
+ * Render blur overlay on reviews list content for guest users
+ * Section header (06. Reviews by Rating) stays visible
+ */
+function renderReviewsListBlur(listId) {
+  const list = document.getElementById(listId);
+  if (!list) return;
+
+  // Add placeholder review items (hidden behind blur)
+  list.innerHTML = `
+    <div class="p-3 md:p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-gray-200">★★★★★</span>
+        <span class="text-[10px] md:text-xs font-bold text-gray-300">5</span>
+      </div>
+      <p class="text-xs md:text-sm text-gray-300 mb-2">Sign up to view detailed review analysis.</p>
+    </div>
+    <div class="p-3 md:p-4 border-t border-gray-100">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-gray-200">★★★☆☆</span>
+        <span class="text-[10px] md:text-xs font-bold text-gray-300">3</span>
+      </div>
+      <p class="text-xs md:text-sm text-gray-300 mb-2">Unlock full review insights and summaries.</p>
+    </div>
+    <div class="p-3 md:p-4 border-t border-gray-100">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-gray-200">★☆☆☆☆</span>
+        <span class="text-[10px] md:text-xs font-bold text-gray-300">1</span>
+      </div>
+      <p class="text-xs md:text-sm text-gray-300 mb-2">Get access to complete analysis results.</p>
+    </div>
+  `;
+
+  // Make list container relative and add overlay
+  list.style.position = 'relative';
+  list.appendChild(createBlurOverlay());
+}
+
+/**
+ * Render blur overlay on strategy content for guest users
+ * Header (lightbulb icon + "Strategy Suggestion") stays visible, only content is blurred
+ */
+function renderStrategyBlur() {
+  const oneline = document.getElementById('strategy-oneline');
+  const reasoning = document.getElementById('strategy-reasoning');
+
+  if (!oneline || !reasoning) return;
+
+  // Add placeholder text (hidden behind blur)
+  oneline.textContent = 'Sign up to unlock strategic recommendations.';
+  oneline.style.color = 'rgba(255,255,255,0.5)';
+  reasoning.textContent = 'Get personalized strategy insights based on comprehensive app analysis and user feedback patterns.';
+  reasoning.style.color = 'rgba(255,255,255,0.3)';
+
+  // Create a wrapper div around the content (not the header)
+  const contentWrapper = document.createElement('div');
+  contentWrapper.style.position = 'relative';
+  contentWrapper.style.minHeight = '80px';
+
+  // Move oneline and reasoning into the wrapper
+  const parent = oneline.parentElement;
+  parent.insertBefore(contentWrapper, oneline);
+  contentWrapper.appendChild(oneline);
+  contentWrapper.appendChild(reasoning);
+
+  // Create custom overlay for strategy (white text on primary bg)
+  const overlay = document.createElement('div');
+  overlay.className = 'guest-blur-overlay absolute inset-0 bg-primary/80 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer z-10 rounded-lg';
+  overlay.innerHTML = `
+    <span class="material-symbols-outlined text-2xl md:text-3xl text-white mb-1.5">lock</span>
+    <p class="text-xs md:text-sm font-bold text-white mb-0.5">${t('guest.blur_unlock')}</p>
+    <p class="text-[10px] md:text-xs text-white/80 font-medium">${t('guest.blur_signup_credit')}</p>
+  `;
+  overlay.addEventListener('click', showGuestSignupModal);
+  contentWrapper.appendChild(overlay);
+}
+
 function showLoading() {
   document.getElementById('loading').classList.remove('hidden');
   document.getElementById('error').classList.add('hidden');
@@ -420,7 +565,8 @@ function showLimited() {
   stopLoading();
   document.getElementById('loading').classList.add('hidden');
   document.getElementById('limited').classList.remove('hidden');
-  showEmailPopup();
+  // Show guest signup modal for rate-limited users
+  showGuestSignupModal();
 }
 
 function showNoCreditsModal() {
@@ -429,6 +575,49 @@ function showNoCreditsModal() {
 
 function hideNoCreditsModal() {
   document.getElementById('no-credits-modal')?.classList.add('hidden');
+}
+
+/**
+ * Show guest signup modal
+ */
+function showGuestSignupModal() {
+  document.getElementById('guest-signup-modal')?.classList.remove('hidden');
+}
+
+/**
+ * Hide guest signup modal
+ */
+function hideGuestSignupModal() {
+  document.getElementById('guest-signup-modal')?.classList.add('hidden');
+}
+
+/**
+ * Show duplicate credit modal
+ */
+function showDuplicateCreditModal() {
+  document.getElementById('duplicate-credit-modal')?.classList.remove('hidden');
+}
+
+/**
+ * Hide duplicate credit modal
+ */
+function hideDuplicateCreditModal() {
+  document.getElementById('duplicate-credit-modal')?.classList.add('hidden');
+}
+
+/**
+ * Handle Google login from guest signup modal
+ */
+async function handleGuestSignup() {
+  hideGuestSignupModal();
+  // Trigger Google login via header auth component
+  const googleLoginBtn = document.querySelector('#app-header .google-login-btn, #app-header [data-google-login]');
+  if (googleLoginBtn) {
+    googleLoginBtn.click();
+  } else {
+    // Fallback: redirect to home for login
+    window.location.href = '/?login=true';
+  }
 }
 
 function showEmailPopup() {
@@ -619,6 +808,13 @@ document.getElementById('close-popup')?.addEventListener('click', hideEmailPopup
 document.getElementById('close-no-credits-modal')?.addEventListener('click', hideNoCreditsModal);
 document.getElementById('email-signup-btn')?.addEventListener('click', showEmailPopup);
 
+// Guest signup modal events
+document.getElementById('guest-signup-btn')?.addEventListener('click', handleGuestSignup);
+document.getElementById('close-guest-signup-modal')?.addEventListener('click', hideGuestSignupModal);
+
+// Duplicate credit modal events
+document.getElementById('close-duplicate-credit-modal')?.addEventListener('click', hideDuplicateCreditModal);
+
 // Stage buttons (email step 2)
 document.querySelectorAll('.stage-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -708,6 +904,12 @@ async function checkAnalyzeQuota() {
 async function downloadAsPDF() {
   if (!analysisData) return;
 
+  // Block PDF download for guest users
+  if (isGuestUser) {
+    showGuestSignupModal();
+    return;
+  }
+
   const btn = document.getElementById('download-pdf-btn');
   const originalContent = btn.innerHTML;
   btn.innerHTML = '<span class="material-symbols-outlined mr-2 text-lg animate-spin">sync</span>생성 중...';
@@ -716,6 +918,9 @@ async function downloadAsPDF() {
   try {
     // Use browser print functionality for PDF
     const printContent = document.getElementById('results').cloneNode(true);
+
+    // Remove blur overlays from print content
+    printContent.querySelectorAll('.guest-blur-overlay').forEach(el => el.remove());
 
     // Create a new window for printing
     const printWindow = window.open('', '_blank');

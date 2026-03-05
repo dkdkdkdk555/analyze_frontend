@@ -253,6 +253,25 @@ const TRANSLATIONS = {
     'analysis.coming_soon_title':      '준비 중인 기능이에요',
     'analysis.coming_soon_desc':       '그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!',
     'analysis.coming_soon_confirm':    '확인',
+
+    // ── Guest signup popup ──────────────────────────────────────────────────────
+    'guest.signup_popup_title':        '이 리포트의 핵심 결과는 가입 후 확인할 수 있어요',
+    'guest.signup_popup_benefit1':     '전체 분석 결과 확인',
+    'guest.signup_popup_benefit2':     '리포트 저장',
+    'guest.signup_popup_benefit3':     '추가 분석 가능',
+    'guest.signup_popup_credit':       '지금 가입하면 3크레딧을 바로 지급합니다.',
+    'guest.signup_btn':                '가입하고 전체 보기',
+    'guest.blur_view_content':         '내용 확인',
+    'guest.blur_unlock':               '가입하고 잠금 해제',
+    'guest.blur_signup_credit':        '지금 가입하면 3크레딧 지급!',
+    'guest.rate_limit_title':          '무료 체험이 끝났어요',
+    'guest.rate_limit_desc':           '비회원은 총 3회까지 분석 결과를 확인할 수 있어요.',
+
+    // ── Duplicate credit popup ──────────────────────────────────────────────────
+    'signup.duplicate_title':          '환영합니다!',
+    'signup.duplicate_msg':            '현재 접속하신 기기나 네트워크에서 이미 혜택이 지급된 이력이 확인되어 웰컴 크레딧이 자동으로 지급되지 않았습니다.\n\n혹시 서비스에 처음 방문하셨는데도 이 메시지가 보인다면, 아래 taloninsight@gmail.com으로 가입 이메일을 알려주세요. 확인 후 즉시 웰컴 크레딧을 지급해 드리겠습니다!',
+    'signup.duplicate_confirm':        '확인',
+
     'mypage.analyses_title':           '분석결과',
     'mypage.group_badge':              '그룹',
     'mypage.loading':                  '불러오는 중...',
@@ -643,6 +662,25 @@ const TRANSLATIONS = {
     'analysis.coming_soon_title':      'This feature is coming soon',
     'analysis.coming_soon_desc':       "We're working hard on group analysis.<br>Please check back soon!",
     'analysis.coming_soon_confirm':    'OK',
+
+    // ── Guest signup popup ──────────────────────────────────────────────────────
+    'guest.signup_popup_title':        'Sign up to unlock the full report',
+    'guest.signup_popup_benefit1':     'View complete analysis',
+    'guest.signup_popup_benefit2':     'Save reports',
+    'guest.signup_popup_benefit3':     'Run more analyses',
+    'guest.signup_popup_credit':       'Sign up now and get 3 free credits!',
+    'guest.signup_btn':                'Sign Up to View',
+    'guest.blur_view_content':         'View Content',
+    'guest.blur_unlock':               'Sign up to unlock',
+    'guest.blur_signup_credit':        'Get 3 free credits!',
+    'guest.rate_limit_title':          'Free trial ended',
+    'guest.rate_limit_desc':           'Guest users can view up to 3 analysis results.',
+
+    // ── Duplicate credit popup ──────────────────────────────────────────────────
+    'signup.duplicate_title':          'Welcome!',
+    'signup.duplicate_msg':            "We detected that welcome credits were already claimed from this device or network, so they weren't automatically added to your account.\n\nIf this is your first time using TalonInsight, please email us at taloninsight@gmail.com with your registered email. We'll credit your account right away!",
+    'signup.duplicate_confirm':        'OK',
+
     'mypage.analyses_title':           'My Analyses',
     'mypage.group_badge':              'Group',
     'mypage.loading':                  'Loading...',

@@ -190,6 +190,37 @@ function buildMobileAuth(user) {
   `;
 }
 
+// ─── Duplicate Credit Modal ──────────────────────────────────────────────────
+
+function showDuplicateCreditModal() {
+  // Check if modal already exists in DOM
+  const existingModal = document.getElementById('duplicate-credit-modal');
+  if (existingModal) {
+    existingModal.classList.remove('hidden');
+    return;
+  }
+
+  // Create modal dynamically
+  const modal = document.createElement('div');
+  modal.id = 'duplicate-credit-modal-dynamic';
+  modal.className = 'fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4';
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-amber-600" style="font-size:28px">info</span>
+      </div>
+      <h3 class="text-lg font-bold text-[#111318] mb-3">${t('signup.duplicate_title')}</h3>
+      <p class="text-sm text-[#636e88] leading-relaxed mb-5 whitespace-pre-line">${t('signup.duplicate_msg')}</p>
+      <button id="close-duplicate-modal-dynamic" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors">${t('signup.duplicate_confirm')}</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.querySelector('#close-duplicate-modal-dynamic')?.addEventListener('click', () => {
+    modal.remove();
+  });
+}
+
 // ─── Consent Modal ───────────────────────────────────────────────────────────
 
 function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateAuthUI) {
@@ -240,15 +271,30 @@ function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateA
   confirmBtn.addEventListener('click', async () => {
     confirmBtn.disabled = true;
     try {
+      // Get fingerprint for duplicate detection
+      let fingerprintId = null;
+      try {
+        const { getVisitorId } = await import('./fingerprint.js');
+        fingerprintId = await getVisitorId();
+      } catch (fpError) {
+        console.warn('[Consent] Fingerprint error:', fpError);
+      }
+
       const res = await fetch(`${apiBaseUrl}/api/auth/consent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ consentToken: token }),
+        body: JSON.stringify({ consentToken: token, fingerprintId }),
       });
       const data = await res.json();
       if (!res.ok || !data.authToken) throw new Error(data.error || 'consent failed');
       setToken(data.authToken);
       modal.remove();
+
+      // Show duplicate credit modal if applicable
+      if (data.skipWelcomeCredit) {
+        showDuplicateCreditModal();
+      }
+
       const user = apiBaseUrl ? await fetchCurrentUser(apiBaseUrl) : null;
       updateAuthUI(user);
     } catch (err) {
