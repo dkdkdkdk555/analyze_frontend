@@ -409,12 +409,12 @@
       <div class="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl">
         <div class="text-center mb-5">
           <span class="material-symbols-outlined text-5xl text-amber-500 mb-3 block" style="font-variation-settings:'FILL' 1">toll</span>
-          <h2 class="text-lg font-bold text-[#111318]">분석 횟수를 모두 소진했어요</h2>
-          <p class="text-sm text-[#636e88] mt-2 leading-relaxed">오늘의 무료 분석 3회와 크레딧을 모두 사용했습니다.<br>크레딧을 충전하거나 내일 다시 시도해 주세요.</p>
+          <h2 class="text-lg font-bold text-[#111318]" data-i18n="analysis.no_credits_title">You've used all your analyses</h2>
+          <p class="text-sm text-[#636e88] mt-2 leading-relaxed" data-i18n-html="analysis.no_credits_desc">You've used today's 3 free analyses and all your credits.<br>Please top up your credits or try again tomorrow.</p>
         </div>
         <div class="flex flex-col gap-2">
-          <button onclick="window.location.href='/'" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors">홈으로 돌아가기</button>
-          <button id="close-no-credits-modal" class="w-full py-3 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition-colors">닫기</button>
+          <button onclick="window.location.href='/'"
+            class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors" data-i18n="analysis.no_credits_btn">Go to Home</button>
         </div>
       </div>
     </div>
@@ -425,9 +425,9 @@
         <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
           <span class="material-symbols-outlined text-primary" style="font-size:28px">construction</span>
         </div>
-        <h3 class="text-base font-black text-[#111318] mb-2">준비 중인 기능이에요</h3>
-        <p class="text-sm text-[#636e88] leading-relaxed mb-5">그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!</p>
-        <button id="close-coming-soon-modal" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors">확인</button>
+        <h3 class="text-base font-black text-[#111318] mb-2" data-i18n="analysis.coming_soon_title">This feature is coming soon</h3>
+        <p class="text-sm text-[#636e88] leading-relaxed mb-5" data-i18n-html="analysis.coming_soon_desc">We're working hard on group analysis.<br>Please check back soon!</p>
+        <button id="close-coming-soon-modal" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors" data-i18n="analysis.coming_soon_confirm">OK</button>
       </div>
     </div>
   </main>
