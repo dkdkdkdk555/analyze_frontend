@@ -42,6 +42,11 @@ function translateDescription(desc) {
     return `${prefix}: ${groupName} (${count} ${suffix})`;
   }
 
+  // Pattern: "크레딧 충전"
+  if (desc === '크레딧 충전') {
+    return t('credit.desc_credit_charge');
+  }
+
   // No pattern matched, return as-is
   return desc;
 }

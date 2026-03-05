@@ -1,2 +1,7 @@
 # Legacy redirect - old group analysis result path
 /group-analysis-result.html /analysis/group-analysis-result.html 301
+
+# Policy pages - short URL rewrites (URL stays the same in browser)
+/privacy /policy/privacy 200
+/terms /policy/terms 200
+/refund /policy/refund 200

@@ -25,9 +25,9 @@ function statusBadge(status) {
   return `<span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full ${cls}">${label}</span>`;
 }
 
-function formatAmount(amount) {
-  const num = (amount || 0).toLocaleString();
-  return getLang() === 'en' ? `KRW ${num}` : `${num}원`;
+function formatAmount(amountCents) {
+  const dollars = ((amountCents || 0) / 100).toFixed(2);
+  return `$${dollars}`;
 }
 
 async function init() {

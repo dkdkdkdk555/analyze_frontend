@@ -283,6 +283,7 @@ const TRANSLATIONS = {
     'credit.desc_app_analysis':    '앱 분석',
     'credit.desc_group_analysis':  '그룹 분석',
     'credit.desc_apps_suffix':     '개 앱',
+    'credit.desc_credit_charge':   '크레딧 충전',
 
     // ── Group analysis result sections ───────────────────────────────────────
     'group.verdict':         '경쟁 구도',
@@ -640,6 +641,7 @@ const TRANSLATIONS = {
     'credit.desc_app_analysis':    'App Analysis',
     'credit.desc_group_analysis':  'Group Analysis',
     'credit.desc_apps_suffix':     'apps',
+    'credit.desc_credit_charge':   'Credit Charge',
 
     // ── Group analysis result sections ───────────────────────────────────────
     'group.verdict':         'Competitive Landscape',
