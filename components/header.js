@@ -190,6 +190,85 @@ function buildMobileAuth(user) {
   `;
 }
 
+// ─── Welcome Credit Modal (new user, credits granted) ────────────────────────
+
+let _confettiAnimId = null;
+
+function showWelcomeCreditModal() {
+  const modal = document.createElement('div');
+  modal.id = 'welcome-credit-modal';
+  modal.className = 'fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4';
+  modal.innerHTML = `
+    <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200;"></canvas>
+    <div class="relative bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl text-center" style="z-index:201;">
+      <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-primary" style="font-size:36px;font-variation-settings:'FILL' 1">card_giftcard</span>
+      </div>
+      <h3 class="text-xl font-bold text-[#111318] mb-3">${t('signup.welcome_title')}</h3>
+      <div class="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-bold text-sm px-4 py-2 rounded-full mb-4">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">stars</span>
+        ${t('signup.welcome_credit_badge')}
+      </div>
+      <p class="text-sm text-[#636e88] leading-relaxed mb-6 whitespace-pre-line">${t('signup.welcome_msg')}</p>
+      <button id="close-welcome-modal" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors">${t('signup.welcome_confirm')}</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  _startConfetti();
+
+  modal.querySelector('#close-welcome-modal')?.addEventListener('click', () => {
+    _stopConfetti();
+    modal.remove();
+  });
+}
+
+function _startConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#1E5AE8', '#60a5fa', '#f59e0b', '#10b981', '#f43f5e', '#a855f7', '#fbbf24'];
+  const particles = Array.from({ length: 130 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    r: Math.random() * 5 + 4,
+    d: Math.random() * 80 + 20,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    tiltAngle: Math.random() * Math.PI * 2,
+    tiltAngleInc: Math.random() * 0.07 + 0.04,
+  }));
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.tiltAngle += p.tiltAngleInc;
+      p.y += (Math.cos(p.d) + 2.5 + p.r / 2) * 0.7;
+      const tilt = Math.sin(p.tiltAngle) * 12;
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + tilt + p.r / 4, p.y);
+      ctx.lineTo(p.x + tilt, p.y + tilt + p.r / 4);
+      ctx.stroke();
+      if (p.y > canvas.height) {
+        p.y = -10;
+        p.x = Math.random() * canvas.width;
+      }
+    });
+    _confettiAnimId = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function _stopConfetti() {
+  if (_confettiAnimId) {
+    cancelAnimationFrame(_confettiAnimId);
+    _confettiAnimId = null;
+  }
+}
+
 // ─── Duplicate Credit Modal ──────────────────────────────────────────────────
 
 function showDuplicateCreditModal() {
@@ -290,9 +369,11 @@ function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateA
       setToken(data.authToken);
       modal.remove();
 
-      // Show duplicate credit modal if applicable
+      // Show appropriate modal based on credit status
       if (data.skipWelcomeCredit) {
         showDuplicateCreditModal();
+      } else {
+        showWelcomeCreditModal();
       }
 
       const user = apiBaseUrl ? await fetchCurrentUser(apiBaseUrl) : null;

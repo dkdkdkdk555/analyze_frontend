@@ -268,6 +268,12 @@ const TRANSLATIONS = {
     'guest.rate_limit_title':          '무료 체험이 끝났어요',
     'guest.rate_limit_desc':           '비회원은 총 3회까지 분석 결과를 확인할 수 있어요.',
 
+    // ── Welcome credit popup ──────────────────────────────────────────────────
+    'signup.welcome_title':            '🎉 가입을 축하드립니다!',
+    'signup.welcome_credit_badge':     '🎁 웰컴 크레딧 3개 지급 완료!',
+    'signup.welcome_msg':              '앱 분석을 시작할 준비가 됐어요.\n크레딧으로 지금 바로 경쟁 앱을 분석해보세요!',
+    'signup.welcome_confirm':          '분석 시작하기',
+
     // ── Duplicate credit popup ──────────────────────────────────────────────────
     'signup.duplicate_title':          '환영합니다!',
     'signup.duplicate_msg':            '현재 접속하신 기기나 네트워크에서 이미 혜택이 지급된 이력이 확인되어 웰컴 크레딧이 자동으로 지급되지 않았습니다.\n\n혹시 서비스에 처음 방문하셨는데도 이 메시지가 보인다면, 아래 taloninsight@gmail.com으로 가입 이메일을 알려주세요. 확인 후 즉시 웰컴 크레딧을 지급해 드리겠습니다!',
@@ -677,6 +683,12 @@ const TRANSLATIONS = {
     'guest.blur_signup_credit':        'Get 3 free credits!',
     'guest.rate_limit_title':          'Free trial ended',
     'guest.rate_limit_desc':           'Guest users can view up to 3 analysis results.',
+
+    // ── Welcome credit popup ──────────────────────────────────────────────────
+    'signup.welcome_title':            '🎉 Welcome aboard!',
+    'signup.welcome_credit_badge':     '🎁 3 Welcome Credits Added!',
+    'signup.welcome_msg':              "You're all set to start analyzing apps.\nUse your credits to explore competitor apps right now!",
+    'signup.welcome_confirm':          'Start Analyzing',
 
     // ── Duplicate credit popup ──────────────────────────────────────────────────
     'signup.duplicate_title':          'Welcome!',
