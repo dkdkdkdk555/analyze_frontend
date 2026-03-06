@@ -152,11 +152,6 @@ function renderResults(data) {
     isCachedInput.value = data.isCached ? 'true' : 'false';
   }
 
-  // Show reuse-why popup on second analysis
-  if (data.analysisCount === 2) {
-    showReuseWhyPopup();
-  }
-
   // App Header
   document.getElementById('app-icon').src = data.appIconUrl || '';
   document.getElementById('app-name').textContent = data.appName || '';
@@ -717,76 +712,6 @@ document.getElementById('submit-feedback')?.addEventListener('click', () => {
 
 document.getElementById('submit-email')?.addEventListener('click', submitEmail);
 
-// Reuse Why popup
-let selectedReuseWhy = null;
-
-function showReuseWhyPopup() {
-  // Reset state
-  selectedReuseWhy = null;
-  document.querySelectorAll('.reuse-why-btn').forEach(b => {
-    b.classList.remove('border-primary', 'text-primary', 'bg-primary/5');
-  });
-  document.getElementById('reuse-why-other-input')?.classList.add('hidden');
-  const submitBtn = document.getElementById('submit-reuse-why');
-  if (submitBtn) submitBtn.disabled = true;
-
-  document.getElementById('reuse-why-popup')?.classList.remove('hidden');
-}
-
-function hideReuseWhyPopup() {
-  document.getElementById('reuse-why-popup')?.classList.add('hidden');
-}
-
-async function submitReuseWhy() {
-  if (!selectedReuseWhy) {
-    hideReuseWhyPopup();
-    return;
-  }
-  try {
-    await fetch(`${API_BASE_URL}/api/reuse-why`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reuseWhy: selectedReuseWhy })
-    });
-  } catch (error) {
-    console.error('ReuseWhy error:', error);
-  } finally {
-    hideReuseWhyPopup();
-  }
-}
-
-document.querySelectorAll('.reuse-why-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.reuse-why-btn').forEach(b => {
-      b.classList.remove('border-primary', 'text-primary', 'bg-primary/5');
-    });
-    btn.classList.add('border-primary', 'text-primary', 'bg-primary/5');
-
-    const value = btn.dataset.value;
-    const otherInput = document.getElementById('reuse-why-other-input');
-    const submitBtn = document.getElementById('submit-reuse-why');
-
-    if (value === '기타') {
-      otherInput?.classList.remove('hidden');
-      selectedReuseWhy = null;
-      if (submitBtn) submitBtn.disabled = true;
-    } else {
-      otherInput?.classList.add('hidden');
-      selectedReuseWhy = value;
-      if (submitBtn) submitBtn.disabled = false;
-    }
-  });
-});
-
-document.getElementById('reuse-why-other-text')?.addEventListener('input', (e) => {
-  const val = e.target.value.trim();
-  selectedReuseWhy = val || null;
-  const submitBtn = document.getElementById('submit-reuse-why');
-  if (submitBtn) submitBtn.disabled = !val;
-});
-
-document.getElementById('close-reuse-popup')?.addEventListener('click', hideReuseWhyPopup);
-document.getElementById('submit-reuse-why')?.addEventListener('click', submitReuseWhy);
 document.getElementById('close-popup')?.addEventListener('click', hideBottomPopup);
 document.getElementById('close-no-credits-modal')?.addEventListener('click', hideNoCreditsModal);
 
