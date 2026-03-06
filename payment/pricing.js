@@ -108,7 +108,7 @@ document.getElementById('btn-select-paypal').addEventListener('click', () => {
 });
 
 document.getElementById('btn-select-paddle').addEventListener('click', () => {
-  handlePaddlePayment();
+  // handlePaddlePayment();
 });
 
 document.getElementById('modal-back-paypal').addEventListener('click', () => {
@@ -239,41 +239,7 @@ async function completePaddlePayment(transactionId) {
 
 // ── Paddle 결제 흐름 ───────────────────────────────────────────────────────
 async function handlePaddlePayment() {
-  if (!paddleClientToken) {
-    showModalError(t('pricing.paddle_error'));
-    return;
-  }
 
-  const priceId = paddlePrices[selectedProduct.id];
-  if (!priceId) {
-    showModalError(t('pricing.paddle_error'));
-    return;
-  }
-
-  showPlanView('paddle');
-  paddleCheckoutCompleted = false;
-
-  // Paddle SDK 로드
-  try {
-    await loadPaddleSDK();
-  } catch {
-    showModalError(t('pricing.paddle_error'));
-    return;
-  }
-
-  // Price ID로 직접 Paddle 결제창 열기
-  try {
-    window.Paddle.Checkout.open({
-      settings: {
-        successUrl: `${window.location.origin}/payment/pricing`,
-      },
-      items: [{ priceId, quantity: 1 }],
-      customData: { productId: selectedProduct.id },
-    });
-  } catch (err) {
-    console.error('[Payment] Paddle.Checkout.open error:', err);
-    showModalError(t('pricing.paddle_error'));
-  }
 }
 
 // ── 구매 핸들러 ────────────────────────────────────────────────────────────
