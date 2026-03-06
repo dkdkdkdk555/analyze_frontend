@@ -278,12 +278,12 @@ function renderResults(data) {
     document.getElementById('strategy-reasoning').textContent = data.strategySuggestion?.reasoning || '';
   }
 
-  // Scroll detection for email popup
-  let emailPopupShown = false;
+  // Scroll detection for bottom popup
+  let bottomPopupShown = false;
   window.addEventListener('scroll', () => {
-    if (!emailPopupShown && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-      emailPopupShown = true;
-      showEmailPopup();
+    if (!bottomPopupShown && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+      bottomPopupShown = true;
+      showBottomPopup();
     }
   });
 }
@@ -565,8 +565,6 @@ function showLimited() {
   stopLoading();
   document.getElementById('loading').classList.add('hidden');
   document.getElementById('limited').classList.remove('hidden');
-  // Show guest signup modal for rate-limited users
-  showGuestSignupModal();
 }
 
 function showNoCreditsModal() {
@@ -605,32 +603,17 @@ function hideDuplicateCreditModal() {
   document.getElementById('duplicate-credit-modal')?.classList.add('hidden');
 }
 
-/**
- * Handle Google login from guest signup modal
- */
-async function handleGuestSignup() {
-  hideGuestSignupModal();
-  // Trigger Google login via header auth component
-  const googleLoginBtn = document.querySelector('#app-header .google-login-btn, #app-header [data-google-login]');
-  if (googleLoginBtn) {
-    googleLoginBtn.click();
-  } else {
-    // Fallback: redirect to home for login
-    window.location.href = '/?login=true';
-  }
-}
 
-function showEmailPopup() {
+function showBottomPopup() {
   // Don't show popup if user already submitted email
   if (userHasEmail) return;
   // Reset to step 1
-  document.getElementById('email-popup-step1')?.classList.remove('hidden');
-  document.getElementById('email-popup-step2')?.classList.add('hidden');
-  document.getElementById('email-popup').classList.remove('hidden');
+  document.getElementById('research-popup')?.classList.remove('hidden');
+  document.getElementById('bottom-popup').classList.remove('hidden');
 }
 
-function hideEmailPopup() {
-  document.getElementById('email-popup').classList.add('hidden');
+function hideBottomPopup() {
+  document.getElementById('bottom-popup').classList.add('hidden');
 }
 
 async function submitFeedback(usePurpose) {
@@ -687,7 +670,7 @@ async function submitEmailRegistWhy(stage) {
   } catch (error) {
     console.error('EmailRegistWhy error:', error);
   } finally {
-    hideEmailPopup();
+    hideBottomPopup();
   }
 }
 
@@ -804,13 +787,20 @@ document.getElementById('reuse-why-other-text')?.addEventListener('input', (e) =
 
 document.getElementById('close-reuse-popup')?.addEventListener('click', hideReuseWhyPopup);
 document.getElementById('submit-reuse-why')?.addEventListener('click', submitReuseWhy);
-document.getElementById('close-popup')?.addEventListener('click', hideEmailPopup);
+document.getElementById('close-popup')?.addEventListener('click', hideBottomPopup);
 document.getElementById('close-no-credits-modal')?.addEventListener('click', hideNoCreditsModal);
-document.getElementById('email-signup-btn')?.addEventListener('click', showEmailPopup);
 
 // Guest signup modal events
-document.getElementById('guest-signup-btn')?.addEventListener('click', handleGuestSignup);
+document.getElementById('guest-signup-btn')?.addEventListener('click', () => {
+  window.location.href = `${API_BASE_URL}/api/auth/google`;
+});
 document.getElementById('close-guest-signup-modal')?.addEventListener('click', hideGuestSignupModal);
+
+// Limited state login button → directly trigger Google OAuth (same as header login btn)
+document.getElementById('limited-login-btn')?.addEventListener('click', () => {
+  window.location.href = `${API_BASE_URL}/api/auth/google`;
+});
+
 
 // Duplicate credit modal events
 document.getElementById('close-duplicate-credit-modal')?.addEventListener('click', hideDuplicateCreditModal);
@@ -821,7 +811,7 @@ document.querySelectorAll('.stage-btn').forEach(btn => {
     submitEmailRegistWhy(btn.dataset.value);
   });
 });
-document.getElementById('skip-stage')?.addEventListener('click', hideEmailPopup);
+document.getElementById('skip-stage')?.addEventListener('click', hideBottomPopup);
 
 // PDF Download functionality
 document.getElementById('download-pdf-btn')?.addEventListener('click', downloadAsPDF);

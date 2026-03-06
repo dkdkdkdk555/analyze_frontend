@@ -209,8 +209,9 @@ const TRANSLATIONS = {
     'analysis.loading_initial':    '스토어 등록정보를 분석 중 입니다..',
     'analysis.error_msg':          '오류가 발생했습니다',
     'analysis.retry':              '다시 시도',
-    'analysis.limited_title':      '일일 무료 분석 한도를 초과했습니다',
-    'analysis.limited_desc':       '정식 출시 시 알림을 받으시겠어요?',
+    'analysis.limited_title': '🎁 더 많은 분석 기회가 준비되어 있어요!',
+    'analysis.limited_desc': '비가입 무료 체험 3회를 모두 사용하셨습니다. 지금 가입하시면, 즉시 사용 가능한 웰컴 크레딧 3개를 추가로 선물해 드립니다!',
+    'analysis.limited_btn': '구글로 로그인하고 3크레딧 받기',
     'analysis.email_signup_btn':   '런칭 알림 받기',
 
     // ── Analysis page UI ─────────────────────────────────────────────────────
@@ -618,8 +619,9 @@ const TRANSLATIONS = {
     'analysis.loading_initial':    'Analyzing app store listings..',
     'analysis.error_msg':          'An error occurred',
     'analysis.retry':              'Retry',
-    'analysis.limited_title':      'Daily free analysis limit reached',
-    'analysis.limited_desc':       'Would you like to be notified when we launch?',
+    'analysis.limited_title': '🎁 More analyses await you!',
+    'analysis.limited_desc': "You've used all 3 free analyses. Sign up in seconds and get 3 welcome credits instantly!",
+    'analysis.limited_btn': 'Sign up with Google & get 3 credits',
     'analysis.email_signup_btn':   'Get launch notification',
 
     // ── Analysis page UI ─────────────────────────────────────────────────────
@@ -668,7 +670,7 @@ const TRANSLATIONS = {
     'guest.signup_popup_benefit1':     'View complete analysis',
     'guest.signup_popup_benefit2':     'Save reports',
     'guest.signup_popup_benefit3':     'Run more analyses',
-    'guest.signup_popup_credit':       'Sign up now and get 3 free credits!',
+    'guest.signup_popup_credit': 'Sign up now and get 3 welcome credits!',
     'guest.signup_btn':                'Sign Up to View',
     'guest.blur_view_content':         'View Content',
     'guest.blur_unlock':               'Sign up to unlock',
