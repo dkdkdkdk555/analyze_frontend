@@ -1,6 +1,6 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
-import { applyTranslations, t } from '../components/i18n.js';
+import { applyTranslations, t, getLang } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -12,9 +12,16 @@ const PRODUCTS = [
   { id: 'power',   name: 'Power',    amount: 3360,  credits: 120 },
 ];
 
-let paypalClientId = null;
-let paypalSDKLoaded = false;
-let selectedProduct = null;
+let paypalClientId       = null;
+let paddleClientToken    = null;
+let paddleEnvironment    = 'production';
+let paddlePrices         = {};
+let paypalSDKLoaded      = false;
+let paddleSDKLoaded      = false;
+let selectedProduct      = null;
+
+// Paddle 결제 흐름 상태
+let paddleCheckoutCompleted    = false;
 
 document.title = t('pricing.page_title');
 initHeader({ page: 'pricing', apiBaseUrl: API_BASE_URL });
@@ -35,37 +42,78 @@ const modalError        = document.getElementById('modal-error');
 const modalErrorMsg     = document.getElementById('modal-error-msg');
 const modalRetry        = document.getElementById('modal-retry');
 const modalErrorClose   = document.getElementById('modal-error-close');
+const providerSelect    = document.getElementById('modal-provider-select');
+const paypalView        = document.getElementById('modal-paypal-view');
+const paddleView        = document.getElementById('modal-paddle-view');
+const paddleStatus      = document.getElementById('modal-paddle-status');
+const paypalKoWarning   = document.getElementById('paypal-ko-warning');
 
-function openModal()  { modal.classList.remove('hidden'); }
-function closeModal() { modal.classList.add('hidden'); }
+// ── View 관리 ──────────────────────────────────────────────────────────────
+function showPlanView(view) {
+  // view: 'select' | 'paypal' | 'paddle'
+  providerSelect.classList.toggle('hidden', view !== 'select');
+  paypalView.classList.toggle('hidden', view !== 'paypal');
+  paddleView.classList.toggle('hidden', view !== 'paddle');
+
+  if (view !== 'paypal') {
+    document.getElementById('paypal-button-container').innerHTML = '';
+  }
+
+  if (view === 'select') {
+    // 한국어인 경우 PayPal 불가 말풍선 표시
+    paypalKoWarning.classList.toggle('hidden', getLang() !== 'ko');
+  }
+}
+
+function showModalState(state) {
+  // state: 'plan' | 'success' | 'error'
+  modalPlanInfo.classList.toggle('hidden', state !== 'plan');
+  modalSuccess.classList.toggle('hidden', state !== 'success');
+  modalError.classList.toggle('hidden', state !== 'error');
+}
+
+function openModal() {
+  modal.classList.remove('hidden');
+}
+
+function closeModal() {
+  modal.classList.add('hidden');
+}
 
 function showModalSuccess(creditAmount) {
-  modalPlanInfo.classList.add('hidden');
-  modalError.classList.add('hidden');
-  modalSuccess.classList.remove('hidden');
-  modalSuccessMsg.textContent = `${creditAmount} credits have been added to your account.`;
+  modalSuccessMsg.textContent = t('pricing.success_msg').replace('{n}', creditAmount);
+  showModalState('success');
 }
 
 function showModalError(message) {
-  document.getElementById('paypal-button-container').innerHTML = '';
-  modalPlanInfo.classList.add('hidden');
-  modalSuccess.classList.add('hidden');
-  modalError.classList.remove('hidden');
   modalErrorMsg.textContent = message;
+  showModalState('error');
 }
 
 function resetModal() {
-  document.getElementById('paypal-button-container').innerHTML = '';
-  modalPlanInfo.classList.remove('hidden');
-  modalSuccess.classList.add('hidden');
-  modalError.classList.add('hidden');
+  showPlanView('select');
+  showModalState('plan');
 }
 
+// ── 이벤트 바인딩 ──────────────────────────────────────────────────────────
 modalBackdrop.addEventListener('click', closeModal);
 modalClose.addEventListener('click', closeModal);
 modalSuccessClose.addEventListener('click', () => { closeModal(); location.reload(); });
 modalErrorClose.addEventListener('click', closeModal);
-modalRetry.addEventListener('click', () => { resetModal(); renderPayPalButtons(); });
+modalRetry.addEventListener('click', resetModal);
+
+document.getElementById('btn-select-paypal').addEventListener('click', () => {
+  showPlanView('paypal');
+  renderPayPalButtons();
+});
+
+document.getElementById('btn-select-paddle').addEventListener('click', () => {
+  handlePaddlePayment();
+});
+
+document.getElementById('modal-back-paypal').addEventListener('click', () => {
+  showPlanView('select');
+});
 
 // ── PayPal SDK 동적 로드 ───────────────────────────────────────────────────
 function loadPayPalSDK(clientId) {
@@ -80,8 +128,25 @@ function loadPayPalSDK(clientId) {
 }
 
 // ── PayPal 버튼 렌더링 ─────────────────────────────────────────────────────
-function renderPayPalButtons() {
+async function renderPayPalButtons() {
+  if (!paypalClientId) {
+    showModalError(t('pricing.payment_error'));
+    return;
+  }
+
   const token = localStorage.getItem('auth_token');
+
+  try {
+    await loadPayPalSDK(paypalClientId);
+  } catch {
+    showModalError(t('pricing.payment_error'));
+    return;
+  }
+
+  if (!window.paypal) {
+    showModalError(t('pricing.payment_error'));
+    return;
+  }
 
   window.paypal.Buttons({
     style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay' },
@@ -101,7 +166,7 @@ function renderPayPalButtons() {
       const res = await fetch(`${API_BASE_URL}/api/payments/capture-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ paypalOrderId: data.orderID }),
+        body: JSON.stringify({ paypalOrderId: data.orderID, productId: selectedProduct.id }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Payment capture failed');
@@ -110,13 +175,105 @@ function renderPayPalButtons() {
 
     onError: (err) => {
       console.error('[Payment] PayPal error:', err);
-      showModalError('A payment error occurred. Please try again.');
+      showModalError(t('pricing.payment_error'));
     },
 
     onCancel: () => {
-      closeModal();
+      showPlanView('select');
     },
   }).render('#paypal-button-container');
+}
+
+// ── Paddle SDK 동적 로드 ───────────────────────────────────────────────────
+function loadPaddleSDK() {
+  if (paddleSDKLoaded) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
+    script.onload = () => {
+      window.Paddle.Environment.set(paddleEnvironment);
+      window.Paddle.Initialize({
+        token: paddleClientToken,
+        eventCallback: (event) => {
+          if (event.name === 'checkout.completed') {
+            paddleCheckoutCompleted = true;
+            // 검증 즉시 시작
+            if (paddleStatus) paddleStatus.textContent = t('pricing.paddle_verifying');
+            completePaddlePayment(event.data.transaction_id);
+          }
+          if (event.name === 'checkout.closed') {
+            if (!paddleCheckoutCompleted) {
+              // 사용자가 결제 없이 닫음 → 수단 선택 화면으로
+              showPlanView('select');
+              showModalState('plan');
+            }
+            paddleCheckoutCompleted = false;
+          }
+        },
+      });
+      paddleSDKLoaded = true;
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// ── Paddle 결제 완료 검증 ──────────────────────────────────────────────────
+async function completePaddlePayment(transactionId) {
+  const token = localStorage.getItem('auth_token');
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/payments/paddle/complete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ transactionId, productId: selectedProduct.id }),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || t('pricing.payment_error'));
+    showModalSuccess(result.creditAmount);
+  } catch (err) {
+    console.error('[Payment] Paddle complete error:', err);
+    showModalError(err.message || t('pricing.payment_error'));
+  }
+}
+
+// ── Paddle 결제 흐름 ───────────────────────────────────────────────────────
+async function handlePaddlePayment() {
+  if (!paddleClientToken) {
+    showModalError(t('pricing.paddle_error'));
+    return;
+  }
+
+  const priceId = paddlePrices[selectedProduct.id];
+  if (!priceId) {
+    showModalError(t('pricing.paddle_error'));
+    return;
+  }
+
+  showPlanView('paddle');
+  paddleCheckoutCompleted = false;
+
+  // Paddle SDK 로드
+  try {
+    await loadPaddleSDK();
+  } catch {
+    showModalError(t('pricing.paddle_error'));
+    return;
+  }
+
+  // Price ID로 직접 Paddle 결제창 열기
+  try {
+    window.Paddle.Checkout.open({
+      settings: {
+        successUrl: `${window.location.origin}/payment/pricing`,
+      },
+      items: [{ priceId, quantity: 1 }],
+      customData: { productId: selectedProduct.id },
+    });
+  } catch (err) {
+    console.error('[Payment] Paddle.Checkout.open error:', err);
+    showModalError(t('pricing.paddle_error'));
+  }
 }
 
 // ── 구매 핸들러 ────────────────────────────────────────────────────────────
@@ -128,11 +285,6 @@ async function handlePurchase(productId) {
     return;
   }
 
-  if (!paypalClientId) {
-    alert(t('pricing.payment_error' + ':paypalClientId'));
-    return;
-  }
-
   selectedProduct = PRODUCTS.find(p => p.id === productId);
   if (!selectedProduct) return;
 
@@ -141,26 +293,6 @@ async function handlePurchase(productId) {
 
   resetModal();
   openModal();
-
-  try {
-    await loadPayPalSDK(paypalClientId);
-  } catch {
-    showModalError(t('pricing.payment_error' + ':loadPayPalSDK'));
-    return;
-  }
-
-  // SDK 로드 후 window.paypal 초기화 확인
-  if (!window.paypal) {
-    showModalError(t('pricing.payment_error' + ':window.paypal'));
-    return;
-  }
-
-  try {
-    renderPayPalButtons();
-  } catch (err) {
-    console.error('[Payment] renderPayPalButtons error:', err);
-    showModalError(t('pricing.payment_error' + ':renderPayPalButtons'));
-  }
 }
 
 // ── 초기화 ─────────────────────────────────────────────────────────────────
@@ -168,7 +300,10 @@ async function init() {
   try {
     const res = await fetch(`${API_BASE_URL}/api/payments/config`);
     const data = await res.json();
-    paypalClientId = data.paypalClientId;
+    paypalClientId    = data.paypalClientId;
+    paddleClientToken = data.paddleClientToken;
+    paddleEnvironment = data.paddleEnvironment || 'production';
+    paddlePrices      = data.paddlePrices || {};
   } catch {
     console.error('[Pricing] Failed to load payment config');
   }
