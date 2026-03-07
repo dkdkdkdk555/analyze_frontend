@@ -260,10 +260,7 @@ const TRANSLATIONS = {
     'analysis.stability':              '안정성',
     'analysis.no_credits_title':       '분석 횟수를 모두 소진했어요',
     'analysis.no_credits_desc':        '오늘의 무료 분석 3회와 크레딧을 모두 사용했습니다.<br>크레딧을 충전하거나 내일 다시 시도해 주세요.',
-    'analysis.no_credits_btn':         '홈으로 돌아가기',
-    'analysis.coming_soon_title':      '준비 중인 기능이에요',
-    'analysis.coming_soon_desc':       '그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!',
-    'analysis.coming_soon_confirm':    '확인',
+    'analysis.no_credits_btn': '홈으로 돌아가기',
 
     // ── Guest signup popup ──────────────────────────────────────────────────────
     'guest.signup_popup_title':        '이 리포트의 핵심 결과는 가입 후 확인할 수 있어요',
@@ -389,9 +386,7 @@ const TRANSLATIONS = {
     'group_result.individual_link':    '개별 분석 보기',
     'group_result.new_analysis':       '새 그룹 분석 시작',
     // ── Group Analysis page ──────────────────────────────────────────────────────
-    'group_page.page_title':            '그룹 분석 - TalonInsight',
-    'group_page.coming_soon_title':     '준비 중인 기능이에요',
-    'group_page.coming_soon_desc':      '그룹 분석 기능을 열심히 준비하고 있어요.<br>조금만 기다려 주세요!',
+    'group_page.page_title': '그룹 분석 - TalonInsight',
     'group_page.back_to_services':      '서비스 목록으로',
     'group_page.breadcrumb_home':       '홈',
     'group_page.breadcrumb':            '그룹 분석',
@@ -686,10 +681,7 @@ const TRANSLATIONS = {
     'analysis.stability':              'Stability',
     'analysis.no_credits_title':       "You've used all your analyses",
     'analysis.no_credits_desc':        "You've used today's 3 free analyses and all your credits.<br>Please top up your credits or try again tomorrow.",
-    'analysis.no_credits_btn':         'Go to Home',
-    'analysis.coming_soon_title':      'This feature is coming soon',
-    'analysis.coming_soon_desc':       "We're working hard on group analysis.<br>Please check back soon!",
-    'analysis.coming_soon_confirm':    'OK',
+    'analysis.no_credits_btn': 'Go to Home',
 
     // ── Guest signup popup ──────────────────────────────────────────────────────
     'guest.signup_popup_title':        'Sign up to unlock the full report',
@@ -815,9 +807,7 @@ const TRANSLATIONS = {
     'group_result.individual_link':    'View Analysis',
     'group_result.new_analysis':       'New Group Analysis',
     // ── Group Analysis page ──────────────────────────────────────────────────────
-    'group_page.page_title':            'Group Analysis - TalonInsight',
-    'group_page.coming_soon_title':     'Coming Soon',
-    'group_page.coming_soon_desc':      "Group analysis is on its way.<br>Hang tight — we'll let you know when it's live!",
+    'group_page.page_title': 'Group Analysis - TalonInsight',
     'group_page.back_to_services':      'Back to Services',
     'group_page.breadcrumb_home':       'Home',
     'group_page.breadcrumb':            'Group Analysis',

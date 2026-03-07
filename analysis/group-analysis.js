@@ -9,30 +9,12 @@ let selectedApps = []; // { appName, appStoreUrl, playStoreUrl, iconUrl }
 let pendingApp = null;  // app pending confirmation in category modal
 let currentUser = null;
 
-// ── Feature flag ─────────────────────────────────────────────────────────────
-async function checkGroupAnalysisFeature() {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/features`);
-    const data = await res.json();
-    return data.groupAnalysis === true;
-  } catch {
-    return false;
-  }
-}
-
 // ── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
   applyTranslations();
   document.title = t('group_page.page_title');
   await initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
   initFooter();
-
-  // Check if group analysis feature is enabled for this IP
-  const featureEnabled = await checkGroupAnalysisFeature();
-  if (!featureEnabled) {
-    document.getElementById('coming-soon-overlay')?.classList.remove('hidden');
-    return;
-  }
 
   const token = localStorage.getItem('auth_token');
   if (token) {
