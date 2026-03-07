@@ -754,6 +754,24 @@ document.getElementById('group-analyze-btn')?.addEventListener('click', () => {
 // Apply i18n translations to static section labels
 applyTranslations();
 
+// Update OG/Twitter meta tags and html lang based on active language
+(function updateOgMeta() {
+  const lang = getLang();
+  const isKo = lang === 'ko';
+  const title = isKo ? '앱 분석 결과 - TalonInsight' : 'App Analysis Results - TalonInsight';
+  const desc = isKo
+    ? '앱 분석 결과를 확인하세요. 시장 정의, 핵심 가치, 리뷰 분석, 미해결 문제 등 상세한 인사이트를 제공합니다.'
+    : 'View your app analysis results. Get detailed insights on market definition, core values, review analysis, and unresolved user pain points.';
+  const locale = isKo ? 'ko_KR' : 'en_US';
+  document.documentElement.lang = lang;
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', desc);
+  document.querySelector('meta[property="og:locale"]')?.setAttribute('content', locale);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', desc);
+  document.querySelector('meta[name="description"]')?.setAttribute('content', desc);
+})();
+
 // Initialize header (search + mobile menu)
 initHeader({ page: 'analysis', apiBaseUrl: API_BASE_URL });
 initFooter();

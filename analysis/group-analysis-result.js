@@ -9,6 +9,23 @@ const APP_COLORS = ['#1E5AE8', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 async function init() {
   applyTranslations();
+
+  // Update OG/Twitter meta tags and html lang based on active language
+  const lang = getLang();
+  const isKo = lang === 'ko';
+  const ogTitle = isKo ? '그룹 분석 결과 - TalonInsight' : 'Group Analysis Results - TalonInsight';
+  const ogDesc = isKo
+    ? '여러 앱의 경쟁 구도와 시장 기회를 한눈에 확인하세요.'
+    : 'See the competitive landscape and market opportunities across multiple apps at a glance.';
+  const ogLocale = isKo ? 'ko_KR' : 'en_US';
+  document.documentElement.lang = lang;
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', ogTitle);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', ogDesc);
+  document.querySelector('meta[property="og:locale"]')?.setAttribute('content', ogLocale);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', ogTitle);
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', ogDesc);
+  document.querySelector('meta[name="description"]')?.setAttribute('content', ogDesc);
+
   await initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
   initFooter();
 
