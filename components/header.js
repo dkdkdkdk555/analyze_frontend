@@ -16,9 +16,9 @@ export async function initHeader({ page, apiBaseUrl }) {
   attachLangSwitcherHandlers();
   if (page === 'analysis' && apiBaseUrl) initHeaderSearch(apiBaseUrl);
 
-  // 2. Process token from URL → localStorage
+  // 2. Process token from URL → localStorage (async: exchanges one-time code for JWT)
   const { handleTokenFromURL, fetchCurrentUser, logout, setToken } = await import('./auth.js');
-  const { consentToken } = handleTokenFromURL();
+  const { consentToken } = await handleTokenFromURL(apiBaseUrl);
 
   // 3. Fetch current user → update auth UI
   const user = apiBaseUrl ? await fetchCurrentUser(apiBaseUrl) : null;
