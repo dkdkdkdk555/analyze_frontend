@@ -320,17 +320,45 @@
         </div>
       </section>
 
-      <!-- 8. Strategy Suggestion -->
-      <section id="strategy-suggestion" class="mb-8 md:mb-12">
-        <div class="bg-primary rounded-xl p-4 md:p-8 shadow-lg shadow-primary/20 text-white flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-          <div>
-            <div class="flex items-center gap-2 mb-2">
-              <span class="material-symbols-outlined text-lg md:text-xl">lightbulb</span>
-              <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider" data-i18n="analysis.strategy">Strategy Suggestion</h2>
+      <!-- 8. User Personas -->
+      <section id="user-personas" class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">08.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.personas_title">Target User Personas</h2>
+        </div>
+        <p class="text-xs md:text-sm text-[#636e88] mb-3 md:mb-4" data-i18n="analysis.personas_desc">Who uses this app? Understanding the core user groups helps you find underserved segments to target.</p>
+        <div id="personas-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      </section>
+
+      <!-- 9. Strategy Suggestion -->
+      <section id="strategy-suggestion" class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">09.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.strategy">Strategy Suggestion</h2>
+        </div>
+        <div class="bg-primary rounded-xl p-4 md:p-8 shadow-lg shadow-primary/20 text-white">
+          <p id="strategy-oneline" class="text-lg md:text-2xl font-bold leading-snug"></p>
+          <p id="strategy-reasoning" class="mt-2 md:mt-4 text-sm md:text-base opacity-90"></p>
+        </div>
+      </section>
+
+      <!-- 10. Market Opportunity -->
+      <section id="market-opportunity" class="mb-8 md:mb-12">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">10.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight tracking-[-0.015em]" data-i18n="analysis.opportunity_title">Market Entry Opportunities</h2>
+        </div>
+        <div class="bg-white rounded-xl border border-[#dcdee5] p-4 md:p-8">
+          <div id="market-gap-box" class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-amber-500 text-lg shrink-0 mt-0.5">search_insights</span>
+              <div>
+                <p class="text-xs font-bold text-amber-700 mb-1" data-i18n="analysis.opportunity_gap_label">Market Gap</p>
+                <p id="market-gap-text" class="text-xs md:text-sm text-amber-800"></p>
+              </div>
             </div>
-            <p id="strategy-oneline" class="text-lg md:text-2xl font-bold leading-snug"></p>
-            <p id="strategy-reasoning" class="mt-2 md:mt-4 text-sm md:text-base opacity-90"></p>
           </div>
+          <ul id="opportunity-list" class="flex flex-col gap-3"></ul>
         </div>
       </section>
 

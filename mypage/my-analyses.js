@@ -23,64 +23,69 @@ function renderList(analyses) {
     const isGroup = a.analysis_type === 'group';
 
     if (isGroup) {
-      // Parse apps list for small icon collage
       let appList = [];
       try { appList = JSON.parse(a.apps_json || '[]'); } catch { /* */ }
-      const iconCollage = appList.slice(0, 3).map(app =>
+      const iconCollage = appList.slice(0, 4).map(app =>
         app.iconUrl
-          ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-6 h-6 rounded-md object-cover border-2 border-white -ml-1 first:ml-0" onerror="this.style.display='none'">`
-          : `<div class="w-6 h-6 rounded-md bg-primary flex items-center justify-center text-white text-xs font-bold border-2 border-white -ml-1 first:ml-0">${(app.appName || '?')[0]}</div>`
+          ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-7 h-7 rounded-lg object-cover border-2 border-white -ml-1.5 first:ml-0 shadow-sm" onerror="this.style.display='none'">`
+          : `<div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-white text-xs font-bold border-2 border-white -ml-1.5 first:ml-0">${(app.appName || '?')[0]}</div>`
       ).join('');
+      const moreCount = appList.length > 4 ? `<span class="text-[10px] text-[#636e88] ml-1">+${appList.length - 4}</span>` : '';
 
       return `
         <a
           href="/group-analysis-result.html?id=${encodeURIComponent(a.group_analysis_id)}"
-          class="analysis-item flex items-center gap-4 p-4 bg-white rounded-2xl border border-[#e8eaf0] shadow-sm hover:border-primary hover:shadow-md transition-all text-left w-full"
+          class="analysis-item group flex items-center gap-4 p-4 md:p-5 bg-white rounded-2xl border border-[#e8eaf0] hover:border-primary hover:shadow-md transition-all w-full"
         >
-          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-primary" style="font-size:24px">workspaces</span>
+          <div class="w-14 h-14 rounded-xl bg-primary/8 flex items-center justify-center shrink-0 border border-primary/15">
+            <span class="material-symbols-outlined text-primary" style="font-size:26px">workspaces</span>
           </div>
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 mb-0.5">
-              <p class="text-base font-bold text-[#111318] truncate">${a.app_identifier}</p>
-              <span class="text-[10px] font-bold bg-primary text-white px-1.5 py-0.5 rounded-full flex-shrink-0">${t('mypage.group_badge')}</span>
+            <div class="flex items-center gap-2 mb-1">
+              <p class="text-sm md:text-base font-bold text-[#111318] truncate">${a.app_identifier}</p>
+              <span class="text-[10px] font-bold bg-primary text-white px-1.5 py-0.5 rounded-full flex-shrink-0 leading-tight">${t('mypage.group_badge')}</span>
             </div>
-            <div class="flex items-center gap-1 mb-0.5">${iconCollage}</div>
-            <p class="text-xs text-[#636e88] mt-0.5">${formatDate(a.created_at)}</p>
+            <div class="flex items-center gap-0 mb-1.5">${iconCollage}${moreCount}</div>
+            <p class="text-xs text-[#9ba3b8]">${formatDate(a.created_at)}</p>
           </div>
-          <span class="material-symbols-outlined text-[#c4c8d4] text-xl shrink-0">chevron_right</span>
+          <span class="material-symbols-outlined text-[#c4c8d4] group-hover:text-primary transition-colors text-xl shrink-0">chevron_right</span>
         </a>
       `;
     }
 
     const iconUrl = a.app_icon_url || '';
     const iconHtml = iconUrl
-      ? `<img src="${iconUrl}" alt="${a.app_identifier}" class="w-12 h-12 rounded-xl object-cover shrink-0" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      ? `<img src="${iconUrl}" alt="${a.app_identifier}" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-gray-100" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
       : '';
-    const fallbackHtml = `<div class="${iconUrl ? 'hidden' : 'flex'} w-12 h-12 rounded-xl bg-primary items-center justify-center text-white font-bold text-lg shrink-0">${(a.app_identifier || '?')[0].toUpperCase()}</div>`;
+    const fallbackHtml = `<div class="${iconUrl ? 'hidden' : 'flex'} w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-blue-400 items-center justify-center text-white font-bold text-xl shrink-0">${(a.app_identifier || '?')[0].toUpperCase()}</div>`;
 
-    // Lang/Market badges
+    const marketLabels = { kr: '한국', us: '미국', jp: '일본', gb: '영국', de: '독일', fr: '프랑스', au: '호주', in: '인도', br: '브라질' };
+    const market = (a.market || 'kr').toLowerCase();
+    const marketDisplay = marketLabels[market] || market.toUpperCase();
     const langLabel = a.lang === 'en' ? 'EN' : 'KO';
-    const marketLabel = (a.market || 'kr').toUpperCase();
-    const langMarketBadge = `<span class="text-[10px] font-medium bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${langLabel} · ${marketLabel}</span>`;
 
     return `
       <button
         data-id="${a.id}"
-        class="analysis-item flex items-center gap-4 p-4 bg-white rounded-2xl border border-[#e8eaf0] shadow-sm hover:border-primary hover:shadow-md transition-all text-left w-full"
+        class="analysis-item group flex items-center gap-4 p-4 md:p-5 bg-white rounded-2xl border border-[#e8eaf0] hover:border-primary hover:shadow-md transition-all text-left w-full"
       >
-        <div class="shrink-0">
+        <div class="shrink-0 relative">
           ${iconHtml}
           ${fallbackHtml}
         </div>
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 mb-0.5">
-            <p class="text-base font-bold text-[#111318] truncate">${a.app_identifier}</p>
-            ${langMarketBadge}
+          <p class="text-sm md:text-base font-bold text-[#111318] truncate mb-1.5">${a.app_identifier}</p>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="inline-flex items-center gap-1 text-[10px] font-medium bg-primary/8 text-primary px-2 py-0.5 rounded-full">
+              <span class="material-symbols-outlined" style="font-size:11px">language</span>${langLabel}
+            </span>
+            <span class="inline-flex items-center gap-1 text-[10px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+              <span class="material-symbols-outlined" style="font-size:11px">location_on</span>${marketDisplay}
+            </span>
+            <span class="text-[10px] text-[#9ba3b8]">${formatDate(a.created_at)}</span>
           </div>
-          <p class="text-xs text-[#636e88] mt-0.5">${formatDate(a.created_at)}</p>
         </div>
-        <span class="material-symbols-outlined text-[#c4c8d4] text-xl shrink-0">chevron_right</span>
+        <span class="material-symbols-outlined text-[#c4c8d4] group-hover:text-primary transition-colors text-xl shrink-0">chevron_right</span>
       </button>
     `;
   }).join('');
@@ -143,8 +148,8 @@ function renderDetailRatings(ratings) {
 
   const legendRows = [5, 4, 3, 2, 1].map((star, idx) => {
     const pct = (((distribution[star] || 0) / total) * 100).toFixed(0);
-    return `<div class="flex items-center justify-between text-xs">
-      <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full" style="background:${colors[idx]}"></div>${star}점</span>
+    return `<div class="flex items-center justify-between text-[10px] md:text-xs">
+      <span class="flex items-center gap-1.5 md:gap-2"><div class="w-2 h-2 rounded-full" style="background:${colors[idx]}"></div>${star}점</span>
       <span class="font-bold">${pct}%</span>
     </div>`;
   }).join('');
@@ -182,28 +187,106 @@ function renderDetailReviews(reviewsByRating) {
   return `<div class="bg-white border border-[#dcdee5] rounded-xl divide-y divide-gray-100">${rows}</div>`;
 }
 
-function renderDetailComplaintCard(icon, title, complaint) {
+function renderDetailComplaintCard(icon, title, complaint, extraClass = '') {
   if (!complaint) return '';
   const items = complaint.description ? [complaint.description] : [];
   if (complaint.items) items.push(...complaint.items);
   const listHtml = items.slice(0, 3).map(item =>
-    `<li class="flex gap-2"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div><p class="text-xs md:text-sm">${item}</p></li>`
-  ).join('') || `<li class="text-xs text-gray-400">${t('mypage.data_none')}</li>`;
+    `<li class="flex gap-2"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></div><p class="text-xs md:text-sm">${item}</p></li>`
+  ).join('') || `<li class="text-xs md:text-sm text-gray-400">${t('mypage.data_none')}</li>`;
   return `
-    <div class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5">
-      <div class="flex items-center gap-2 mb-3 border-b pb-2 border-gray-100">
-        <span class="material-symbols-outlined text-primary text-lg">${icon}</span>
+    <div class="bg-white border border-[#dcdee5] rounded-xl p-4 md:p-5${extraClass ? ' ' + extraClass : ''}">
+      <div class="flex items-center gap-2 mb-3 md:mb-4 border-b pb-2 md:pb-3 border-gray-100">
+        <span class="material-symbols-outlined text-primary text-lg md:text-xl">${icon}</span>
         <h3 class="font-bold text-sm md:text-base">${title}</h3>
       </div>
-      <ul class="space-y-2">${listHtml}</ul>
+      <ul class="space-y-2 md:space-y-3">${listHtml}</ul>
     </div>`;
 }
 
 window.downloadDetailAsPDF = function(appName) {
-  const title = document.title;
-  document.title = `${appName} 분석결과 - TalonInsight`;
-  window.print();
-  document.title = title;
+  const detailView = document.getElementById('detail-view');
+  if (!detailView) return;
+
+  // 현재 렌더링된 상세 뷰를 복제
+  const printContent = detailView.cloneNode(true);
+
+  // 인쇄 불필요 요소 제거 (뒤로가기 버튼, 액션 버튼들)
+  printContent.querySelectorAll('#back-btn, .no-print').forEach(el => el.remove());
+
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert('팝업이 차단되었습니다. 팝업 차단을 해제한 후 다시 시도해주세요.');
+    return;
+  }
+
+  const date = new Date().toLocaleDateString(getLang() === 'en' ? 'en-US' : 'ko-KR', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  printWindow.document.write(`<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>${appName} 분석결과 - TalonInsight</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1E5AE8",
+            "background-light": "#f6f6f8",
+          },
+          fontFamily: { "display": ["Inter", "Noto Sans KR", "sans-serif"] }
+        }
+      }
+    }
+  <\/script>
+  <style>
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    body {
+      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+      background: white;
+      color: #111318;
+      margin: 0;
+      padding: 0;
+    }
+    @media print {
+      @page { margin: 1.2cm; size: A4; }
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body class="font-display text-[#111318] bg-white">
+  <div class="max-w-[900px] mx-auto px-6 py-8">
+    <div class="flex items-start justify-between mb-8 pb-5 border-b border-gray-200">
+      <div>
+        <p class="text-xs text-gray-400 mb-0.5">TalonInsight 분석 리포트</p>
+        <h1 class="text-2xl font-bold text-[#111318]">${appName}</h1>
+      </div>
+      <p class="text-sm text-gray-400 shrink-0 ml-4 mt-1">${date}</p>
+    </div>
+    ${printContent.innerHTML}
+  </div>
+  <script>
+    document.fonts.ready.then(function() {
+      setTimeout(function() {
+        window.print();
+        window.close();
+      }, 1200);
+    });
+  <\/script>
+</body>
+</html>`);
+  printWindow.document.close();
 };
 
 function renderDetail(analysis, data) {
@@ -233,11 +316,27 @@ function renderDetail(analysis, data) {
         <p class="text-[#636e88] text-sm mt-1">${formatDate(analysis.created_at)}</p>
         ${storeLinksHtml ? `<div class="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start">${storeLinksHtml}</div>` : ''}
       </div>
-      <button onclick="downloadDetailAsPDF('${appName.replace(/'/g, "\\'")}')" class="no-print shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-[#dcdee5] rounded-lg text-[#636e88] hover:border-primary hover:text-primary transition-colors bg-white self-start">
-        <span class="material-symbols-outlined text-sm">download</span>
-        ${t('mypage.pdf_save')}
-      </button>
+      <div class="flex flex-wrap gap-2 shrink-0 self-start">
+        <button id="detail-group-analyze-btn" class="no-print flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 border border-primary text-primary text-xs md:text-sm font-bold hover:bg-primary/5 transition-colors">
+          <span class="material-symbols-outlined mr-2 text-lg">group_work</span>
+          ${t('analysis.group_analysis_btn')}
+        </button>
+        <button onclick="downloadDetailAsPDF('${appName.replace(/'/g, "\\'")}')" class="no-print flex items-center justify-center rounded-lg h-10 md:h-11 px-4 md:px-6 bg-primary text-white text-xs md:text-sm font-bold hover:bg-primary/90 transition-colors">
+          <span class="material-symbols-outlined mr-2 text-lg">download</span>
+          ${t('mypage.pdf_save')}
+        </button>
+      </div>
     </div>`;
+
+  // 그룹분석 시작하기 버튼 클릭 핸들러
+  document.getElementById('detail-group-analyze-btn')?.addEventListener('click', () => {
+    const groupParams = new URLSearchParams();
+    if (appName) groupParams.set('appName', appName);
+    if (data.appIconUrl || iconUrl) groupParams.set('iconUrl', data.appIconUrl || iconUrl);
+    if (data.appStoreUrl) groupParams.set('appStoreUrl', data.appStoreUrl);
+    if (data.playStoreUrl) groupParams.set('playStoreUrl', data.playStoreUrl);
+    window.location.href = `/analysis/group-analysis.html?${groupParams.toString()}`;
+  });
 
   const sections = [];
 
@@ -366,24 +465,98 @@ function renderDetail(analysis, data) {
           <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.complaints')}</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          ${renderDetailComplaintCard('grid_view', 'UI / UX', data.complaints.uiUx)}
-          ${renderDetailComplaintCard('speed', t('analysis.performance'), data.complaints.performance)}
-          ${renderDetailComplaintCard('security', t('analysis.stability'), data.complaints.stability)}
+          ${renderDetailComplaintCard('grid_view', 'UI / UX', data.complaints.uiUx, '')}
+          ${renderDetailComplaintCard('speed', t('analysis.performance'), data.complaints.performance, '')}
+          ${renderDetailComplaintCard('security', t('analysis.stability'), data.complaints.stability, 'sm:col-span-2 md:col-span-1')}
         </div>
       </section>`);
   }
 
-  // 08. 전략 제안
+  // 08. 타겟 사용자 페르소나
+  if (data.userPersonas?.length) {
+    const personaColors = [
+      { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'text-blue-500', badge: 'bg-blue-100 text-blue-700' },
+      { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-500', badge: 'bg-purple-100 text-purple-700' },
+      { bg: 'bg-green-50', border: 'border-green-200', icon: 'text-green-500', badge: 'bg-green-100 text-green-700' },
+    ];
+    const personaCards = data.userPersonas.slice(0, 3).map((p, i) => {
+      const c = personaColors[i % personaColors.length];
+      const keywords = (p.keywords || []).slice(0, 5).map(k =>
+        `<span class="text-[10px] ${c.badge} px-1.5 py-0.5 rounded-full">${k}</span>`
+      ).join('');
+      return `
+        <div class="flex flex-col gap-3 p-4 rounded-xl border ${c.border} ${c.bg}">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined ${c.icon} text-xl">person</span>
+            <div>
+              <p class="font-bold text-sm text-[#111318]">${p.type || ''}</p>
+              <p class="text-[10px] text-[#636e88]">${p.ageRange || ''}</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-[10px] font-semibold text-[#636e88] uppercase tracking-wider mb-1">${t('analysis.persona_motivation')}</p>
+            <p class="text-xs text-[#111318]">${p.motivation || ''}</p>
+          </div>
+          <div>
+            <p class="text-[10px] font-semibold text-[#636e88] uppercase tracking-wider mb-1">${t('analysis.persona_painpoint')}</p>
+            <p class="text-xs text-[#636e88]">${p.painPoint || ''}</p>
+          </div>
+          ${keywords ? `<div class="flex flex-wrap gap-1 mt-1">${keywords}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    sections.push(`
+      <section class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">08.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.personas_title')}</h2>
+        </div>
+        <p class="text-xs md:text-sm text-[#636e88] mb-3 md:mb-4">${t('analysis.personas_desc')}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">${personaCards}</div>
+      </section>`);
+  }
+
+  // 09. 전략 제안
   if (data.strategySuggestion) {
     sections.push(`
-      <section class="mb-8 md:mb-12">
+      <section class="mb-8 md:mb-10">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">09.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.strategy')}</h2>
+        </div>
         <div class="bg-primary rounded-xl p-4 md:p-8 shadow-lg shadow-primary/20 text-white">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined text-lg md:text-xl">lightbulb</span>
-            <h2 class="text-sm md:text-lg font-bold uppercase tracking-wider">${t('analysis.strategy')}</h2>
-          </div>
           <p class="text-lg md:text-2xl font-bold leading-snug">${data.strategySuggestion.oneLine || ''}</p>
           <p class="mt-2 md:mt-4 text-sm md:text-base opacity-90">${data.strategySuggestion.reasoning || ''}</p>
+        </div>
+      </section>`);
+  }
+
+  // 10. 시장 진입 기회
+  if (data.marketOpportunity) {
+    const opportunitiesHtml = (data.marketOpportunity.opportunities || []).map((opp, i) => `
+      <li class="flex gap-3 items-start p-3 md:p-4 bg-[#f6f6f8] rounded-xl">
+        <div class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</div>
+        <p class="text-xs md:text-sm text-[#111318]">${opp}</p>
+      </li>`).join('');
+
+    sections.push(`
+      <section class="mb-8 md:mb-12">
+        <div class="flex items-center gap-2 mb-3 md:mb-4">
+          <span class="text-primary font-bold text-sm md:text-base">10.</span>
+          <h2 class="text-lg md:text-[22px] font-bold leading-tight">${t('analysis.opportunity_title')}</h2>
+        </div>
+        <div class="bg-white rounded-xl border border-[#dcdee5] p-4 md:p-8">
+          ${data.marketOpportunity.gap ? `
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-amber-500 text-lg shrink-0 mt-0.5">search_insights</span>
+              <div>
+                <p class="text-xs font-bold text-amber-700 mb-1">${t('analysis.opportunity_gap_label')}</p>
+                <p class="text-xs md:text-sm text-amber-800">${data.marketOpportunity.gap}</p>
+              </div>
+            </div>
+          </div>` : ''}
+          ${opportunitiesHtml ? `<ul class="flex flex-col gap-3">${opportunitiesHtml}</ul>` : ''}
         </div>
       </section>`);
   }

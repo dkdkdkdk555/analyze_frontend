@@ -273,6 +273,20 @@ function renderResults(data) {
     document.getElementById('strategy-reasoning').textContent = data.strategySuggestion?.reasoning || '';
   }
 
+  // 09. User Personas (비로그인 사용자도 볼 수 있음)
+  if (data.userPersonas?.length) {
+    renderUserPersonas(data.userPersonas);
+  } else {
+    renderSectionBlur('personas-grid', false);
+  }
+
+  // 10. Market Opportunity
+  if (isGuestUser || !data.marketOpportunity) {
+    renderSectionBlur('market-opportunity', true);
+  } else {
+    renderMarketOpportunity(data.marketOpportunity);
+  }
+
   // Scroll detection for bottom popup
   let bottomPopupShown = false;
   window.addEventListener('scroll', () => {
@@ -511,6 +525,84 @@ function renderStrategyBlur() {
   `;
   overlay.addEventListener('click', showGuestSignupModal);
   contentWrapper.appendChild(overlay);
+}
+
+function renderUserPersonas(personas) {
+  const grid = document.getElementById('personas-grid');
+  if (!grid) return;
+
+  const personaColors = [
+    { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'text-blue-500', badge: 'bg-blue-100 text-blue-700' },
+    { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-500', badge: 'bg-purple-100 text-purple-700' },
+    { bg: 'bg-green-50', border: 'border-green-200', icon: 'text-green-500', badge: 'bg-green-100 text-green-700' },
+  ];
+
+  grid.innerHTML = personas.slice(0, 3).map((p, i) => {
+    const c = personaColors[i % personaColors.length];
+    const keywords = (p.keywords || []).slice(0, 5).map(k =>
+      `<span class="text-[10px] ${c.badge} px-1.5 py-0.5 rounded-full">${k}</span>`
+    ).join('');
+    return `
+      <div class="flex flex-col gap-3 p-4 rounded-xl border ${c.border} ${c.bg}">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined ${c.icon} text-xl">person</span>
+          <div>
+            <p class="font-bold text-sm text-[#111318]">${p.type || ''}</p>
+            <p class="text-[10px] text-[#636e88]">${p.ageRange || ''}</p>
+          </div>
+        </div>
+        <div>
+          <p class="text-[10px] font-semibold text-[#636e88] uppercase tracking-wider mb-1" data-i18n="analysis.persona_motivation">Motivation</p>
+          <p class="text-xs text-[#111318]">${p.motivation || ''}</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-semibold text-[#636e88] uppercase tracking-wider mb-1" data-i18n="analysis.persona_painpoint">Pain Point</p>
+          <p class="text-xs text-[#636e88]">${p.painPoint || ''}</p>
+        </div>
+        ${keywords ? `<div class="flex flex-wrap gap-1 mt-1">${keywords}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderMarketOpportunity(opportunity) {
+  const gapText = document.getElementById('market-gap-text');
+  const list = document.getElementById('opportunity-list');
+  if (gapText) gapText.textContent = opportunity.gap || '';
+  if (!list) return;
+
+  list.innerHTML = (opportunity.opportunities || []).map((opp, i) => `
+    <li class="flex gap-3 items-start p-3 md:p-4 bg-[#f6f6f8] rounded-xl">
+      <div class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</div>
+      <p class="text-xs md:text-sm text-[#111318]">${opp}</p>
+    </li>
+  `).join('');
+}
+
+/**
+ * Generic blur overlay for new sections
+ * @param {string} containerId - element to add blur to
+ * @param {boolean} wrapInner - if true wraps inner content, if false overlays the element directly
+ */
+function renderSectionBlur(containerId, wrapInner) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // Add placeholder ghost content
+  if (containerId === 'personas-grid') {
+    container.innerHTML = `
+      <div class="h-32 bg-gray-100 rounded-xl"></div>
+      <div class="h-32 bg-gray-100 rounded-xl"></div>
+      <div class="h-32 bg-gray-100 rounded-xl"></div>
+    `;
+  } else {
+    const inner = container.querySelector('#market-gap-box, #opportunity-list');
+    if (inner) inner.innerHTML = '<div class="h-24 bg-gray-100 rounded-xl"></div>';
+  }
+
+  const target = wrapInner ? container : container;
+  target.style.position = 'relative';
+  target.appendChild(createBlurOverlay());
 }
 
 function showLoading() {
