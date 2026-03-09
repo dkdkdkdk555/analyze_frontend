@@ -191,7 +191,9 @@ function loadPaddleSDK() {
     const script = document.createElement('script');
     script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
     script.onload = () => {
-      window.Paddle.Environment.set(paddleEnvironment);
+      if (paddleEnvironment === 'sandbox') {
+        window.Paddle.Environment.set('sandbox');
+      }
       window.Paddle.Initialize({
         token: paddleClientToken,
         eventCallback: (event) => {
