@@ -52,6 +52,7 @@ const TRANSLATIONS = {
     'footer.tagline':       '데이터로 증명하는 앱 성장 파트너. 시장 조사부터 경쟁사 분석까지 한 번에 해결하세요.',
     'footer.biz_number':    '사업자등록번호 136-15-09172',
     'footer.address':       '서울특별시 관악구 쑥고개로30길 34, 1층 101호(봉천동)',
+    'footer.operated_by':   'Operated by HealthTier',
     'footer.paddle_notice': '본 서비스의 주문 및 결제는 글로벌 결제 대행사 <strong>Paddle.com</strong> 및 <strong>PayPal</strong>에서 처리됩니다. Paddle은 법적 판매자로서 모든 결제 관련 문의와 환불을 책임집니다.',
     'footer.terms':         '이용약관',
     'footer.privacy':       '개인정보처리방침',
@@ -112,6 +113,7 @@ const TRANSLATIONS = {
     'pricing.success_done':       '확인',
     'pricing.retry':              '다시 시도',
     'pricing.cancel':             '취소',
+    'pricing.operated_by_notice': 'HealthTier는 TalonInsight의 운영사입니다.',
 
     // ── Payment result pages ──────────────────────────────────────────
     'payment.success_page_title': '결제 완료 - TalonInsight',
@@ -473,6 +475,7 @@ const TRANSLATIONS = {
     'footer.tagline':       'Your data-driven app growth partner. From market research to competitor analysis — all in one place.',
     'footer.biz_number':    'Business Registration No. 136-15-09172',
     'footer.address':       '34 Ssukgogae-ro 30-gil, Gwanak-gu, Seoul, Republic of Korea',
+    'footer.operated_by':   'Operated by HealthTier',
     'footer.paddle_notice': 'Our order process is conducted by our online reseller <strong>Paddle.com Market Limited</strong>. Paddle is the <strong>Merchant of Record</strong> for all our orders. Paddle provides all customer service inquiries and handles returns.',
     'footer.terms':         'Terms of Service',
     'footer.privacy':       'Privacy Policy',
@@ -533,6 +536,7 @@ const TRANSLATIONS = {
     'pricing.success_done':       'Done',
     'pricing.retry':              'Try again',
     'pricing.cancel':             'Cancel',
+    'pricing.operated_by_notice': 'HealthTier is the operator of TalonInsight.',
 
     // ── Payment result pages ──────────────────────────────────────────
     'payment.success_page_title': 'Payment Complete - TalonInsight',

@@ -24,7 +24,8 @@ export function initFooter() {
             ${t('footer.tagline')}
           </p>
           <p class="text-[#636e88] text-[10px]">
-            © 2026 TalonInsight All rights reserved.
+            © 2026 TalonInsight All rights reserved.<br>
+            ${t('footer.operated_by')}
           </p>
           <p class="text-[#636e88] text-[10px] leading-relaxed">
             ${t('footer.biz_number')}<br>
