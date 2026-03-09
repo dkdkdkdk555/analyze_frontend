@@ -1,6 +1,6 @@
 ## Company Information
 * **Registration Number:** 136-15-09172
-* **Address:** 34 Ssukgogae-ro 30-gil, Gwanak-gu, Seoul, Republic of Korea
+* **Address:** 	3 floor, 28, Hyoryeong-ro 31-gil, Seocho-gu, Seoul, Republic of Korea
 
 ---
 

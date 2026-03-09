@@ -1,10 +1,10 @@
-# robots.txt for analyze-dega.pages.dev
+# robots.txt for taloninsight.com
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://analyze-dega.pages.dev/sitemap.xml
+Sitemap: https://taloninsight.com/sitemap.xml
 
 # Crawl-delay for polite crawling (optional, mainly for Naver)
 Crawl-delay: 1

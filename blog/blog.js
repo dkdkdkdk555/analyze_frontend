@@ -15,7 +15,7 @@ document.title = t('blog.page_title');
 
 // Update blog links based on language
 const lang = getLang();
-const blogBasePath = lang === 'en' ? 'blog/en/' : 'blog/';
+const blogBasePath = lang === 'en' ? 'en/' : '';
 
 const blogLinks = {
   'blog-link-1': 'app-market-research-guide.html',
