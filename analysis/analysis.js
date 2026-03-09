@@ -277,12 +277,12 @@ function renderResults(data) {
   if (data.userPersonas?.length) {
     renderUserPersonas(data.userPersonas);
   } else {
-    renderSectionBlur('personas-grid', false);
+    renderSectionBlur('personas-grid');
   }
 
   // 10. Market Opportunity
   if (isGuestUser || !data.marketOpportunity) {
-    renderSectionBlur('market-opportunity', true);
+    renderSectionBlur('market-opportunity');
   } else {
     renderMarketOpportunity(data.marketOpportunity);
   }
@@ -584,7 +584,7 @@ function renderMarketOpportunity(opportunity) {
  * @param {string} containerId - element to add blur to
  * @param {boolean} wrapInner - if true wraps inner content, if false overlays the element directly
  */
-function renderSectionBlur(containerId, wrapInner) {
+function renderSectionBlur(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -600,9 +600,14 @@ function renderSectionBlur(containerId, wrapInner) {
     if (inner) inner.innerHTML = '<div class="h-24 bg-gray-100 rounded-xl"></div>';
   }
 
-  const target = wrapInner ? container : container;
-  target.style.position = 'relative';
-  target.appendChild(createBlurOverlay());
+  // For market-opportunity: blur only the content box, not the section header
+  const blurTarget = containerId === 'market-opportunity'
+    ? document.getElementById('market-opportunity-content')
+    : container;
+
+  if (!blurTarget) return;
+  blurTarget.style.position = 'relative';
+  blurTarget.appendChild(createBlurOverlay());
 }
 
 function showLoading() {

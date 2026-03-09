@@ -922,11 +922,11 @@ export function getLang() {
   return detectLang();
 }
 
-/** Persists a language choice and reloads the page */
+/** Persists a language choice and applies translations in place (no page reload) */
 export function setLang(lang) {
   if (!TRANSLATIONS[lang]) return;
   localStorage.setItem('lang', lang);
-  location.reload();
+  applyTranslations();
 }
 
 /** Returns the translated string for key, falling back to Korean then key itself */

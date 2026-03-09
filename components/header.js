@@ -508,7 +508,43 @@ function attachLangSwitcherHandlers() {
 
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-set-lang]');
-    if (btn) setLang(btn.dataset.setLang);
+    if (!btn) return;
+    const lang = btn.dataset.setLang;
+    setLang(lang);
+
+    // Update desktop dropdown active states
+    document.querySelectorAll('#lang-dropdown [data-set-lang]').forEach(b => {
+      const isActive = b.dataset.setLang === lang;
+      b.classList.toggle('font-bold', isActive);
+      b.classList.toggle('text-primary', isActive);
+      b.querySelector('.lang-check-icon')?.remove();
+      if (isActive) {
+        const check = document.createElement('span');
+        check.className = 'material-symbols-outlined text-primary text-sm lang-check-icon';
+        check.textContent = 'check';
+        b.appendChild(check);
+      }
+    });
+
+    // Update toggle button label
+    const currentLabel = LANG_OPTIONS.find(l => l.code === lang)?.label;
+    const toggle = document.getElementById('lang-toggle');
+    if (toggle && currentLabel) {
+      const labelSpan = toggle.querySelectorAll('span')[1];
+      if (labelSpan) labelSpan.textContent = currentLabel;
+    }
+
+    // Update mobile switcher active states
+    document.querySelectorAll('#mobile-menu-drawer [data-set-lang]').forEach(b => {
+      const isActive = b.dataset.setLang === lang;
+      b.classList.toggle('bg-primary', isActive);
+      b.classList.toggle('text-white', isActive);
+      b.classList.toggle('text-[#636e88]', !isActive);
+      b.classList.toggle('hover:bg-[#f0f1f4]', !isActive);
+    });
+
+    // Close dropdown
+    document.getElementById('lang-dropdown')?.classList.add('hidden');
   });
 }
 
@@ -520,9 +556,9 @@ function buildDesktopNavLinks({ page }) {
   const inact  = 'text-[#111318] hover:text-primary';
 
   return [
-    `<a class="${base} ${page === 'services' ? active : inact}" href="/services/services.html">${t('nav.services')}</a>`,
-    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="/payment/pricing.html">${t('nav.pricing')}</a>`,
-    `<a class="${base} ${page === 'blog'     ? active : inact}" href="/blog/blog.html">${t('nav.blog')}</a>`,
+    `<a class="${base} ${page === 'services' ? active : inact}" href="/services/services.html" data-i18n="nav.services">${t('nav.services')}</a>`,
+    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="/payment/pricing.html" data-i18n="nav.pricing">${t('nav.pricing')}</a>`,
+    `<a class="${base} ${page === 'blog'     ? active : inact}" href="/blog/blog.html" data-i18n="nav.blog">${t('nav.blog')}</a>`,
   ].join('');
 }
 
@@ -571,15 +607,15 @@ function buildMobileDrawer({ page }) {
     <nav class="flex flex-col px-5 py-2 flex-1">
       <a href="/services/services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'services' ? 'text-primary' : ''}">apps</span>
-        ${t('nav.services')}
+        <span data-i18n="nav.services">${t('nav.services')}</span>
       </a>
       <a href="/payment/pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'pricing' ? 'text-primary' : ''}">credit_card</span>
-        ${t('nav.pricing')}
+        <span data-i18n="nav.pricing">${t('nav.pricing')}</span>
       </a>
       <a href="/blog/blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'blog' ? 'text-primary' : ''}">article</span>
-        ${t('nav.blog')}
+        <span data-i18n="nav.blog">${t('nav.blog')}</span>
       </a>
     </nav>
   `;

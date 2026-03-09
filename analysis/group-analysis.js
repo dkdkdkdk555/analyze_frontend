@@ -512,7 +512,7 @@ async function startAnalysis() {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ groupName, apps: selectedApps, lang: getLang() }),
+      body: JSON.stringify({ groupName, apps: selectedApps, lang: getLang(), market: getMarket() }),
     });
 
     if (res.status === 402) {
