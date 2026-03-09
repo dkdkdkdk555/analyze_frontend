@@ -108,7 +108,7 @@ document.getElementById('btn-select-paypal').addEventListener('click', () => {
 });
 
 document.getElementById('btn-select-paddle').addEventListener('click', () => {
-  // handlePaddlePayment();
+  handlePaddlePayment();
 });
 
 document.getElementById('modal-back-paypal').addEventListener('click', () => {
@@ -239,7 +239,35 @@ async function completePaddlePayment(transactionId) {
 
 // ── Paddle 결제 흐름 ───────────────────────────────────────────────────────
 async function handlePaddlePayment() {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    showModalError(t('pricing.login_required'));
+    return;
+  }
 
+  showPlanView('paddle');
+  if (paddleStatus) paddleStatus.textContent = t('pricing.paddle_loading');
+  paddleCheckoutCompleted = false;
+
+  try {
+    // Paddle SDK 로드 (이미 로드된 경우 즉시 resolve)
+    await loadPaddleSDK();
+
+    // 백엔드에서 Paddle transaction 생성
+    const res = await fetch(`${API_BASE_URL}/api/payments/paddle/create-transaction`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ productId: selectedProduct.id }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || t('pricing.payment_error'));
+
+    // Paddle Checkout 열기
+    window.Paddle.Checkout.open({ transactionId: data.transactionId });
+  } catch (err) {
+    console.error('[Payment] Paddle create transaction error:', err);
+    showModalError(err.message || t('pricing.payment_error'));
+  }
 }
 
 // ── 구매 핸들러 ────────────────────────────────────────────────────────────
