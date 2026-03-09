@@ -231,11 +231,82 @@ async function renderPositioningMap(posMap, apps) {
       ctx.stroke();
     }
 
-    // Label below dot
+  });
+
+  // ── Collision-aware label placement ────────────────────────────────────────
+  ctx.font = '11px Noto Sans KR, sans-serif';
+  const FONT_H = 12;
+  const LABEL_PAD_X = 4;
+  const LABEL_PAD_Y = 2;
+
+  // Measure each label
+  const labelMeta = appPositions.map((appPos, i) => {
+    const text = appPos.appName?.slice(0, 8) || '';
+    const tw = ctx.measureText(text).width;
+    return { text, tw, x: toX(appPos.x || 0), y: toY(appPos.y || 0) };
+  });
+
+  // Candidate offsets: below, above, right, left, below-right, below-left, above-right, above-left
+  const OFFSETS = [
+    { dx: 0,    dy: r + 14 },
+    { dx: 0,    dy: -(r + 6) },
+    { dx: r + 8, dy: 4 },
+    { dx: -(r + 8), dy: 4 },
+    { dx: r + 6,  dy: r + 10 },
+    { dx: -(r + 6), dy: r + 10 },
+    { dx: r + 6,  dy: -(r + 6) },
+    { dx: -(r + 6), dy: -(r + 6) },
+  ];
+
+  // Check AABB overlap of two label rects
+  function overlaps(ax, ay, aw, ah, bx, by, bw, bh) {
+    return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+  }
+
+  // Track placed label rects
+  const placed = [];
+
+  const finalLabels = labelMeta.map(({ text, tw, x, y }) => {
+    const lw = tw + LABEL_PAD_X * 2;
+    const lh = FONT_H + LABEL_PAD_Y * 2;
+
+    for (const { dx, dy } of OFFSETS) {
+      const lx = x + dx - lw / 2;
+      const ly = y + dy - lh / 2;
+
+      // Stay within canvas bounds
+      if (lx < 2 || lx + lw > W - 2 || ly < 2 || ly + lh > H - 2) continue;
+
+      // Check against already-placed labels
+      const hasOverlap = placed.some(p => overlaps(lx, ly, lw, lh, p.lx, p.ly, p.lw, p.lh));
+      if (!hasOverlap) {
+        placed.push({ lx, ly, lw, lh });
+        return { text, lx, ly, lw, lh, cx: x + dx, cy: y + dy };
+      }
+    }
+
+    // Fallback: use first candidate even if overlapping
+    const { dx, dy } = OFFSETS[0];
+    const lx = x + dx - lw / 2;
+    const ly = y + dy - lh / 2;
+    placed.push({ lx, ly, lw, lh });
+    return { text, lx, ly, lw, lh, cx: x + dx, cy: y + dy };
+  });
+
+  // Draw labels with white background pill
+  finalLabels.forEach(({ text, lx, ly, lw, lh, cx, cy }) => {
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(lx, ly, lw, lh, 4);
+    } else {
+      ctx.rect(lx, ly, lw, lh);
+    }
+    ctx.fill();
+
     ctx.fillStyle = '#111318';
-    ctx.font = '11px Noto Sans KR, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(appPos.appName?.slice(0, 6) || '', x, y + r + 14);
+    ctx.fillText(text, cx, cy + FONT_H / 2 - 1);
   });
 
   // Legend
@@ -388,5 +459,11 @@ function renderIndividualApps(apps) {
       </a>`;
   }).join('');
 }
+
+// 뒤로가기 시 분석중 페이지 대신 서비스 페이지로 이동
+history.pushState(null, '', location.href);
+window.addEventListener('popstate', () => {
+  location.replace('https://taloninsight.com/services/services');
+});
 
 init();

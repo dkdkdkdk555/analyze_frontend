@@ -48,6 +48,17 @@ const TRANSLATIONS = {
     'lang.en': 'English',
     'lang.ja': '日本語',
 
+    // ── Market labels ────────────────────────────────────────────────
+    'market.kr': '한국',
+    'market.us': '미국',
+    'market.jp': '일본',
+    'market.gb': '영국',
+    'market.de': '독일',
+    'market.fr': '프랑스',
+    'market.au': '호주',
+    'market.in': '인도',
+    'market.br': '브라질',
+
     // ── Footer ───────────────────────────────────────────────────────
     'footer.tagline':       '데이터로 증명하는 앱 성장 파트너. 시장 조사부터 경쟁사 분석까지 한 번에 해결하세요.',
     'footer.biz_number':    '사업자등록번호 136-15-09172',
@@ -478,6 +489,17 @@ const TRANSLATIONS = {
     'lang.en': 'English',
     'lang.ja': '日本語',
 
+    // ── Market labels ────────────────────────────────────────────────
+    'market.kr': 'South Korea',
+    'market.us': 'United States',
+    'market.jp': 'Japan',
+    'market.gb': 'United Kingdom',
+    'market.de': 'Germany',
+    'market.fr': 'France',
+    'market.au': 'Australia',
+    'market.in': 'India',
+    'market.br': 'Brazil',
+
     // ── Footer ───────────────────────────────────────────────────────
     'footer.tagline':       'Your data-driven app growth partner. From market research to competitor analysis — all in one place.',
     'footer.biz_number':    'Business Registration No. 136-15-09172',
@@ -892,6 +914,11 @@ export function getMarket() {
   const saved = localStorage.getItem('market');
   if (saved && MARKET_OPTIONS.some(m => m.code === saved)) return saved;
   return 'kr';
+}
+
+/** Returns the localized display name for a market code */
+export function getMarketLabel(code) {
+  return t(`market.${(code || 'kr').toLowerCase()}`) || (code || 'kr').toUpperCase();
 }
 
 /** Persists a market choice */

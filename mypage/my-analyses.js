@@ -1,6 +1,6 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
-import { getLang, t, applyTranslations } from '../components/i18n.js';
+import { getLang, t, applyTranslations, getMarketLabel } from '../components/i18n.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -59,9 +59,8 @@ function renderList(analyses) {
       : '';
     const fallbackHtml = `<div class="${iconUrl ? 'hidden' : 'flex'} w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-blue-400 items-center justify-center text-white font-bold text-xl shrink-0">${(a.app_identifier || '?')[0].toUpperCase()}</div>`;
 
-    const marketLabels = { kr: '한국', us: '미국', jp: '일본', gb: '영국', de: '독일', fr: '프랑스', au: '호주', in: '인도', br: '브라질' };
     const market = (a.market || 'kr').toLowerCase();
-    const marketDisplay = marketLabels[market] || market.toUpperCase();
+    const marketDisplay = getMarketLabel(market);
     const langLabel = a.lang === 'en' ? 'EN' : 'KO';
 
     return `

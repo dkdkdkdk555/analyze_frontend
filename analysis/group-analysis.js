@@ -574,7 +574,7 @@ async function startAnalysis() {
           case 'group_done':
             updateProgressBar(100);
             setTimeout(() => {
-              location.href = `/analysis/group-analysis-result.html?id=${event.groupAnalysisId}`;
+              location.replace(`/analysis/group-analysis-result.html?id=${event.groupAnalysisId}`);
             }, 500);
             break;
 
