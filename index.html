@@ -140,7 +140,8 @@
 
     <main class="flex-1">
       <!-- Hero Section -->
-      <section class="relative overflow-visible py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
+      <section
+        class="relative overflow-visible px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 pt-10 sm:pt-14 md:pt-16 pb-56 sm:pb-60 md:pb-64">
         <div class="mx-auto max-w-[960px]">
           <!-- Hero Content Container -->
           <div class="flex flex-col items-center text-center gap-6 md:gap-8 mb-8 md:mb-12">
@@ -181,7 +182,7 @@
                 <span class="material-symbols-outlined text-[#636e88] text-xl sm:text-2xl mr-2 sm:mr-3 shrink-0">search</span>
                 <input
                   id="search-input"
-                  class="flex-1 border-none bg-transparent text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0 text-base sm:text-lg"
+                  class="flex-1 min-w-0 border-none bg-transparent text-[#111318] placeholder:text-[#636e88] focus:outline-none focus:ring-0 text-base sm:text-lg truncate"
                   placeholder="Enter an app name to analyze"
                   data-i18n-placeholder="index.search_placeholder"
                   type="text"
@@ -243,48 +244,501 @@
           })();
       </script> -->
       <!-- Feature Summary Section -->
-      <section class="bg-white py-12 md:py-16 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
-        <div class="mx-auto max-w-[960px]">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
-            <div class="flex flex-col gap-3 md:gap-4">
-              <div class="size-10 md:size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-2xl md:text-3xl">insights</span>
+<!-- ── Section 1: The Gap ── -->
+<section class="relative overflow-hidden bg-[#0d1117] py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
+  <!-- Background gradient glow -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-20 blur-[120px] pointer-events-none"
+    style="background: radial-gradient(ellipse, #1E5AE8 0%, transparent 70%);"></div>
+  <div class="relative mx-auto max-w-[900px]">
+    <!-- Headline -->
+    <h2
+      class="text-center text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight mb-6 md:mb-10"
+      data-i18n-html="index.gap_headline">
+      "What you think users want"<br><span class="text-primary">is not what users actually want.</span>
+    </h2>
+    <!-- Body text -->
+    <p class="text-center text-[#9ca3af] text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-10 md:mb-14"
+      data-i18n="index.gap_body">
+      In the age of vibe coding, anyone can build an app — but most teams still rely on gut feeling. Without thorough
+      market research, the time and money you invest quickly become a risk.
+    </p>
+    <!-- Stats row -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+      <div class="reveal rounded-2xl border border-white/10 bg-white/5 p-6 md:p-8 text-center backdrop-blur-sm">
+        <div class="text-4xl md:text-5xl font-black text-white mb-2">90<span class="text-primary">%</span></div>
+        <div class="text-sm font-semibold text-white mb-1" data-i18n="index.gap_stat1_label">of apps fail within a year
+        </div>
+        <div class="text-xs text-[#6b7280]" data-i18n="index.gap_stat1_sub">Insufficient market research is the #1 cause
+        </div>
+        </div>
+        <div class="reveal rounded-2xl border border-white/10 bg-white/5 p-6 md:p-8 text-center backdrop-blur-sm">
+          <div class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="index.gap_stat2_num">Vibe Coding</div>
+          <div class="text-sm font-semibold text-white mb-1" data-i18n="index.gap_stat2_label">Building on intuition alone</div>
+          <div class="text-xs text-[#6b7280]" data-i18n="index.gap_stat2_sub">Wasted resources in a crowded market</div>
+        </div>
+        <div class="reveal rounded-2xl border border-primary/30 bg-primary/10 p-6 md:p-8 text-center backdrop-blur-sm">
+          <div class="text-2xl md:text-3xl font-black text-primary mb-2" data-i18n="index.gap_stat3_num">Data-Driven</div>
+          <div class="text-sm font-semibold text-white mb-1" data-i18n="index.gap_stat3_label">Confidence drives better products
+          </div>
+          <div class="text-xs text-[#6b7280]" data-i18n="index.gap_stat3_sub">Great products start with deep market analysis
+          </div>
+        </div>
+        </div>
+        </div>
+        </section>
+        
+        <!-- ── Section 2: The Friction ── -->
+        <section class="bg-[#f6f6f8] py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
+          <div class="mx-auto max-w-[900px]">
+            <!-- Headline -->
+            <h2 class="text-center text-[#111318] text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight mb-4"
+              data-i18n="index.friction_headline">
+              Doing it yourself? Here's what gets in the way.
+            </h2>
+            <p class="text-center text-[#636e88] text-sm md:text-base mb-10 md:mb-14 max-w-xl mx-auto"
+              data-i18n="index.friction_sub">
+              The real barriers you hit when trying to analyze competing apps on your own.
+            </p>
+          <!-- 2x2 Pain Points Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+            <!-- Pain Point 1 -->
+            <div
+              class="reveal group rounded-2xl bg-white border border-[#e5e7eb] p-6 md:p-8 hover:border-red-200 hover:shadow-lg hover:shadow-red-50 transition-all duration-300">
+              <div class="flex items-start gap-4">
+                <div class="shrink-0 size-12 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-red-500 text-2xl">stack</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[#111318] text-base md:text-lg mb-2" data-i18n="index.friction_p1_title">Review
+                    Overload</h3>
+                  <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.friction_p1_desc">Manually reading thousands
+                    of reviews to extract meaningful insights is practically impossible.</p>
+                </div>
               </div>
-              <h3 class="text-lg md:text-xl font-bold" data-i18n="index.feat1_title">Real-Time Review Sentiment Analysis</h3>
-              <p class="text-[#636e88] text-xs md:text-sm leading-relaxed" data-i18n="index.feat1_desc">
-                Our AI processes thousands of user reviews to surface positive and negative keywords along with the core needs your market cares about.
-              </p>
+              <div class="mt-4 pt-4 border-t border-[#f0f1f4] flex items-center gap-2">
+                <span class="text-xs font-mono font-bold text-red-400 bg-red-50 px-2 py-1 rounded" data-i18n="index.friction_p1_tag">10,000+ reviews</span>
+                <span class="text-xs text-[#9ca3af]" data-i18n="index.friction_p1_badge">avg. reviews per app to read
+                  through</span>
+              </div>
             </div>
-            <div class="flex flex-col gap-3 md:gap-4">
-              <div class="size-10 md:size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-2xl md:text-3xl">monitoring</span>
+            <!-- Pain Point 2 -->
+            <div
+              class="reveal group rounded-2xl bg-white border border-[#e5e7eb] p-6 md:p-8 hover:border-amber-200 hover:shadow-lg hover:shadow-amber-50 transition-all duration-300">
+              <div class="flex items-start gap-4">
+                <div class="shrink-0 size-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-amber-500 text-2xl">help</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[#111318] text-base md:text-lg mb-2" data-i18n="index.friction_p2_title">Vague
+                    Conclusions</h3>
+                  <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.friction_p2_desc">Even after collecting data,
+                    answering "so what do we actually build?" remains frustratingly hard.</p>
+                </div>
               </div>
-              <h3 class="text-lg md:text-xl font-bold" data-i18n="index.feat2_title">Market Share Insights</h3>
-              <p class="text-[#636e88] text-xs md:text-sm leading-relaxed" data-i18n="index.feat2_desc">
-                Track category ranking shifts and download trends to map out the competitive landscape and spot opportunities.
-              </p>
+              <div class="mt-4 pt-4 border-t border-[#f0f1f4] flex items-center gap-2">
+                <span class="text-xs font-mono font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded" data-i18n="index.friction_p2_tag">"So what?" problem</span>
+                <span class="text-xs text-[#9ca3af]" data-i18n="index.friction_p2_badge">data that never turns into
+                  strategy</span>
+              </div>
             </div>
-            <div class="flex flex-col gap-3 md:gap-4 sm:col-span-2 md:col-span-1">
-              <div class="size-10 md:size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-2xl md:text-3xl">psychology</span>
+            <!-- Pain Point 3 -->
+            <div
+              class="reveal group rounded-2xl bg-white border border-[#e5e7eb] p-6 md:p-8 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-50 transition-all duration-300">
+              <div class="flex items-start gap-4">
+                <div class="shrink-0 size-12 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-orange-500 text-2xl">device_hub</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[#111318] text-base md:text-lg mb-2" data-i18n="index.friction_p3_title">Fragmented
+                    Picture</h3>
+                  <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.friction_p3_desc">You can see individual
+                    apps, but grouping competitors to get a full market view is nearly impossible.</p>
+                </div>
               </div>
-              <h3 class="text-lg md:text-xl font-bold" data-i18n="index.feat3_title">Unresolved Pain Point Discovery</h3>
-              <p class="text-[#636e88] text-xs md:text-sm leading-relaxed" data-i18n="index.feat3_desc">
-                Identify unmet user needs that competitors haven't solved — and turn those gaps into your next big opportunity.
-              </p>
+              <div class="mt-4 pt-4 border-t border-[#f0f1f4] flex items-center gap-2">
+                <span class="text-xs font-mono font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded" data-i18n="index.friction_p3_tag">siloed analysis</span>
+                <span class="text-xs text-[#9ca3af]" data-i18n="index.friction_p3_badge">no full market view</span>
+              </div>
             </div>
-            <div class="flex flex-col gap-3 md:gap-4 sm:col-span-2 md:col-span-1">
-              <div class="size-10 md:size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-2xl md:text-3xl">lightbulb</span>
+            <!-- Pain Point 4 -->
+            <div
+              class="reveal group rounded-2xl bg-white border border-[#e5e7eb] p-6 md:p-8 hover:border-purple-200 hover:shadow-lg hover:shadow-purple-50 transition-all duration-300">
+              <div class="flex items-start gap-4">
+                <div class="shrink-0 size-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-purple-500 text-2xl">price_change</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[#111318] text-base md:text-lg mb-2" data-i18n="index.friction_p4_title">High Cost
+                    Barrier
+                  </h3>
+                  <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.friction_p4_desc">Enterprise analytics tools
+                    cost
+                    millions of won per year — way out of reach for indie developers and small teams.</p>
+                </div>
               </div>
-              <h3 class="text-lg md:text-xl font-bold" data-i18n="index.feat4_title">Market Entry Strategy</h3>
-              <p class="text-[#636e88] text-xs md:text-sm leading-relaxed" data-i18n="index.feat4_desc">
-                Get an actionable go-to-market strategy tailored for solo founders looking to break into a new app market.
-              </p>
+              <div class="mt-4 pt-4 border-t border-[#f0f1f4] flex items-center gap-2">
+                <span class="text-xs font-mono font-bold text-purple-500 bg-purple-50 px-2 py-1 rounded" data-i18n="index.friction_p4_tag">$2,000+/yr</span>
+                <span class="text-xs text-[#9ca3af]" data-i18n="index.friction_p4_badge">avg. cost of enterprise tools</span>
+              </div>
+            </div>
+            </div>
+            </div>
+            </section>
+            
+            <!-- ── Section 3: The Solution ── -->
+            <section class="bg-white py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
+              <div class="mx-auto max-w-[960px]">
+                <!-- Headline -->
+                <h2 class="text-center text-[#111318] text-2xl sm:text-3xl md:text-4xl font-black leading-tight tracking-tight mb-4"
+                  data-i18n="index.solution_headline">
+                  Everything you need to analyze a market. In one place.
+                </h2>
+                <p class="text-center text-[#636e88] text-sm md:text-base mb-10 md:mb-14 max-w-xl mx-auto"
+                  data-i18n="index.solution_sub">
+                  Enter an app name and AI deeply analyzes its reviews to surface insights and actionable strategy. Group multiple apps together to map the full competitive landscape.
+                </p>
+<!-- 2x2 Feature Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-16 md:mb-20">
+  <div
+    class="reveal flex gap-4 rounded-2xl border border-[#e5e7eb] p-6 hover:border-primary/30 hover:shadow-md transition-all">
+    <div class="shrink-0 size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+      <span class="material-symbols-outlined text-2xl">manage_search</span>
+    </div>
+    <div>
+      <h3 class="font-bold text-[#111318] text-base mb-1.5" data-i18n="index.solution_f1_title">Deep Review Analysis
+      </h3>
+      <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.solution_f1_desc">AI scans thousands of App
+        Store reviews to surface unresolved problems and hidden niches.</p>
+    </div>
+  </div>
+  <div
+    class="reveal flex gap-4 rounded-2xl border border-[#e5e7eb] p-6 hover:border-primary/30 hover:shadow-md transition-all">
+    <div class="shrink-0 size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+      <span class="material-symbols-outlined text-2xl">rocket_launch</span>
+    </div>
+    <div>
+      <h3 class="font-bold text-[#111318] text-base mb-1.5" data-i18n="index.solution_f2_title">Actionable Strategy</h3>
+      <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.solution_f2_desc">Beyond summaries — get
+        concrete advice on market entry opportunities and MVP features to build first.</p>
+    </div>
+  </div>
+  <div
+    class="reveal flex gap-4 rounded-2xl border border-[#e5e7eb] p-6 hover:border-primary/30 hover:shadow-md transition-all">
+    <div class="shrink-0 size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+      <span class="material-symbols-outlined text-2xl">group_work</span>
+    </div>
+    <div>
+      <h3 class="font-bold text-[#111318] text-base mb-1.5" data-i18n="index.solution_f3_title">Powerful Group Analysis
+      </h3>
+      <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.solution_f3_desc">Group multiple competitors
+        together to map market share and pinpoint where you can break in.</p>
+    </div>
+  </div>
+  <div
+    class="reveal flex gap-4 rounded-2xl border border-[#e5e7eb] p-6 hover:border-primary/30 hover:shadow-md transition-all">
+    <div class="shrink-0 size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+      <span class="material-symbols-outlined text-2xl">toll</span>
+    </div>
+    <div>
+      <h3 class="font-bold text-[#111318] text-base mb-1.5" data-i18n="index.solution_f4_title">Pay-as-you-go Credits
+      </h3>
+      <p class="text-[#636e88] text-sm leading-relaxed" data-i18n="index.solution_f4_desc">No expensive subscriptions.
+        Buy credits only when you need them. 3 free analyses every day.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Mockup UI Showcase -->
+<div class="mb-10">
+  <p class="text-center text-xs font-bold uppercase tracking-widest text-[#9ca3af] mb-8"
+    data-i18n="index.solution_mockup_label">Live preview of actual analysis results</p>
+
+  <!-- Tab switcher -->
+  <div class="flex justify-center mb-6">
+    <div class="inline-flex rounded-xl bg-[#f6f6f8] p-1 gap-1">
+      <button id="mockup-tab-single" onclick="switchMockup('single')"
+        class="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-primary shadow-sm transition-all"
+        data-i18n="index.solution_tab_single">Individual App</button>
+      <button id="mockup-tab-group" onclick="switchMockup('group')"
+        class="px-4 py-2 rounded-lg text-sm font-semibold text-[#636e88] hover:text-[#111318] transition-all"
+        data-i18n="index.solution_tab_group">Group Analysis</button>
+    </div>
+  </div>
+
+  <!-- Single App Analysis Mockup -->
+  <div id="mockup-single" class="reveal relative rounded-2xl border border-[#e5e7eb] bg-[#f6f6f8] overflow-hidden shadow-xl">
+    <!-- Browser chrome -->
+    <div class="bg-white border-b border-[#e5e7eb] px-4 py-3 flex items-center gap-3">
+      <div class="flex gap-1.5">
+        <div class="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+        <div class="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+        <div class="w-3 h-3 rounded-full bg-[#28c840]"></div>
+      </div>
+      <div class="flex-1 mx-4">
+        <div class="bg-[#f6f6f8] rounded-lg px-3 py-1.5 text-xs text-[#636e88] text-center">taloninsight.com/analysis
+        </div>
+      </div>
+    </div>
+    <!-- Mockup Content -->
+    <div class="p-4 md:p-6 space-y-4 max-h-[600px] overflow-hidden">
+      <!-- App Header Card -->
+      <div class="bg-white rounded-xl p-4 border border-[#e5e7eb] flex items-center gap-4">
+        <div
+          class="size-14 rounded-xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white font-black text-xl shrink-0">
+          F</div>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-[#111318] text-base" data-i18n="index.mockup_app_title">FitLife Pro - Workout Tracker</div>
+          <div class="text-xs text-[#636e88] mt-0.5" data-i18n="index.mockup_app_market">Health & Fitness · 🇺🇸 US</div>
+          <div class="flex items-center gap-1 mt-1">
+            <span class="text-xs text-amber-500">★★★★☆</span>
+            <span class="text-xs text-[#636e88]" data-i18n="index.mockup_review_count">4.2 · 42,800 reviews</span>
+          </div>
+        </div>
+        <div class="shrink-0 text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-lg"
+          data-i18n="index.mockup_analysis_done">Analysis Done</div>
+      </div>
+
+      <!-- TAM/SAM row -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white rounded-xl p-4 border border-[#e5e7eb]">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-[#636e88] mb-1">TAM</div>
+          <div class="text-xl font-black text-[#111318]" data-i18n="index.mockup_tam_value">$18.2B</div>
+          <div class="text-xs text-[#636e88] mt-1" data-i18n="index.mockup_tam_desc">US healthcare app market</div>
+        </div>
+        <div class="bg-white rounded-xl p-4 border border-[#e5e7eb]">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-[#636e88] mb-1">SAM</div>
+          <div class="text-xl font-black text-[#111318]" data-i18n="index.mockup_sam_value">$480M</div>
+          <div class="text-xs text-[#636e88] mt-1" data-i18n="index.mockup_sam_desc">Personal fitness tracking</div>
+        </div>
+      </div>
+
+      <!-- Personas -->
+      <div class="bg-white rounded-xl p-4 border border-[#e5e7eb]">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-primary text-xs font-bold">08.</span>
+          <span class="font-bold text-sm text-[#111318]" data-i18n="index.mockup_persona_title">Target User
+            Personas</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="rounded-xl bg-blue-50 border border-blue-100 p-3">
+            <div class="text-lg mb-1">💪</div>
+            <div class="font-bold text-xs text-[#111318] mb-1" data-i18n="index.mockup_persona1_name">Desk Worker</div>
+            <div class="text-[10px] text-[#636e88]" data-i18n="index.mockup_persona1_motivation">Motivation: Office
+              worker in their 30s needing to stay active despite a sedentary job</div>
+            <div class="mt-2 text-[10px] text-red-500 font-medium" data-i18n="index.mockup_persona1_pain">Top pain: No
+              auto-recommended workout routines</div>
+          </div>
+          <div class="rounded-xl bg-purple-50 border border-purple-100 p-3">
+            <div class="text-lg mb-1">🏃</div>
+            <div class="font-bold text-xs text-[#111318] mb-1" data-i18n="index.mockup_persona2_name">Casual Runner
+            </div>
+            <div class="text-[10px] text-[#636e88]" data-i18n="index.mockup_persona2_motivation">Motivation: Tracking
+              training progress for weekend marathons</div>
+            <div class="mt-2 text-[10px] text-red-500 font-medium" data-i18n="index.mockup_persona2_pain">Top pain: Weak
+              social & competitive features</div>
+          </div>
+          <div class="rounded-xl bg-green-50 border border-green-100 p-3">
+            <div class="text-lg mb-1">🥗</div>
+            <div class="font-bold text-xs text-[#111318] mb-1" data-i18n="index.mockup_persona3_name">Diet Challenger
+            </div>
+            <div class="text-[10px] text-[#636e88]" data-i18n="index.mockup_persona3_motivation">Motivation: Managing
+              both diet and exercise together for weight loss</div>
+            <div class="mt-2 text-[10px] text-red-500 font-medium" data-i18n="index.mockup_persona3_pain">Top pain: Diet
+              log and workout sync is broken</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy Card -->
+      <div class="bg-primary rounded-xl p-5 text-white shadow-lg shadow-primary/20">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-primary/60 text-xs font-bold">09.</span>
+          <span class="material-symbols-outlined opacity-70" style="font-size:15px">emoji_objects</span>
+          <span class="font-bold text-sm opacity-90" data-i18n="index.mockup_strategy_title">Strategy
+            Recommendation</span>
+        </div>
+        <p class="font-black text-base md:text-lg leading-snug mb-2" data-i18n="index.mockup_strategy_oneline">"Position
+          as an all-in-one AI health coach that auto-syncs workouts and diet"</p>
+        <p class="text-sm opacity-80 leading-relaxed" data-i18n="index.mockup_strategy_reasoning">All existing apps fail
+          to bridge the workout-diet gap. An integrated platform with a 5-minute AI workout recommendation as the MVP
+          gives you a fast, differentiated market entry.</p>
+      </div>
+
+      <!-- Gradient fade at bottom -->
+      <div
+        class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#f6f6f8] to-transparent pointer-events-none">
+      </div>
+    </div>
+  </div>
+
+  <!-- Group Analysis Mockup (hidden by default) -->
+  <div id="mockup-group"
+    class="hidden reveal relative rounded-2xl border border-[#e5e7eb] bg-[#f6f6f8] overflow-hidden shadow-xl">
+    <!-- Browser chrome -->
+    <div class="bg-white border-b border-[#e5e7eb] px-4 py-3 flex items-center gap-3">
+      <div class="flex gap-1.5">
+        <div class="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+        <div class="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+        <div class="w-3 h-3 rounded-full bg-[#28c840]"></div>
+      </div>
+      <div class="flex-1 mx-4">
+        <div class="bg-[#f6f6f8] rounded-lg px-3 py-1.5 text-xs text-[#636e88] text-center">
+          taloninsight.com/analysis/group-analysis-result</div>
+      </div>
+    </div>
+    <!-- Group Mockup Content -->
+    <div class="p-4 md:p-6 space-y-4 max-h-[600px] overflow-hidden">
+      <!-- Header Card -->
+      <div class="bg-white rounded-xl p-4 border border-[#e5e7eb]">
+        <div class="text-[10px] font-bold uppercase tracking-widest text-primary mb-1"
+          data-i18n="index.mockup_group_label">Group Analysis Result</div>
+        <div class="font-black text-[#111318] text-lg mb-3" data-i18n="index.mockup_group_name">🏃 US Fitness App Market
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">FitLife Pro</span>
+          <span class="px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">HealthKit+</span>
+          <span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">RunnerSpace</span>
+          <span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">DietCoach AI</span>
+        </div>
+      </div>
+
+      <!-- Verdict -->
+      <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+        <div class="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1 mb-2">
+          <span class="material-symbols-outlined" style="font-size:12px">emoji_objects</span>
+          <span data-i18n="index.mockup_verdict_label">Competitive Landscape</span>
+        </div>
+        <p class="font-bold text-[#111318] text-sm mb-1" data-i18n="index.mockup_verdict_statement">FitLife Pro leads by
+          review count, but the AI personalization space remains wide open</p>
+        <p class="text-xs text-[#636e88]" data-i18n="index.mockup_verdict_reasoning">None of the 4 apps deliver proper
+          personalized workout recommendations — this is the core opportunity for a new entrant.</p>
+        </div>
+        
+        <!-- Market Share -->
+        <div class="bg-white rounded-xl p-4 border border-[#e5e7eb]">
+          <div class="flex items-center gap-1.5 mb-4">
+            <span class="material-symbols-outlined text-primary text-sm">pie_chart</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-primary">02-2 ·</span>
+            <span class="font-bold text-sm text-[#111318]" data-i18n="index.mockup_share_title">Market Share Est.</span>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-[#111318]">FitLife Pro</span>
+                <span class="text-[#636e88]">42%</span>
+              </div>
+              <div class="h-2.5 bg-[#f0f1f4] rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 rounded-full" style="width: 42%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-[#111318]">HealthKit+</span>
+                <span class="text-[#636e88]">28%</span>
+              </div>
+              <div class="h-2.5 bg-[#f0f1f4] rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: 28%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-[#111318]">RunnerSpace</span>
+                <span class="text-[#636e88]">19%</span>
+              </div>
+              <div class="h-2.5 bg-[#f0f1f4] rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 rounded-full" style="width: 19%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-[#111318]">DietCoach AI</span>
+                <span class="text-[#636e88]">11%</span>
+              </div>
+              <div class="h-2.5 bg-[#f0f1f4] rounded-full overflow-hidden">
+                <div class="h-full bg-orange-500 rounded-full" style="width: 11%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 text-xs text-[#636e88] bg-[#f6f6f8] rounded-lg p-3" data-i18n="index.mockup_share_insight">
+            FitLife Pro dominates with 42,800 reviews, but its 4.2 rating — lowest among competitors — signals accumulated
+            user frustration.</div>
+        </div>
+        
+        <!-- Entry Opportunity -->
+        <div class="bg-white rounded-xl p-4 border border-[#e5e7eb]">
+          <div class="flex items-center gap-1.5 mb-3">
+            <span class="material-symbols-outlined text-primary text-sm">rocket_launch</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-primary">03 ·</span>
+            <span class="font-bold text-sm text-[#111318]" data-i18n="index.mockup_opportunity_title">Entry
+              Opportunity</span>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-start gap-2.5 p-3 rounded-xl bg-[#f6f6f8] border border-[#e5e7eb]">
+              <span
+                class="shrink-0 size-5 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">1</span>
+              <p class="text-xs text-[#111318] leading-relaxed" data-i18n="index.mockup_opp1">AI-generated personalized
+                workout routines — a gap across all 4 apps, enabling instant differentiation</p>
+            </div>
+            <div class="flex items-start gap-2.5 p-3 rounded-xl bg-[#f6f6f8] border border-[#e5e7eb]">
+              <span
+                class="shrink-0 size-5 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">2</span>
+              <p class="text-xs text-[#111318] leading-relaxed" data-i18n="index.mockup_opp2">Unified workout + diet dashboard —
+                users currently juggle 2–3 apps to cover what one app should do</p>
             </div>
           </div>
         </div>
+        <!-- Gradient fade at bottom -->
+        <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#f6f6f8] to-transparent pointer-events-none">
+        </div>
+</div>
+</div>
+          </div>
+          <!-- CTA: Scroll to Top -->
+          <div class="flex flex-col items-center gap-4 pt-4">
+            <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+              class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-bold text-base hover:bg-primary/90 active:scale-95 transition-all shadow-lg shadow-primary/25">
+              <span class="material-symbols-outlined text-xl">arrow_upward</span>
+              <span data-i18n="index.solution_cta_btn">Start Analyzing</span>
+            </button>
+          </div>
+          </div>
       </section>
+<script>
+  // Scroll reveal
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = (i * 80) + 'ms';
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  function switchMockup(tab) {
+    const single = document.getElementById('mockup-single');
+    const group = document.getElementById('mockup-group');
+    const tabSingle = document.getElementById('mockup-tab-single');
+    const tabGroup = document.getElementById('mockup-tab-group');
+    if (tab === 'single') {
+      single.classList.remove('hidden');
+      group.classList.add('hidden');
+      tabSingle.classList.add('text-white', 'bg-primary', 'shadow-sm');
+      tabSingle.classList.remove('text-[#636e88]', 'hover:text-[#111318]');
+      tabGroup.classList.remove('text-white', 'bg-primary', 'shadow-sm');
+      tabGroup.classList.add('text-[#636e88]', 'hover:text-[#111318]');
+    } else {
+      group.classList.remove('hidden');
+      single.classList.add('hidden');
+      tabGroup.classList.add('text-white', 'bg-primary', 'shadow-sm');
+      tabGroup.classList.remove('text-[#636e88]', 'hover:text-[#111318]');
+      tabSingle.classList.remove('text-white', 'bg-primary', 'shadow-sm');
+      tabSingle.classList.add('text-[#636e88]', 'hover:text-[#111318]');
+    }
+  }
+</script>
     </main>
 
     <!-- Footer -->
