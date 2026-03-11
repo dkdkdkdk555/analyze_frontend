@@ -133,7 +133,7 @@ const TRANSLATIONS = {
     'index.solution_f3_title': '강력한 그룹 분석',
     'index.solution_f3_desc': '여러 앱을 하나의 그룹으로 묶어 시장 점유율과 침투 가능성을 정밀하게 파악합니다.',
     'index.solution_f4_title': '합리적 크레딧 시스템',
-    'index.solution_f4_desc': '비싼 월 구독료 대신, 필요할 때 필요한 만큼만 결제하는 크레딧 방식. 매일 3회는 무료.',
+    'index.solution_f4_desc': '비싼 월 구독료 대신, 필요할 때 필요한 만큼만 결제하는 크레딧 방식.',
     'index.solution_mockup_label': '예시 분석 결과 미리보기',
     'index.solution_tab_single': '개별 앱 분석',
     'index.solution_tab_group': '그룹 분석',
@@ -244,8 +244,7 @@ const TRANSLATIONS = {
     'services.single_f3':        '평점별 리뷰 심층 분석',
     'services.single_f4':        '미해결 문제 추출 (진입 기회)',
     'services.single_f5':        '신규 서비스 전략 제안',
-    'services.free_per_day':     '일 3회 무료',
-    'services.credit_per':       '이후 1 크레딧/건',
+    'services.credit_per':       '1 크레딧/건',
     'services.start':            '시작하기',
     'services.group_title':      '그룹 분석',
     'services.group_desc':       '같은 카테고리 앱 2~5개를 한 번에 비교·분석하세요.<br>포지셔닝 맵, 공통 페인포인트, 시장 점유율 추정으로 경쟁 구도와 시장 기회를 한눈에 파악합니다.',
@@ -270,7 +269,6 @@ const TRANSLATIONS = {
     'services.row_risk':         '진입 리스크 분석',
     'services.row_credits':      '크레딧',
     'services.credits_single':   '1 크레딧/건',
-    'services.credits_single_free': '일 3회 무료',
     'services.credits_group':    '앱 수 + 1 크레딧',
     'services.cta_question':     '크레딧이 필요하신가요?',
     'services.view_pricing':     '이용 플랜 보기',
@@ -323,9 +321,6 @@ const TRANSLATIONS = {
     'analysis.loading_initial':    '스토어 등록정보를 분석 중 입니다..',
     'analysis.error_msg':          '오류가 발생했습니다',
     'analysis.retry':              '다시 시도',
-    'analysis.limited_title': '🎁 더 많은 분석 기회가 준비되어 있어요!',
-    'analysis.limited_desc': '비가입 무료 체험 3회를 모두 사용하셨습니다. 지금 가입하시면, 즉시 사용 가능한 웰컴 크레딧 3개를 추가로 선물해 드립니다!',
-    'analysis.limited_btn': '구글로 로그인하고 3크레딧 받기',
     'analysis.email_signup_btn':   '런칭 알림 받기',
 
     // ── Analysis page UI ─────────────────────────────────────────────────────
@@ -589,7 +584,7 @@ const TRANSLATIONS = {
     'market.br': 'Brazil',
 
     // ── Footer ───────────────────────────────────────────────────────
-    'footer.tagline':       'Your data-driven app growth partner. From market research to competitor analysis — all in one place.',
+    'footer.tagline':       'Stop guessing. Start building what people actually want.',
     'footer.biz_number':    'Business Registration No. 136-15-09172',
     'footer.address': 'Room S55, 3rd Floor, 28, Hyoryeong-ro 31-gil, Seocho-gu, Seoul, 06686, Republic of Korea',
     'footer.operated_by':   'Operated by HealthTier',
@@ -602,7 +597,7 @@ const TRANSLATIONS = {
 
     // ── Index page ───────────────────────────────────────────────────
     'index.page_title':     'TalonInsight - Sharp App Competitor Analysis',
-    'index.hero_title':     'Skip the tedious market research —<br><span class="text-primary">let us do it for you.</span>',
+    'index.hero_title':     'App market research,<br><span class="text-primary">done in 30 seconds.</span>',
     'index.hero_subtitle':  'Analyze competitor apps\' store listings and reviews to uncover core value propositions and unresolved pain points.',
     'index.search_placeholder': 'Enter an app name to analyze',
     'index.market_tooltip': 'Select the target market for your search',
@@ -619,8 +614,8 @@ const TRANSLATIONS = {
 
     // ── Index Feature Summary – Section 1: The Gap ───────────────────
     'index.gap_tag': 'The Reality of the Market',
-    'index.gap_headline': 'What you think is a <span class="text-primary">"Great Feature"</span><br>might not be what users want.',
-    'index.gap_body': 'In the era of "vibe coding" — where anyone can ship an app with AI tools — competition has never been fiercer. Yet most teams still rely on gut feeling. Without thorough market research, time and money become pure risk.',
+    'index.gap_headline': 'Your <span class="text-primary">"great idea"</span><br>might not be what users actually want.',
+    'index.gap_body': 'In the era of "vibe coding" — where anyone can ship an app with AI tools — competition has never been fiercer. Yet most teams still rely on gut feeling. Without real market research, every hour you spend coding is a roll of the dice.',
     'index.gap_stat1_label': '"No Market Need" is the #1 cause of startup failure',
     'index.gap_stat1_sub': 'CB Insights Startup Failure Analysis',
     'index.gap_stat2_num': 'Vibe Coding',
@@ -632,7 +627,7 @@ const TRANSLATIONS = {
 
     // ── Index Feature Summary – Section 2: The Friction ─────────────
     'index.friction_tag': 'Problems with the Old Way',
-    'index.friction_headline': 'Why doing it yourself is so painful',
+    'index.friction_headline': 'Sounds simple. Until you actually try it.',
     'index.friction_sub': 'Real barriers you face when trying to properly analyze competitor apps',
     'index.friction_p1_title': 'The Analysis Bottleneck',
     'index.friction_p1_desc': 'Reading through thousands of reviews to extract meaningful insights is practically impossible to do manually.',
@@ -645,7 +640,7 @@ const TRANSLATIONS = {
     'index.friction_p3_title': 'Fragmented Information',
     'index.friction_p3_desc': 'You can see individual apps, but grouping competitors to get a full market overview is nearly impossible.',
     'index.friction_p3_badge': 'No full market picture',
-    'index.friction_p3_tag': 'siloed analysis',
+    'index.friction_p3_tag': 'Scattered data',
     'index.friction_p4_title': 'High Entry Barrier',
     'index.friction_p4_desc': 'Enterprise analytics tools cost millions of won per year — a massive burden for solo developers or small teams.',
     'index.friction_p4_badge': 'avg. annual cost for enterprise tools',
@@ -654,16 +649,16 @@ const TRANSLATIONS = {
 
     // ── Index Feature Summary – Section 3: The Solution ─────────────
     'index.solution_tag': 'TalonInsight\'s Solution',
-    'index.solution_headline': 'Everything you need to analyze a market, all in one place',
+    'index.solution_headline': 'From raw reviews to market strategy — in under 30 seconds',
     'index.solution_sub': 'Enter an app name and AI deeply analyzes its reviews to surface insights and actionable strategy. Group multiple apps together to map the full competitive landscape.',
     'index.solution_f1_title': 'Precision Review Analysis',
-    'index.solution_f1_desc': 'AI dissects massive App Store datasets to surface unresolved niches and hidden opportunities.',
+    'index.solution_f1_desc': 'AI combs through thousands of App Store reviews to find gaps competitors haven\'t solved.',
     'index.solution_f2_title': 'Actionable Strategy Recommendations',
     'index.solution_f2_desc': 'More than a summary — get concrete advice on market entry opportunities and MVP features.',
     'index.solution_f3_title': 'Powerful Group Analysis',
     'index.solution_f3_desc': 'Combine multiple apps into one group analysis to precisely map market share and penetration potential.',
     'index.solution_f4_title': 'Fair Credit-Based Pricing',
-    'index.solution_f4_desc': 'No expensive subscriptions. Pay only for what you use with a credit system. 3 analyses free every day.',
+    'index.solution_f4_desc': 'No subscriptions. Pay only for what you use. Free analyses always available — sign up to unlock the full report.',
     'index.solution_mockup_label': 'Live preview of actual analysis results',
     'index.solution_tab_single': 'Single App Analysis',
     'index.solution_tab_group': 'Group Analysis',
@@ -708,7 +703,7 @@ const TRANSLATIONS = {
     'pricing.hero_sub_mobile':    'Pick a credit plan that fits your pace.',
     'pricing.hero_title_desktop': 'Pricing Plans',
     'pricing.hero_sub_desktop':   'Top up when you need it. Analyze as much as you want.',
-    'pricing.recommended':        'Best Value',
+    'pricing.recommended':        'Most Popular',
     'pricing.cta':                'Get Credits',
     'pricing.starter_desc':       'Perfect for quickly validating ideas with small-scale analysis.',
     'pricing.growth_desc':        'The most popular plan for founders who want a real read on the market.',
@@ -774,7 +769,6 @@ const TRANSLATIONS = {
     'services.single_f3':        'In-Depth Rating-Based Review Analysis',
     'services.single_f4':        'Unresolved Problem Extraction (Entry Opportunities)',
     'services.single_f5':        'New Service Strategy Recommendation',
-    'services.free_per_day':     '3 free/day',
     'services.credit_per':       'then 1 credit each',
     'services.start':            'Get Started',
     'services.group_title':      'Group Analysis',
@@ -800,7 +794,6 @@ const TRANSLATIONS = {
     'services.row_risk':         'Entry Risk Analysis',
     'services.row_credits':      'Credits',
     'services.credits_single':   '1 credit each',
-    'services.credits_single_free': '3 free/day',
     'services.credits_group':    '(apps + 1) credits',
     'services.cta_question':     'Need credits?',
     'services.view_pricing':     'View Pricing Plans',
@@ -853,9 +846,6 @@ const TRANSLATIONS = {
     'analysis.loading_initial':    'Analyzing app store listings..',
     'analysis.error_msg':          'An error occurred',
     'analysis.retry':              'Retry',
-    'analysis.limited_title': '🎁 More analyses await you!',
-    'analysis.limited_desc': "You've used all 3 free analyses. Sign up in seconds and get 3 welcome credits instantly!",
-    'analysis.limited_btn': 'Sign up with Google & get 3 credits',
     'analysis.email_signup_btn':   'Get launch notification',
 
     // ── Analysis page UI ─────────────────────────────────────────────────────
@@ -915,7 +905,7 @@ const TRANSLATIONS = {
     // ── Welcome credit popup ──────────────────────────────────────────────────
     'signup.welcome_title':            '🎉 Welcome aboard!',
     'signup.welcome_credit_badge':     '🎁 3 Welcome Credits Added!',
-    'signup.welcome_msg':              "You're all set to start analyzing apps.\nUse your credits to explore competitor apps right now!",
+    'signup.welcome_msg':              "You're all set.\nStart with a competitor app you've been curious about.",
     'signup.welcome_confirm':          'Start Analyzing',
 
     // ── Duplicate credit popup ──────────────────────────────────────────────────

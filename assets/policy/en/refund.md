@@ -9,7 +9,7 @@ TalonInsight (hereinafter "Service") is committed to ensuring customer satisfact
 Members may request a refund within **7 days** of the credit purchase date, provided that **all** of the following conditions are met:
 
 * **Not a single credit** from the purchased credit package has been used.
-* The daily complimentary "3 free analyses" do not affect refund eligibility; however, if even one paid credit has been deducted, a refund is not available.
+* The "free analyses" do not affect refund eligibility; however, if even one paid credit has been deducted, a refund is not available.
 
 ### 2. Non-Refundable Circumstances
 

@@ -96,13 +96,6 @@ async function analyzeApp() {
       })
     });
 
-    if (response.status === 429) {
-      // For rate limit, wait for minimum loading time before showing
-      await waitForMinLoadingTime();
-      showLimited();
-      return;
-    }
-
     if (response.status === 402) {
       // No credits: fall back to guest analysis (retry without auth token)
       isNoCreditsUser = true;
@@ -655,7 +648,6 @@ function renderSectionBlur(containerId) {
 function showLoading() {
   document.getElementById('loading').classList.remove('hidden');
   document.getElementById('error').classList.add('hidden');
-  document.getElementById('limited').classList.add('hidden');
   document.getElementById('results').classList.add('hidden');
   startLoadingMessages();
 }
@@ -695,11 +687,6 @@ function showError() {
   document.getElementById('error').classList.remove('hidden');
 }
 
-function showLimited() {
-  stopLoading();
-  document.getElementById('loading').classList.add('hidden');
-  document.getElementById('limited').classList.remove('hidden');
-}
 
 function showNoCreditsModal() {
   document.getElementById('no-credits-modal')?.classList.remove('hidden');
@@ -860,12 +847,6 @@ document.getElementById('guest-signup-btn')?.addEventListener('click', () => {
   window.location.href = `${API_BASE_URL}/api/auth/google`;
 });
 document.getElementById('close-guest-signup-modal')?.addEventListener('click', hideGuestSignupModal);
-
-// Limited state login button → directly trigger Google OAuth (same as header login btn)
-document.getElementById('limited-login-btn')?.addEventListener('click', () => {
-  window.location.href = `${API_BASE_URL}/api/auth/google`;
-});
-
 
 // Duplicate credit modal events
 document.getElementById('close-duplicate-credit-modal')?.addEventListener('click', hideDuplicateCreditModal);
