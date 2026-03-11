@@ -92,7 +92,7 @@ const TRANSLATIONS = {
     'index.gap_tag': '시장의 현실',
     'index.gap_headline': '"내가 좋다고 생각하는 기능"이<br><span class="text-primary">"사용자가 원하는 기능"은 아닙니다.</span>',
     'index.gap_body': 'AI 코딩 툴의 등장으로 누구나 앱을 만들 수 있는 \'바이브 코딩\' 시대. 경쟁은 더 치열해졌지만, 대부분의 팀은 여전히 감과 직관에 의존합니다. 철저한 시장 조사 없이 투입되는 시간과 비용은 곧 리스크가 됩니다.',
-    'index.gap_stat1_label': '"시장 수요 없음"이 스타트업 실패의 1위 원인',
+    'index.gap_stat1_label': '"시장 수요 없음"이 스타트업 \n실패 원인 1위',
     'index.gap_stat1_sub': 'CB Insights 스타트업 실패 원인 분석',
     'index.gap_stat2_num': '바이브 코딩',
     'index.gap_stat2_label': '감에 의존하는 개발',

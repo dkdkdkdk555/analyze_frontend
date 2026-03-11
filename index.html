@@ -709,7 +709,7 @@
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
-        entry.target.style.transitionDelay = (i * 180) + 'ms';
+        entry.target.style.transitionDelay = (i * 260) + 'ms';
         entry.target.classList.add('visible');
         revealObserver.unobserve(entry.target);
       }
