@@ -25,6 +25,7 @@ let userHasEmail = false; // Flag to track if user already submitted email
 let loadingStartTime = null; // Track when loading started
 let pendingAnalysisData = null; // Store analysis result while waiting for minimum loading time
 let isGuestUser = false; // Track if current analysis is for a guest user
+let isNoCreditsUser = false; // Track if logged-in user has no credits (guest-like blur mode)
 
 // Minimum loading time: 21 seconds (7 seconds × 3 messages) to show video ad
 const MIN_LOADING_TIME_MS = 21000;
@@ -103,10 +104,32 @@ async function analyzeApp() {
     }
 
     if (response.status === 402) {
-      // No credits remaining - show modal immediately
-      stopLoading();
-      document.getElementById('loading').classList.add('hidden');
-      showNoCreditsModal();
+      // No credits: fall back to guest analysis (retry without auth token)
+      isNoCreditsUser = true;
+      const guestResp = await fetch(`${API_BASE_URL}/api/apps/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appStoreUrl,
+          playStoreUrl,
+          abText: AB_TEXT,
+          lang: getLang(),
+          market: getMarket(),
+          metadata: appName ? { appName, iconUrl, developer } : undefined
+        })
+      }).catch(() => null);
+
+      if (!guestResp?.ok) {
+        await waitForMinLoadingTime();
+        showError();
+        return;
+      }
+
+      pendingAnalysisData = await guestResp.json();
+      // No-credits users skip the minimum loading wait
+      analysisData = pendingAnalysisData;
+      isGuestUser = analysisData.isGuest === true;
+      renderResults(analysisData);
       return;
     }
 
@@ -118,8 +141,8 @@ async function analyzeApp() {
 
     pendingAnalysisData = await response.json();
 
-    // Wait for minimum loading time to show video ad
-    await waitForMinLoadingTime();
+    // Wait for minimum loading time to show video ad (skip for no-credits users)
+    if (!isNoCreditsUser) await waitForMinLoadingTime();
 
     analysisData = pendingAnalysisData;
     isGuestUser = analysisData.isGuest === true;
@@ -401,17 +424,27 @@ function renderComplaintList(elementId, complaint) {
 }
 
 /**
- * Create blur overlay element with lock icon and message
+ * Create blur overlay element with lock icon and message.
+ * Shows "get credits" CTA for no-credits logged-in users, "sign up" for guests.
  */
 function createBlurOverlay() {
   const overlay = document.createElement('div');
   overlay.className = 'guest-blur-overlay absolute inset-0 bg-white/70 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer z-10 rounded-lg';
-  overlay.innerHTML = `
-    <span class="material-symbols-outlined text-2xl md:text-3xl text-primary mb-1.5">lock</span>
-    <p class="text-xs md:text-sm font-bold text-[#111318] mb-0.5">${t('guest.blur_unlock')}</p>
-    <p class="text-[10px] md:text-xs text-primary font-medium">${t('guest.blur_signup_credit')}</p>
-  `;
-  overlay.addEventListener('click', showGuestSignupModal);
+  if (isNoCreditsUser) {
+    overlay.innerHTML = `
+      <span class="material-symbols-outlined text-2xl md:text-3xl text-amber-500 mb-1.5" style="font-variation-settings:'FILL' 1">toll</span>
+      <p class="text-xs md:text-sm font-bold text-[#111318] mb-0.5">${t('analysis.no_credits_blur_unlock')}</p>
+      <p class="text-[10px] md:text-xs text-primary font-medium">${t('analysis.no_credits_blur_sub')}</p>
+    `;
+    overlay.addEventListener('click', () => { window.location.href = '/payment/pricing.html'; });
+  } else {
+    overlay.innerHTML = `
+      <span class="material-symbols-outlined text-2xl md:text-3xl text-primary mb-1.5">lock</span>
+      <p class="text-xs md:text-sm font-bold text-[#111318] mb-0.5">${t('guest.blur_unlock')}</p>
+      <p class="text-[10px] md:text-xs text-primary font-medium">${t('guest.blur_signup_credit')}</p>
+    `;
+    overlay.addEventListener('click', showGuestSignupModal);
+  }
   return overlay;
 }
 
@@ -518,12 +551,21 @@ function renderStrategyBlur() {
   // Create custom overlay for strategy (white text on primary bg)
   const overlay = document.createElement('div');
   overlay.className = 'guest-blur-overlay absolute inset-0 bg-primary/80 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer z-10 rounded-lg';
-  overlay.innerHTML = `
-    <span class="material-symbols-outlined text-2xl md:text-3xl text-white mb-1.5">lock</span>
-    <p class="text-xs md:text-sm font-bold text-white mb-0.5">${t('guest.blur_unlock')}</p>
-    <p class="text-[10px] md:text-xs text-white/80 font-medium">${t('guest.blur_signup_credit')}</p>
-  `;
-  overlay.addEventListener('click', showGuestSignupModal);
+  if (isNoCreditsUser) {
+    overlay.innerHTML = `
+      <span class="material-symbols-outlined text-2xl md:text-3xl text-amber-300 mb-1.5" style="font-variation-settings:'FILL' 1">toll</span>
+      <p class="text-xs md:text-sm font-bold text-white mb-0.5">${t('analysis.no_credits_blur_unlock')}</p>
+      <p class="text-[10px] md:text-xs text-white/80 font-medium">${t('analysis.no_credits_blur_sub')}</p>
+    `;
+    overlay.addEventListener('click', () => { window.location.href = '/payment/pricing.html'; });
+  } else {
+    overlay.innerHTML = `
+      <span class="material-symbols-outlined text-2xl md:text-3xl text-white mb-1.5">lock</span>
+      <p class="text-xs md:text-sm font-bold text-white mb-0.5">${t('guest.blur_unlock')}</p>
+      <p class="text-[10px] md:text-xs text-white/80 font-medium">${t('guest.blur_signup_credit')}</p>
+    `;
+    overlay.addEventListener('click', showGuestSignupModal);
+  }
   contentWrapper.appendChild(overlay);
 }
 
@@ -811,6 +853,7 @@ document.getElementById('submit-email')?.addEventListener('click', submitEmail);
 
 document.getElementById('close-popup')?.addEventListener('click', hideBottomPopup);
 document.getElementById('close-no-credits-modal')?.addEventListener('click', hideNoCreditsModal);
+document.getElementById('no-credits-continue-btn')?.addEventListener('click', hideNoCreditsModal);
 
 // Guest signup modal events
 document.getElementById('guest-signup-btn')?.addEventListener('click', () => {
@@ -876,17 +919,19 @@ initFooter();
 // Pre-flight check: verify logged-in user has quota before starting analysis
 async function checkAnalyzeQuota() {
   const authToken = localStorage.getItem('auth_token');
-  if (!authToken) return true; // Non-logged-in: IP rate limit handled by backend
+  if (!authToken) return; // Non-logged-in: backend handles it
 
   try {
     const res = await fetch(`${API_BASE_URL}/api/analyze/check`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
-    if (!res.ok) return true; // On error, let backend handle it
+    if (!res.ok) return;
     const data = await res.json();
-    return data.canAnalyze !== false;
+    if (data.canAnalyze === false) {
+      isNoCreditsUser = true; // No credits: allow analysis but show blur like guest
+    }
   } catch {
-    return true; // On network error, let backend handle it
+    // On network error, let backend handle it
   }
 }
 
@@ -898,14 +943,13 @@ async function checkAnalyzeQuota() {
   // Send exposure event on page load
   sendExposureEvent();
 
-  // Pre-check quota for logged-in users before starting analysis
-  const canAnalyze = await checkAnalyzeQuota();
-  if (!canAnalyze) {
-    showNoCreditsModal();
-    return;
-  }
+  // Pre-check quota: set isNoCreditsUser flag if needed, but always proceed
+  await checkAnalyzeQuota();
 
-  // Start analysis
+  // If no credits, show informational modal (user can dismiss to view blurred analysis)
+  if (isNoCreditsUser) showNoCreditsModal();
+
+  // Start analysis (runs regardless of credit status)
   analyzeApp();
 })();
 
@@ -915,9 +959,13 @@ async function checkAnalyzeQuota() {
 async function downloadAsPDF() {
   if (!analysisData) return;
 
-  // Block PDF download for guest users
-  if (isGuestUser) {
-    showGuestSignupModal();
+  // Block PDF download for guest/no-credits users
+  if (isGuestUser || isNoCreditsUser) {
+    if (isNoCreditsUser) {
+      window.location.href = '/payment/pricing.html';
+    } else {
+      showGuestSignupModal();
+    }
     return;
   }
 

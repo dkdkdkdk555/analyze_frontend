@@ -372,6 +372,7 @@
               <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="앱 기획 참고" data-i18n="analysis.survey_btn_planning">App Planning</button>
               <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="경쟁사 분석" data-i18n="analysis.survey_btn_competitor">Competitor Research</button>
               <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="투자자료 준비" data-i18n="analysis.survey_btn_investor">Investor Materials</button>
+              <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="소유 앱의 현황 파악" data-i18n="analysis.survey_btn_own_app">My App Status</button>
               <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="그냥 테스트" data-i18n="analysis.survey_btn_test">Just Testing</button>
               <button class="survey-btn px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-primary hover:text-primary transition-colors" data-value="기타" data-i18n="analysis.survey_btn_other">Other (custom)</button>
             </div>
@@ -421,8 +422,10 @@
           <p class="text-sm text-[#636e88] mt-2 leading-relaxed" data-i18n-html="analysis.no_credits_desc">You've used today's 3 free analyses and all your credits.<br>Please top up your credits or try again tomorrow.</p>
         </div>
         <div class="flex flex-col gap-2">
-          <button onclick="window.location.href='/'"
-            class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors" data-i18n="analysis.no_credits_btn">Go to Home</button>
+          <button onclick="window.location.href='/payment/pricing.html'"
+            class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/90 transition-colors" data-i18n="analysis.no_credits_btn">Get Credits</button>
+          <button id="no-credits-continue-btn" onclick="document.getElementById('no-credits-modal').classList.add('hidden')"
+            class="w-full py-3 rounded-xl bg-gray-100 text-[#636e88] font-semibold text-sm hover:bg-gray-200 transition-colors" data-i18n="analysis.no_credits_continue_btn">무료 분석 보기</button>
         </div>
       </div>
     </div>
