@@ -1090,7 +1090,9 @@ const MARKET_OPTIONS = [
 export function getMarket() {
   const saved = localStorage.getItem('market');
   if (saved && MARKET_OPTIONS.some(m => m.code === saved)) return saved;
-  return 'kr';
+  // Default based on browser language: Korean → kr, otherwise → us
+  const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  return browserLang.startsWith('ko') ? 'kr' : 'us';
 }
 
 /** Returns the localized display name for a market code */
