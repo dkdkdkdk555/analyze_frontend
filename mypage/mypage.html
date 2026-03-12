@@ -81,6 +81,25 @@
         </div>
       </div>
 
+      <!-- 이메일 설문 수신 동의 -->
+      <div class="border-t border-[#f0f1f4] pt-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex flex-col gap-0.5">
+            <span class="text-sm font-medium text-[#111318]" data-i18n="mypage.survey_consent_label">Email Survey Consent</span>
+            <span class="text-xs text-[#636e88]" data-i18n="mypage.survey_consent_desc">Receive survey emails to help improve the service.</span>
+          </div>
+          <button
+            id="survey-consent-toggle"
+            role="switch"
+            aria-checked="false"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none bg-gray-200"
+          >
+            <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 translate-x-0"></span>
+          </button>
+        </div>
+        <p id="survey-consent-status" class="text-xs text-[#636e88] hidden"></p>
+      </div>
+
       <!-- 회원탈퇴 버튼 -->
       <div class="border-t border-[#f0f1f4] pt-4">
         <button id="delete-account-btn" class="text-xs text-red-400 hover:text-red-600 underline underline-offset-2 transition-colors" data-i18n="mypage.delete_account_btn">

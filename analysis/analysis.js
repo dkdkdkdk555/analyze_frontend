@@ -238,7 +238,7 @@ function renderResults(data) {
 
   // 05. Ratings
   if (data.ratings?.distribution) {
-    renderRatingsSection(data.ratings);
+    renderRatingsSection(data.ratings, data.reviewSources);
   }
 
   // 06. Reviews by Rating
@@ -256,7 +256,7 @@ function renderResults(data) {
           <div class="p-3 md:p-4">
             <div class="flex items-center gap-2 mb-2 flex-wrap">
               ${stars}
-              <span class="text-[10px] md:text-xs font-bold ml-1 md:ml-2">${rating}점 (${label})</span>
+              <span class="text-[10px] md:text-xs font-bold ml-1 md:ml-2">${rating}${getLang() === 'en' ? '★' : '점'} (${label})</span>
             </div>
             <p class="text-xs md:text-sm text-[#636e88] mb-2">${review.summary || ''}</p>
             ${review.keywords?.length ? `
@@ -367,7 +367,7 @@ function renderStars(rating) {
   return stars;
 }
 
-function renderRatingsSection(ratings) {
+function renderRatingsSection(ratings, reviewSources) {
   const distribution = ratings.distribution || {};
   const total = Object.values(distribution).reduce((a, b) => a + b, 0) || 1;
   const avg = Object.entries(distribution).reduce((acc, [star, count]) => acc + (parseInt(star) * count), 0) / total;
@@ -389,16 +389,34 @@ function renderRatingsSection(ratings) {
   document.getElementById('ratings-pie').style.background = `conic-gradient(${gradientParts.join(', ')})`;
 
   // Legend
-  document.getElementById('ratings-legend').innerHTML = [5, 4, 3, 2, 1].map((star, idx) => {
+  const legendEl = document.getElementById('ratings-legend');
+  legendEl.innerHTML = [5, 4, 3, 2, 1].map((star, idx) => {
     const count = distribution[star] || 0;
     const percent = ((count / total) * 100).toFixed(0);
     return `
       <div class="flex items-center justify-between text-[10px] md:text-xs">
-        <span class="flex items-center gap-1.5 md:gap-2"><div class="w-2 h-2 rounded-full" style="background: ${colors[idx]}"></div> ${star}점</span>
+        <span class="flex items-center gap-1.5 md:gap-2"><div class="w-2 h-2 rounded-full" style="background: ${colors[idx]}"></div> ${star}${getLang() === 'en' ? '★' : '점'}</span>
         <span class="font-bold">${percent}%</span>
       </div>
     `;
   }).join('');
+
+  // Review count summary
+  if (reviewSources) {
+    const appCount = reviewSources.appStore || 0;
+    const playCount = reviewSources.playStore || 0;
+    const totalReviews = appCount + playCount;
+    if (totalReviews > 0) {
+      const parts = [];
+      if (appCount > 0) parts.push(`App Store ${appCount.toLocaleString()}`);
+      if (playCount > 0) parts.push(`Play Store ${playCount.toLocaleString()}`);
+      const breakdown = parts.length > 1 ? ` (${parts.join(' + ')})` : '';
+      const summaryEl = document.createElement('div');
+      summaryEl.className = 'mt-3 pt-3 border-t border-[#f0f1f4] text-center text-[10px] md:text-xs text-[#636e88]';
+      summaryEl.innerHTML = `<span class="font-semibold text-[#111318]">${totalReviews.toLocaleString()}</span>${t('analysis.reviews_analyzed')}${breakdown}`;
+      legendEl.appendChild(summaryEl);
+    }
+  }
 }
 
 function renderComplaintList(elementId, complaint) {

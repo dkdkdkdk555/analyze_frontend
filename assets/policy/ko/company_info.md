@@ -1,6 +1,6 @@
 ## Company Information
 * **Registration Number:** 136-15-09172
-* **Address:** 서울특별시 관악구 쑥고개로30길 34, 1층 101호(봉천동)
+* **Address:** 서울 서초구 효령로31길 28 3층 S55호
 
 ---
 

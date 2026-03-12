@@ -1,6 +1,6 @@
 ## Company Information
 * **Registration Number:** 136-15-09172
-* **Address:** 	3 floor, 28, Hyoryeong-ro 31-gil, Seocho-gu, Seoul, Republic of Korea
+* **Address:** 	Room S55, 3rd Floor, 28, Hyoryeong-ro 31-gil, Seocho-gu, Seoul, 06686, Republic of Korea
 
 ---
 

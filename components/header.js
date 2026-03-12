@@ -323,6 +323,10 @@ function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateA
             <a href="/privacy" target="_blank" class="text-primary underline hover:text-blue-700">${t('auth.consent_privacy_link')}</a>${t('auth.consent_agree_suffix')}
           </span>
         </label>
+        <label class="flex items-start gap-3 cursor-pointer select-none">
+          <input type="checkbox" id="consent-survey-email-chk" class="mt-0.5 w-4 h-4 accent-primary rounded border-gray-300 shrink-0">
+          <span class="text-sm text-[#636e88]">${t('auth.consent_survey_email_label')}</span>
+        </label>
       </div>
       <div class="flex flex-col gap-3">
         <button id="consent-confirm-btn" disabled class="w-full h-11 rounded-xl bg-primary text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:enabled:bg-blue-700 transition-colors">
@@ -336,10 +340,11 @@ function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateA
   `;
   document.body.appendChild(modal);
 
-  const termsChk   = modal.querySelector('#consent-terms-chk');
-  const privacyChk = modal.querySelector('#consent-privacy-chk');
-  const confirmBtn = modal.querySelector('#consent-confirm-btn');
-  const cancelBtn  = modal.querySelector('#consent-cancel-btn');
+  const termsChk       = modal.querySelector('#consent-terms-chk');
+  const privacyChk     = modal.querySelector('#consent-privacy-chk');
+  const surveyEmailChk = modal.querySelector('#consent-survey-email-chk');
+  const confirmBtn     = modal.querySelector('#consent-confirm-btn');
+  const cancelBtn      = modal.querySelector('#consent-cancel-btn');
 
   function updateConfirmState() {
     confirmBtn.disabled = !(termsChk.checked && privacyChk.checked);
@@ -362,7 +367,7 @@ function showConsentModal(token, apiBaseUrl, setToken, fetchCurrentUser, updateA
       const res = await fetch(`${apiBaseUrl}/api/auth/consent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ consentToken: token, fingerprintId }),
+        body: JSON.stringify({ consentToken: token, fingerprintId, emailSurveyConsent: surveyEmailChk.checked }),
       });
       const data = await res.json();
       if (!res.ok || !data.authToken) throw new Error(data.error || 'consent failed');

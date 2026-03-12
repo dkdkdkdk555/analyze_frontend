@@ -55,6 +55,56 @@ async function init() {
   document.getElementById('info-email').textContent    = user.email || '-';
   document.getElementById('info-joined').textContent   = formatDate(user.created_at);
 
+  // 이메일 설문 수신 동의 토글
+  const surveyToggle = document.getElementById('survey-consent-toggle');
+  const surveyStatus = document.getElementById('survey-consent-status');
+  let surveyConsent = user.email_survey_consent === true;
+
+  function applySurveyToggleUI(value) {
+    const thumb = surveyToggle.querySelector('span');
+    surveyToggle.setAttribute('aria-checked', String(value));
+    if (value) {
+      surveyToggle.classList.remove('bg-gray-200');
+      surveyToggle.classList.add('bg-primary');
+      thumb.classList.remove('translate-x-0');
+      thumb.classList.add('translate-x-5');
+    } else {
+      surveyToggle.classList.remove('bg-primary');
+      surveyToggle.classList.add('bg-gray-200');
+      thumb.classList.remove('translate-x-5');
+      thumb.classList.add('translate-x-0');
+    }
+  }
+
+  applySurveyToggleUI(surveyConsent);
+
+  surveyToggle.addEventListener('click', async () => {
+    const newValue = !surveyConsent;
+    surveyToggle.disabled = true;
+    surveyStatus.classList.add('hidden');
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/user/survey-consent`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consent: newValue }),
+      });
+      if (!res.ok) throw new Error();
+      surveyConsent = newValue;
+      applySurveyToggleUI(surveyConsent);
+      surveyStatus.textContent = t('mypage.survey_consent_saved');
+      surveyStatus.classList.remove('hidden', 'text-red-500');
+      surveyStatus.classList.add('text-[#636e88]');
+    } catch {
+      surveyStatus.textContent = t('mypage.survey_consent_error');
+      surveyStatus.classList.remove('hidden', 'text-[#636e88]');
+      surveyStatus.classList.add('text-red-500');
+    } finally {
+      surveyToggle.disabled = false;
+      setTimeout(() => surveyStatus.classList.add('hidden'), 3000);
+    }
+  });
+
   // 회원탈퇴 모달 제어
   const modal        = document.getElementById('delete-modal');
   const openBtn      = document.getElementById('delete-account-btn');
