@@ -7,8 +7,14 @@ const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 // Color palette for apps in positioning map
 const APP_COLORS = ['#1E5AE8', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
+// Track preview/limited mode (data not saved, some sections locked)
+let isPreviewMode = false;
+
 async function init() {
   applyTranslations();
+
+  const params = new URLSearchParams(location.search);
+  isPreviewMode = params.get('preview') === 'true';
 
   // Update OG/Twitter meta tags and html lang based on active language
   const lang = getLang();
@@ -29,15 +35,22 @@ async function init() {
   await initHeader({ page: 'index', apiBaseUrl: API_BASE_URL });
   initFooter();
 
-  const params = new URLSearchParams(location.search);
   const id = params.get('id');
-  if (!id) {
+  if (!id || id === 'undefined' || id === 'null') {
     showError();
     return;
   }
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/groups/${id}`);
+    // D1 복제 지연 대비: 404 응답 시 최대 3회 재시도 (1s 간격)
+    let res = null;
+    for (let attempt = 0; attempt <= 3; attempt++) {
+      if (attempt > 0) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      res = await fetch(`${API_BASE_URL}/api/groups/${id}`);
+      if (res.ok || res.status !== 404) break;
+    }
     if (!res.ok) { showError(); return; }
 
     const data = await res.json();
@@ -95,14 +108,72 @@ async function renderResult(data) {
   // Market Share
   renderMarketShare(result.marketShare || [], result.marketShareInsight || '');
 
-  // Entry Opportunity
+  // Entry Opportunity (null이면 잠금 또는 없음)
   renderEntryOpportunity(result.entryOpportunity);
 
-  // Entry Risks
-  renderEntryRisks(result.entryRisks || []);
+  // Entry Risks (null이면 잠금, []이면 없음 메시지)
+  renderEntryRisks(result.entryRisks);
 
   // Individual Apps
   renderIndividualApps(apps);
+
+  // Apply locked notice for preview/limited mode
+  if (isPreviewMode) {
+    showPreviewNoticeBanner();
+  }
+}
+
+// ── Preview/Limited Mode Notice ────────────────────────────────────────────────
+function showPreviewNoticeBanner() {
+  const isKo = getLang() === 'ko';
+  const isLoggedIn = !!localStorage.getItem('auth_token');
+  const banner = document.createElement('div');
+  banner.className = 'fixed top-16 left-0 right-0 bg-amber-50 border-b border-amber-200 px-4 py-3 z-40 flex items-center justify-center gap-3';
+
+  let ctaHtml;
+  if (isLoggedIn) {
+    ctaHtml = `<a href="/mypage/credits.html" class="shrink-0 px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/90 transition-colors">
+      ${isKo ? '크레딧 충전' : 'Add Credits'}
+    </a>`;
+  } else {
+    ctaHtml = `<a href="/?signup=true" class="shrink-0 px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/90 transition-colors">
+      ${isKo ? '무료 가입' : 'Sign Up Free'}
+    </a>`;
+  }
+
+  banner.innerHTML = `
+    <span class="material-symbols-outlined text-amber-500" style="font-size:20px">lock</span>
+    <p class="text-sm text-amber-700">${isKo ? '일부 분석 결과가 잠겨 있습니다. 이 결과는 저장되지 않습니다.' : 'Some results are locked. This analysis is not saved.'}</p>
+    ${ctaHtml}
+  `;
+  document.body.appendChild(banner);
+  document.body.style.paddingTop = '52px';
+}
+
+// ── Locked Section Placeholder ────────────────────────────────────────────────
+function renderLockedSection() {
+  const isKo = getLang() === 'ko';
+  const isLoggedIn = !!localStorage.getItem('auth_token');
+  const ctaHref = isLoggedIn ? '/mypage/credits.html' : '/?signup=true';
+  const ctaText = isLoggedIn
+    ? (isKo ? '크레딧 충전하기' : 'Add Credits')
+    : (isKo ? '무료로 시작하기' : 'Get Started Free');
+  const descText = isLoggedIn
+    ? (isKo ? '크레딧으로 전체 분석 결과를 확인하세요' : 'Use credits to access the complete analysis')
+    : (isKo ? '가입 후 크레딧으로 전체 분석 결과를 확인하세요' : 'Sign up and use credits to access the complete analysis');
+
+  return `
+    <div class="flex flex-col items-center justify-center py-10 gap-3 text-center">
+      <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary" style="font-size:24px">lock</span>
+      </div>
+      <p class="text-sm font-bold text-[#111318]">${isKo ? '전체 내용을 보려면 잠금을 해제하세요' : 'Unlock to view full insights'}</p>
+      <p class="text-xs text-[#636e88]">${descText}</p>
+      <a href="${ctaHref}" class="mt-1 px-4 py-2 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
+        ${ctaText}
+      </a>
+    </div>
+  `;
 }
 
 // ── Positioning Map ──────────────────────────────────────────────────────────
@@ -390,6 +461,11 @@ function renderMarketShare(marketShare, insight) {
 // ── Entry Opportunity ─────────────────────────────────────────────────────────
 function renderEntryOpportunity(opportunity) {
   const el = document.getElementById('entry-opportunity-section');
+  if (opportunity === null && isPreviewMode) {
+    // 제한 모드: 데이터가 서버에서 제공되지 않음 (개발자도구로도 볼 수 없음)
+    el.innerHTML = renderLockedSection();
+    return;
+  }
   if (!opportunity) {
     el.innerHTML = `<p class="text-sm text-[#636e88]">${t('group_result.opportunity_none')}</p>`;
     return;
@@ -411,7 +487,12 @@ function renderEntryOpportunity(opportunity) {
 // ── Entry Risks ───────────────────────────────────────────────────────────────
 function renderEntryRisks(risks) {
   const el = document.getElementById('entry-risks-section');
-  if (!risks.length) {
+  if (risks === null && isPreviewMode) {
+    // 제한 모드: 데이터가 서버에서 제공되지 않음 (개발자도구로도 볼 수 없음)
+    el.innerHTML = renderLockedSection();
+    return;
+  }
+  if (!risks || !risks.length) {
     el.innerHTML = `<p class="text-sm text-[#636e88]">${t('group_result.risks_none')}</p>`;
     return;
   }
@@ -438,10 +519,25 @@ function renderEntryRisks(risks) {
 // ── Individual Apps ───────────────────────────────────────────────────────────
 function renderIndividualApps(apps) {
   const el = document.getElementById('individual-apps-section');
+  const isKo = getLang() === 'ko';
+
   el.innerHTML = apps.map(app => {
     const iconHtml = app.iconUrl
       ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-10 h-10 rounded-xl object-cover">`
       : `<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold">${(app.appName || '?')[0]}</div>`;
+
+    // preview 모드에서는 개별 분석 결과 링크를 잠금 상태로 표시
+    if (isPreviewMode) {
+      return `
+        <div class="flex items-center gap-3 p-4 bg-gray-50 border border-[#e5e7eb] rounded-xl opacity-60">
+          ${iconHtml}
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-[#111318] truncate">${app.appName}</p>
+            <p class="text-xs text-[#636e88] mt-0.5">${isKo ? '전체 결과를 보려면 잠금 해제하세요' : 'Unlock to view full results'}</p>
+          </div>
+          <span class="material-symbols-outlined text-[#636e88]" style="font-size:18px">lock</span>
+        </div>`;
+    }
 
     // Link to user analysis history using the stored userAnalysisId
     const analysisHref = app.userAnalysisId
@@ -463,7 +559,12 @@ function renderIndividualApps(apps) {
 // 뒤로가기 시 분석중 페이지 대신 서비스 페이지로 이동
 history.pushState(null, '', location.href);
 window.addEventListener('popstate', () => {
-  location.replace('https://taloninsight.com/services/services');
+  const params = new URLSearchParams(location.search);
+  if (params.get('preview') === 'true') {
+    location.replace('/analysis/group-analysis.html');
+  } else {
+    location.replace('https://taloninsight.com/services/services');
+  }
 });
 
 init();

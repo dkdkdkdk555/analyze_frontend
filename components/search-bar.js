@@ -1,6 +1,12 @@
-import { getMarket, setMarket } from './i18n.js';
+import { getMarket, setMarket, t } from './i18n.js';
 
 let debounceTimer;
+let groupAddCallback = null;
+
+// Register callback for group add button clicks
+export function onGroupAdd(callback) {
+  groupAddCallback = callback;
+}
 
 export function initSearchBar(apiBaseUrl) {
   const input = document.getElementById('search-input');
@@ -304,6 +310,8 @@ export function initSearchBar(apiBaseUrl) {
       dropdownItems.style.overflowY = '';
     }
 
+    const groupAddTooltip = t('index.group_add_tooltip');
+    const startAnalysisTooltip = t('index.start_individual_analysis_tooltip');
     dropdownItems.innerHTML = displayResults.map(app => `
       <div class="flex items-center gap-4 rounded-lg p-3 hover:bg-primary/5 cursor-pointer transition-colors group/item" data-app='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
         <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-14 shadow-sm border border-gray-100" style="background-image: url('${app.iconImageUrl}')"></div>
@@ -315,8 +323,21 @@ export function initSearchBar(apiBaseUrl) {
           </div>
           ${app.developer ? `<p class="text-[#636e88] text-sm">${app.developer}</p>` : ''}
         </div>
-        <div class="opacity-0 group-hover/item:opacity-100 transition-opacity">
-          <span class="material-symbols-outlined text-primary">arrow_forward</span>
+        <div class="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
+          <button class="relative p-1.5 rounded-lg hover:bg-sky-100 transition-colors" data-group-add='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
+            <span class="material-symbols-outlined text-sky-500 text-xl">playlist_add</span>
+            <span class="group-add-tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-4 py-2.5 bg-sky-500 text-white text-sm font-bold rounded-xl whitespace-nowrap shadow-xl opacity-0 invisible transition-opacity duration-200 pointer-events-none z-[200]">
+              ${groupAddTooltip}
+              <span class="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-sky-500"></span>
+            </span>
+          </button>
+          <span class="relative start-analysis-btn">
+            <span class="material-symbols-outlined text-primary">arrow_forward</span>
+            <span class="start-analysis-tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-4 py-2.5 bg-primary text-white text-sm font-bold rounded-xl whitespace-nowrap shadow-xl opacity-0 invisible transition-opacity duration-200 pointer-events-none z-[200]">
+              ${startAnalysisTooltip}
+              <span class="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-primary"></span>
+            </span>
+          </span>
         </div>
       </div>
     `).join('');
@@ -337,6 +358,64 @@ export function initSearchBar(apiBaseUrl) {
     }
 
     dropdown.classList.remove('hidden');
+
+    // Group add button click handler
+    dropdownItems.querySelectorAll('[data-group-add]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent triggering the parent item click
+        const appData = btn.dataset.groupAdd;
+        if (appData) {
+          const app = JSON.parse(appData.replace(/&apos;/g, "'"));
+          if (groupAddCallback) {
+            groupAddCallback({
+              appName: app.appName,
+              appStoreUrl: app.appStoreUrl || '',
+              playStoreUrl: app.playStoreUrl || '',
+              iconUrl: app.iconImageUrl || '',
+            });
+          }
+        }
+      });
+    });
+
+    // 아이템 hover 시 툴팁 순차 표시: group-add-tooltip 2초 → start-analysis-tooltip 2초
+    dropdownItems.querySelectorAll('[data-app]').forEach(item => {
+      const groupAddTooltipEl = item.querySelector('.group-add-tooltip');
+      const startAnalysisTooltipEl = item.querySelector('.start-analysis-tooltip');
+      let timer1, timer2;
+
+      function showTooltip(el) {
+        if (!el) return;
+        el.classList.remove('opacity-0', 'invisible');
+        el.classList.add('opacity-100', 'visible');
+      }
+      function hideTooltip(el) {
+        if (!el) return;
+        el.classList.remove('opacity-100', 'visible');
+        el.classList.add('opacity-0', 'invisible');
+      }
+
+      item.addEventListener('mouseenter', () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        hideTooltip(startAnalysisTooltipEl);
+        showTooltip(groupAddTooltipEl);
+        timer1 = setTimeout(() => {
+          hideTooltip(groupAddTooltipEl);
+          showTooltip(startAnalysisTooltipEl);
+          timer2 = setTimeout(() => {
+            hideTooltip(startAnalysisTooltipEl);
+          }, 2000);
+        }, 2000);
+      });
+
+      item.addEventListener('mouseleave', () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        hideTooltip(groupAddTooltipEl);
+        hideTooltip(startAnalysisTooltipEl);
+      });
+    });
 
     dropdownItems.querySelectorAll('[data-app]').forEach(item => {
       item.addEventListener('click', () => {

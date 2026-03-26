@@ -199,7 +199,7 @@
 
               <!-- Search Results Dropdown -->
               <div id="search-dropdown"
-                class="hidden absolute top-[calc(100%+8px)] left-0 w-full overflow-hidden rounded-xl border border-[#dcdee5] bg-white shadow-2xl z-50">
+                class="hidden absolute top-[calc(100%+8px)] left-0 w-full overflow-visible rounded-xl border border-[#dcdee5] bg-white shadow-2xl z-50">
                 <div class="p-2">
                   <div id="dropdown-items" class="flex flex-col">
                     <!-- Dropdown items will be dynamically inserted here -->
@@ -213,6 +213,72 @@
               <!-- Error Message -->
               <div id="error-message" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center" data-i18n="index.error">
                 Something went wrong. Please try again later.
+              </div>
+
+              <!-- Group Setup UI (hidden by default) -->
+              <div id="group-setup-section" class="hidden mt-4 animate-[slideUp_0.3s_ease]">
+                <div class="bg-white border border-primary/30 rounded-2xl shadow-lg overflow-hidden">
+                  <!-- Header -->
+                  <div class="bg-primary/5 px-4 py-3 flex items-center justify-between border-b border-primary/10">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-primary" style="font-size:20px">group_work</span>
+                      <span class="text-sm font-bold text-[#111318]" data-i18n="index.group_setup_title">Group Analysis Setup</span>
+                      <span id="index-app-count-badge" class="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">0</span>
+                    </div>
+                    <button id="close-group-setup" class="p-1 rounded-lg hover:bg-primary/10 transition-colors">
+                      <span class="material-symbols-outlined text-[#636e88]" style="font-size:20px">close</span>
+                    </button>
+                  </div>
+
+                  <!-- Group Name Input -->
+                  <div class="px-4 pt-4 pb-3">
+                    <input
+                      id="index-group-name-input"
+                      type="text"
+                      data-i18n-placeholder="group_page.placeholder_group_name"
+                      placeholder="e.g. Health Apps for Millennials"
+                      class="w-full border border-[#e5e7eb] rounded-xl px-4 py-2.5 text-sm text-[#111318] focus:outline-none focus:border-primary transition-colors"
+                    />
+                  </div>
+
+                  <!-- Selected Apps -->
+                  <div class="px-4 pb-3">
+                    <div
+                      id="index-selected-apps"
+                      class="flex flex-wrap gap-3 min-h-[80px] p-3 border-2 border-dashed border-[#e5e7eb] rounded-xl bg-[#f6f6f8] items-start content-start"
+                    >
+                      <div id="index-empty-placeholder" class="w-full flex flex-col items-center justify-center py-2 gap-1 text-[#636e88]">
+                        <span class="material-symbols-outlined text-2xl text-[#e5e7eb]">add_circle</span>
+                        <p class="text-xs" data-i18n="index.group_empty_hint">Search and add apps above</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Credit Info & Start Button -->
+                  <div class="px-4 pb-4 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 text-xs text-[#636e88]">
+                      <span class="material-symbols-outlined" style="font-size:16px">toll</span>
+                      <span id="index-credit-info" data-i18n="index.group_credits_hint">Add 2+ apps to start</span>
+                    </div>
+                    <button
+                      id="index-start-group-btn"
+                      disabled
+                      class="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors disabled:bg-[#e5e7eb] disabled:text-[#636e88] disabled:cursor-not-allowed"
+                    >
+                      <span class="material-symbols-outlined" style="font-size:16px">rocket_launch</span>
+                      <span data-i18n="group_page.start_analysis">Start Analysis</span>
+                    </button>
+                  </div>
+
+                  <!-- Guest Notice -->
+                  <div id="index-guest-notice" class="hidden px-4 pb-4">
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
+                      <span class="material-symbols-outlined text-amber-500 shrink-0" style="font-size:18px">info</span>
+                      <p class="text-xs text-amber-700" data-i18n="index.group_guest_notice">Results won't be saved. Sign up to keep your analysis history.</p>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>

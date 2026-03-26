@@ -8,6 +8,7 @@ const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 let selectedApps = []; // { appName, appStoreUrl, playStoreUrl, iconUrl }
 let pendingApp = null;  // app pending confirmation in category modal
 let currentUser = null;
+let isGuestMode = false; // Track if running as guest
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 async function init() {
@@ -27,15 +28,39 @@ async function init() {
     } catch { /* ignore */ }
   }
 
-  if (!currentUser) {
-    document.getElementById('login-required-notice').classList.remove('hidden');
-    document.getElementById('start-btn').disabled = true;
+  isGuestMode = !currentUser;
+
+  // Show guest notice instead of login required (guests can now use group analysis)
+  if (isGuestMode) {
+    const loginNotice = document.getElementById('login-required-notice');
+    if (loginNotice) {
+      loginNotice.innerHTML = `
+        <span class="material-symbols-outlined text-amber-500" style="font-size:20px">info</span>
+        <p class="text-sm text-amber-700">${t('index.group_guest_notice')}</p>
+      `;
+      loginNotice.classList.remove('hidden');
+    }
   }
 
   setupEventListeners();
 
-  // Pre-populate app from URL params (e.g., navigated from analysis.html)
+  // Check if coming from index page with pending analysis
   const params = new URLSearchParams(location.search);
+  if (params.get('fromIndex') === 'true') {
+    const pendingData = sessionStorage.getItem('pending_group_analysis');
+    if (pendingData) {
+      sessionStorage.removeItem('pending_group_analysis');
+      const data = JSON.parse(pendingData);
+      // Pre-populate apps and group name
+      document.getElementById('group-name-input').value = data.groupName;
+      data.apps.forEach(app => doAddApp(app));
+      // Auto-start analysis
+      setTimeout(() => startAnalysis(), 500);
+      return;
+    }
+  }
+
+  // Pre-populate app from URL params (e.g., navigated from analysis.html)
   const preAppName = params.get('appName');
   if (preAppName) {
     const preApp = {
@@ -89,6 +114,12 @@ function setupEventListeners() {
 
   closeNoCreditsBtn.addEventListener('click', () => {
     document.getElementById('no-credits-modal').classList.add('hidden');
+  });
+
+  const startLimitedBtn = document.getElementById('start-limited-btn');
+  startLimitedBtn?.addEventListener('click', () => {
+    document.getElementById('no-credits-modal').classList.add('hidden');
+    startAnalysis();
   });
 
   initGroupSearch();
@@ -410,36 +441,52 @@ function renderSelectedApps() {
 // ── Credit Preview ────────────────────────────────────────────────────────────
 function updateCreditPreview() {
   const n = selectedApps.length;
-  const total = n + 1;
+  const creditCost = n; // Credits = number of apps
   const balance = currentUser?.credit_balance ?? 0;
   const breakdownEl = document.getElementById('credit-breakdown');
   const numEl = document.getElementById('credit-num');
 
-  numEl.textContent = n < 2 ? '0' : String(total);
-
   if (n < 2) {
+    numEl.textContent = '0';
     breakdownEl.textContent = t('group_page.credits_hint_initial');
     return;
   }
 
-  const afterBalance = balance - total;
+  // Guest mode: show "Free" instead of credit count
+  if (isGuestMode) {
+    numEl.textContent = getLang() === 'ko' ? '무료' : 'Free';
+    numEl.classList.remove('text-red-500');
+    numEl.classList.add('text-primary');
+    if (getLang() === 'ko') {
+      breakdownEl.innerHTML = `
+        앱 ${n}개 분석<br>
+        <span class="text-amber-600">게스트 분석: 결과가 저장되지 않습니다</span>
+      `;
+    } else {
+      breakdownEl.innerHTML = `
+        ${n} apps analysis<br>
+        <span class="text-amber-600">Guest analysis: Results won't be saved</span>
+      `;
+    }
+    return;
+  }
+
+  // Logged-in user: credits = number of apps
+  numEl.textContent = String(creditCost);
+  const afterBalance = balance - creditCost;
   if (getLang() === 'ko') {
     breakdownEl.innerHTML = `
-      앱 ${n}개 × 1 크레딧 = ${n} 크레딧<br>
-      종합 분석 = 1 크레딧<br>
-      <strong class="text-[#111318]">합계: ${total} 크레딧</strong>
-      ${currentUser ? ` (잔여 ${balance} → 분석 후 ${afterBalance})` : ''}
+      앱 ${n}개 × 1 크레딧 = <strong class="text-[#111318]">${creditCost} 크레딧</strong><br>
+      <span class="text-[#636e88]">잔여 ${balance} → 분석 후 ${afterBalance}</span>
     `;
   } else {
     breakdownEl.innerHTML = `
-      ${n} apps × 1 credit = ${n} credits<br>
-      Group analysis = 1 credit<br>
-      <strong class="text-[#111318]">Total: ${total} credits</strong>
-      ${currentUser ? ` (balance: ${balance} → ${afterBalance} after)` : ''}
+      ${n} apps × 1 credit = <strong class="text-[#111318]">${creditCost} credits</strong><br>
+      <span class="text-[#636e88]">Balance: ${balance} → ${afterBalance} after</span>
     `;
   }
 
-  if (currentUser && afterBalance < 0) {
+  if (afterBalance < 0) {
     numEl.classList.add('text-red-500');
     numEl.classList.remove('text-primary');
   } else {
@@ -457,16 +504,23 @@ function updateStartButton() {
 
   // innerHTML을 항상 새로 쓰는 방식으로 통일 (이전에 innerHTML 교체 후 #bottom-app-count가 null이 되는 버그 수정)
   if (n >= 2) {
-    bottomInfo.innerHTML = getLang() === 'ko'
-      ? `앱 <strong class="text-[#111318]">${n}</strong>개 · <strong class="text-[#111318]">${n + 1}</strong> 크레딧 차감 예정`
-      : `<strong class="text-[#111318]">${n}</strong> apps · <strong class="text-[#111318]">${n + 1}</strong> credits to be used`;
+    if (isGuestMode) {
+      bottomInfo.innerHTML = getLang() === 'ko'
+        ? `앱 <strong class="text-[#111318]">${n}</strong>개 · <span class="text-green-600 font-semibold">무료</span>`
+        : `<strong class="text-[#111318]">${n}</strong> apps · <span class="text-green-600 font-semibold">Free</span>`;
+    } else {
+      bottomInfo.innerHTML = getLang() === 'ko'
+        ? `앱 <strong class="text-[#111318]">${n}</strong>개 · <strong class="text-[#111318]">${n}</strong> 크레딧 차감 예정`
+        : `<strong class="text-[#111318]">${n}</strong> apps · <strong class="text-[#111318]">${n}</strong> credits to be used`;
+    }
   } else {
     bottomInfo.innerHTML = getLang() === 'ko'
       ? `앱 <strong class="text-[#111318]">${n}</strong>개 선택됨`
       : `<strong class="text-[#111318]">${n}</strong> apps selected`;
   }
 
-  const canStart = groupName.length > 0 && n >= 2 && currentUser;
+  // Allow both logged-in users and guests to start analysis
+  const canStart = groupName.length > 0 && n >= 2;
   startBtn.disabled = !canStart;
 }
 
@@ -474,10 +528,11 @@ function updateStartButton() {
 function showConfirmStartModal() {
   const groupName = document.getElementById('group-name-input').value.trim();
   const n = selectedApps.length;
-  const creditRequired = n + 1;
+  const creditRequired = n; // Credits = number of apps
   const balance = currentUser?.credit_balance ?? 0;
 
-  if ((balance) < creditRequired) {
+  // For guest users, skip credit check
+  if (!isGuestMode && balance < creditRequired) {
     document.getElementById('no-credits-detail').innerHTML = getLang() === 'ko'
       ? `그룹 분석에 <strong>${creditRequired} 크레딧</strong>이 필요하지만<br>현재 <strong>${balance} 크레딧</strong>만 남아있어요.`
       : `Group analysis requires <strong>${creditRequired} credits</strong>,<br>but you only have <strong>${balance} credits</strong>.`;
@@ -485,9 +540,15 @@ function showConfirmStartModal() {
     return;
   }
 
-  document.getElementById('confirm-start-detail').innerHTML = getLang() === 'ko'
-    ? `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 분석해요.<br><strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`
-    : `Analyzing <strong>${n}</strong> apps in the <strong>${groupName}</strong> group.<br><strong class="text-[#111318]">${creditRequired} credits</strong> will be used.`;
+  if (isGuestMode) {
+    document.getElementById('confirm-start-detail').innerHTML = getLang() === 'ko'
+      ? `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 무료로 분석해요.<br><span class="text-amber-600">게스트 분석: 결과가 저장되지 않습니다.</span>`
+      : `Analyzing <strong>${n}</strong> apps in the <strong>${groupName}</strong> group for free.<br><span class="text-amber-600">Guest analysis: Results won't be saved.</span>`;
+  } else {
+    document.getElementById('confirm-start-detail').innerHTML = getLang() === 'ko'
+      ? `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 분석해요.<br><strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`
+      : `Analyzing <strong>${n}</strong> apps in the <strong>${groupName}</strong> group.<br><strong class="text-[#111318]">${creditRequired} credits</strong> will be used.`;
+  }
   document.getElementById('confirm-start-modal').classList.remove('hidden');
 }
 
@@ -495,8 +556,6 @@ function showConfirmStartModal() {
 async function startAnalysis() {
   const groupName = document.getElementById('group-name-input').value.trim();
   const token = localStorage.getItem('auth_token');
-
-  if (!token || !currentUser) return;
 
   // Show progress view
   document.getElementById('creation-view').classList.add('hidden');
@@ -506,13 +565,21 @@ async function startAnalysis() {
   updateProgressBar(5);
 
   try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const res = await fetch(`${API_BASE_URL}/api/groups/analyze`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ groupName, apps: selectedApps, lang: getLang(), market: getMarket() }),
+      headers,
+      body: JSON.stringify({
+        groupName,
+        apps: selectedApps,
+        lang: getLang(),
+        market: getMarket(),
+        isGuest: isGuestMode,
+      }),
     });
 
     if (res.status === 402) {
@@ -573,9 +640,15 @@ async function startAnalysis() {
 
           case 'group_done':
             updateProgressBar(100);
+            if (!event.groupAnalysisId) {
+              showError(t('group_page.err_progress'));
+              break;
+            }
+            // limited 모드는 D1 쓰기 전파 대기를 위해 딜레이를 더 줌
             setTimeout(() => {
-              location.replace(`/analysis/group-analysis-result.html?id=${event.groupAnalysisId}`);
-            }, 500);
+              const previewParam = event.isLimited ? '&preview=true' : '';
+              location.replace(`/analysis/group-analysis-result.html?id=${event.groupAnalysisId}${previewParam}`);
+            }, event.isLimited ? 1500 : 500);
             break;
 
           case 'error':
