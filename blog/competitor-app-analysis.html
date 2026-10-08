@@ -10,14 +10,12 @@
     gtag('config', 'G-FHEBQXPMJ3');
   </script>
   <script>
+    // Follow the reader's saved language choice only (set via the language switcher).
     (function() {
-      var saved = localStorage.getItem('lang');
-      var browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-      var lang = saved || (browserLang.startsWith('ko') ? 'ko' : 'en');
-      if (lang === 'en') {
-        var currentPath = window.location.pathname;
-        var newPath = currentPath.replace('/blog/', '/blog/en/');
-        window.location.replace(newPath);
+      var saved = null;
+      try { saved = localStorage.getItem('lang'); } catch (e) {}
+      if (saved === 'en') {
+        window.location.replace(window.location.pathname.replace('/blog/', '/blog/en/'));
       }
     })();
   </script>
@@ -25,40 +23,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기 | TalonInsight</title>
   <meta name="description" content="상위 앱들은 무엇이 다를까요? 경쟁사 앱을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다. 무료 경쟁 앱 분석 방법 포함.">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://taloninsight.com/blog/competitor-app-analysis.html">
-  <meta property="og:title" content="경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기">
-  <meta property="og:description" content="상위 앱들을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다.">
-  <meta property="og:image" content="https://taloninsight.com/assets/images/blog1.png">
-  <meta property="og:site_name" content="TalonInsight">
-  <meta property="og:locale" content="ko_KR">
-  <meta property="article:published_time" content="2026-02-04">
-
-  <!-- SEO Meta Tags -->
-  <link rel="canonical" href="https://taloninsight.com/blog/competitor-app-analysis.html">
-  <meta name="robots" content="index, follow">
-  <meta name="keywords" content="경쟁사 앱 분석, 경쟁 앱 분석 방법, 앱 벤치마킹, 앱 경쟁 분석, 성공한 앱 분석, 앱 전략 수립">
-  <meta name="author" content="TalonInsight">
+  <link rel="canonical" href="https://taloninsight.com/blog/competitor-app-analysis">
+  <link rel="alternate" hreflang="en" href="https://taloninsight.com/blog/en/competitor-app-analysis">
+  <link rel="alternate" hreflang="ko" href="https://taloninsight.com/blog/competitor-app-analysis">
+  <link rel="alternate" hreflang="x-default" href="https://taloninsight.com/blog/en/competitor-app-analysis">
+  <meta name="robots" content="max-image-preview:large">
   <meta name="theme-color" content="#1E5AE8">
 
-  <!-- Structured Data -->
+  <!-- Open Graph (X/Twitter reads og:* as fallback; only twitter:card is required) -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="TalonInsight">
+  <meta property="og:url" content="https://taloninsight.com/blog/competitor-app-analysis">
+  <meta property="og:title" content="경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기">
+  <meta property="og:description" content="상위 앱들은 무엇이 다를까요? 경쟁사 앱을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다. 무료 경쟁 앱 분석 방법 포함.">
+  <meta property="og:image" content="https://taloninsight.com/assets/images/blog1-og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="article:published_time" content="2026-02-04">
+  <meta property="article:modified_time" content="2026-02-04">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기",
-    "description": "상위 앱들을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다.",
-    "image": "https://taloninsight.com/assets/images/blog1.png",
-    "author": {"@type": "Organization", "name": "TalonInsight"},
-    "publisher": {"@type": "Organization", "name": "TalonInsight"},
-    "datePublished": "2026-02-04",
-    "dateModified": "2026-02-04"
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": "https://taloninsight.com/blog/competitor-app-analysis#article",
+        "headline": "경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기",
+        "description": "상위 앱들은 무엇이 다를까요? 경쟁사 앱을 체계적으로 분석하고 벤치마킹하는 프레임워크를 공유합니다. 무료 경쟁 앱 분석 방법 포함.",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://taloninsight.com/assets/images/blog1-og.jpg",
+          "width": 1200,
+          "height": 630
+        },
+        "datePublished": "2026-02-04",
+        "dateModified": "2026-02-04",
+        "inLanguage": "ko",
+        "mainEntityOfPage": "https://taloninsight.com/blog/competitor-app-analysis",
+        "author": {
+          "@id": "https://taloninsight.com/#organization"
+        },
+        "publisher": {
+          "@id": "https://taloninsight.com/#organization"
+        },
+        "isPartOf": {
+          "@id": "https://taloninsight.com/#website"
+        },
+        "about": {
+          "@id": "https://taloninsight.com/#app"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "홈",
+            "item": "https://taloninsight.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "블로그",
+            "item": "https://taloninsight.com/blog/blog"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기"
+          }
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://taloninsight.com/#organization",
+        "name": "TalonInsight",
+        "url": "https://taloninsight.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://taloninsight.com/assets/images/logo.png",
+          "width": 512,
+          "height": 512
+        }
+      }
+    ]
   }
   </script>
-
-  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -74,7 +135,7 @@
   <div class="relative flex min-h-screen w-full flex-col">
     <!-- Navigation -->
     <header class="sticky top-0 z-50 flex items-center justify-between border-b border-[#f0f1f4] bg-white/80 backdrop-blur-md px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-3 md:py-4">
-      <a href="../index.html" class="flex items-center gap-2 text-primary">
+      <a href="/" class="flex items-center gap-2 text-primary">
         <div class="size-6 md:size-8">
           <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path>
@@ -83,8 +144,8 @@
         <span class="text-[#111318] font-black text-base md:text-xl tracking-tight">TalonInsight</span>
       </a>
       <nav class="flex items-center gap-4 md:gap-8">
-        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="../index.html">홈</a>
-        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="blog.html">블로그</a>
+        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="/">홈</a>
+        <a class="text-[#111318] text-sm font-medium hover:text-primary" href="/blog/blog">블로그</a>
       </nav>
     </header>
 
@@ -92,8 +153,8 @@
       <article class="mx-auto max-w-[720px]">
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-sm mb-6 text-[#636e88]">
-          <a href="../index.html" class="hover:text-primary">홈</a><span>/</span>
-          <a href="blog.html" class="hover:text-primary">블로그</a><span>/</span>
+          <a href="/" class="hover:text-primary">홈</a><span>/</span>
+          <a href="/blog/blog" class="hover:text-primary">블로그</a><span>/</span>
           <span class="text-[#111318]">경쟁사 앱 분석</span>
         </nav>
 
@@ -110,7 +171,7 @@
 
         <!-- Featured Image -->
         <figure class="mb-8 md:mb-10">
-          <img src="../assets/images/blog1.png" alt="경쟁사 앱 분석 가이드" class="w-full rounded-xl shadow-sm">
+          <img src="/assets/images/blog1.webp" alt="경쟁사 앱 분석: 성공하는 앱들의 공통점 찾기" width="1200" height="1078" fetchpriority="high" class="w-full rounded-xl shadow-sm">
         </figure>
 
         <!-- Content -->
@@ -287,7 +348,7 @@
           <div class="bg-primary rounded-xl p-6 md:p-8 text-center text-white">
             <h3 class="text-xl font-bold mb-3">경쟁 앱 분석 자동화하기</h3>
             <p class="text-white/80 mb-5 text-sm">TalonInsight가 경쟁 앱의 핵심 가치와 미해결 문제를 찾아드립니다</p>
-            <a href="../index.html" class="inline-flex items-center justify-center rounded-lg h-11 px-8 bg-white text-primary text-sm font-bold hover:bg-gray-100 transition-colors">
+            <a href="/" class="inline-flex items-center justify-center rounded-lg h-11 px-8 bg-white text-primary text-sm font-bold hover:bg-gray-100 transition-colors">
               무료로 분석 시작
             </a>
           </div>
@@ -297,7 +358,7 @@
         <div class="mt-12 pt-8 border-t border-[#dcdee5]">
           <h3 class="text-lg font-bold mb-6">관련 글</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href="app-market-research-guide.html" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
+            <a href="/blog/app-market-research-guide" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
               <div class="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-2xl text-primary">query_stats</span>
               </div>
@@ -306,7 +367,7 @@
                 <p class="text-[#636e88] text-xs line-clamp-2">1인 개발자를 위한 무료 분석 방법</p>
               </div>
             </a>
-            <a href="playstore-review-analysis.html" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
+            <a href="/blog/playstore-review-analysis" class="flex gap-4 bg-white rounded-lg border border-[#dcdee5] p-4 hover:shadow-md transition-shadow">
               <div class="w-16 h-16 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-2xl text-green-500">reviews</span>
               </div>
@@ -323,7 +384,7 @@
     <footer class="border-t border-[#f0f1f4] bg-white py-8 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40">
       <div class="mx-auto max-w-[720px] flex justify-between items-start">
         <div>
-          <a href="../index.html" class="flex items-center gap-2 text-primary opacity-80 mb-2">
+          <a href="/" class="flex items-center gap-2 text-primary opacity-80 mb-2">
             <div class="size-5"><svg fill="none" viewBox="0 0 48 48"><path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z" fill="currentColor"></path></svg></div>
             <span class="font-black text-xs">TalonInsight</span>
           </a>

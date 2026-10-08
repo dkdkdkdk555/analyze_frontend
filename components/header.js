@@ -561,9 +561,9 @@ function buildDesktopNavLinks({ page }) {
   const inact  = 'text-[#111318] hover:text-primary';
 
   return [
-    `<a class="${base} ${page === 'services' ? active : inact}" href="/services/services.html" data-i18n="nav.services">${t('nav.services')}</a>`,
-    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="/payment/pricing.html" data-i18n="nav.pricing">${t('nav.pricing')}</a>`,
-    `<a class="${base} ${page === 'blog'     ? active : inact}" href="/blog/blog.html" data-i18n="nav.blog">${t('nav.blog')}</a>`,
+    `<a class="${base} ${page === 'services' ? active : inact}" href="/services/services" data-i18n="nav.services">${t('nav.services')}</a>`,
+    `<a class="${base} ${page === 'pricing'  ? active : inact}" href="/payment/pricing" data-i18n="nav.pricing">${t('nav.pricing')}</a>`,
+    `<a class="${base} ${page === 'blog'     ? active : inact}" href="/blog/blog" data-i18n="nav.blog">${t('nav.blog')}</a>`,
   ].join('');
 }
 
@@ -610,15 +610,15 @@ function buildMobileDrawer({ page }) {
 
   const mobileNavLinks = `
     <nav class="flex flex-col px-5 py-2 flex-1">
-      <a href="/services/services.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+      <a href="/services/services" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'services' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'services' ? 'text-primary' : ''}">apps</span>
         <span data-i18n="nav.services">${t('nav.services')}</span>
       </a>
-      <a href="/payment/pricing.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+      <a href="/payment/pricing" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'pricing' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'pricing' ? 'text-primary' : ''}">credit_card</span>
         <span data-i18n="nav.pricing">${t('nav.pricing')}</span>
       </a>
-      <a href="/blog/blog.html" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
+      <a href="/blog/blog" class="flex items-center gap-3 py-4 text-sm font-medium ${page === 'blog' ? 'text-primary font-bold' : 'text-[#111318]'} border-b border-[#f0f1f4] hover:text-primary transition-colors">
         <span class="material-symbols-outlined text-lg ${page === 'blog' ? 'text-primary' : ''}">article</span>
         <span data-i18n="nav.blog">${t('nav.blog')}</span>
       </a>

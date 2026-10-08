@@ -13,19 +13,19 @@ applyTranslations();
 // Update page title
 document.title = t('blog.page_title');
 
-// Update blog links based on language
+// Static HTML links point to the English (canonical) posts; swap to the Korean posts for Korean readers
 const lang = getLang();
-const blogBasePath = lang === 'en' ? 'en/' : '';
+const blogBasePath = lang === 'ko' ? '/blog/' : '/blog/en/';
 
 const blogLinks = {
-  'blog-link-1': 'app-market-research-guide.html',
-  'blog-link-2': 'playstore-review-analysis.html',
-  'blog-link-3': 'competitor-app-analysis.html'
+  'blog-link-1': 'app-market-research-guide',
+  'blog-link-2': 'playstore-review-analysis',
+  'blog-link-3': 'competitor-app-analysis'
 };
 
-Object.entries(blogLinks).forEach(([id, filename]) => {
+Object.entries(blogLinks).forEach(([id, slug]) => {
   const link = document.getElementById(id);
   if (link) {
-    link.href = blogBasePath + filename;
+    link.href = blogBasePath + slug;
   }
 });

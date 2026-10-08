@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Indexable canonical URLs only (Cloudflare Pages serves pages without .html).
+     Update <lastmod> when a page's content changes. Language alternates are declared
+     with hreflang in each blog article's <head>. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://taloninsight.com/</loc>
-    <lastmod>2026-02-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-10-07</lastmod>
   </url>
   <url>
-    <loc>https://taloninsight.com/analysis.html</loc>
-    <lastmod>2026-02-04</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <loc>https://taloninsight.com/services/services</loc>
+    <lastmod>2026-10-07</lastmod>
   </url>
   <url>
-    <loc>https://taloninsight.com/blog.html</loc>
-    <lastmod>2026-02-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://taloninsight.com/payment/pricing</loc>
+    <lastmod>2026-10-07</lastmod>
   </url>
   <url>
-    <loc>https://taloninsight.com/blog/app-market-research-guide.html</loc>
-    <lastmod>2026-02-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://taloninsight.com/blog/blog</loc>
+    <lastmod>2026-10-07</lastmod>
   </url>
   <url>
-    <loc>https://taloninsight.com/blog/playstore-review-analysis.html</loc>
-    <lastmod>2026-02-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://taloninsight.com/blog/en/app-market-research-guide</loc>
+    <lastmod>2026-10-07</lastmod>
   </url>
   <url>
-    <loc>https://taloninsight.com/blog/competitor-app-analysis.html</loc>
-    <lastmod>2026-02-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://taloninsight.com/blog/en/playstore-review-analysis</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://taloninsight.com/blog/en/competitor-app-analysis</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://taloninsight.com/blog/app-market-research-guide</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://taloninsight.com/blog/playstore-review-analysis</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://taloninsight.com/blog/competitor-app-analysis</loc>
+    <lastmod>2026-10-07</lastmod>
   </url>
 </urlset>

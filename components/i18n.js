@@ -73,7 +73,7 @@ const TRANSLATIONS = {
     'footer.contact':       'Contact',
 
     // ── Index page ───────────────────────────────────────────────────
-    'index.page_title':     'TalonInsight - 정확한 앱 경쟁자분석',
+    'index.page_title':     '앱 시장조사 도구 & 앱스토어 분석 | TalonInsight',
     'index.hero_title':     '귀찮은 앱 시장조사,<br><span class="text-primary">대신해 드립니다</span>',
     'index.hero_subtitle':  '경쟁앱의 스토어 등록정보와 리뷰를 분석하여 앱의 핵심 가치와 미해결 문제를 파악해 드립니다.',
     'index.search_placeholder': '분석할 앱 이름을 입력하세요',
@@ -182,7 +182,7 @@ const TRANSLATIONS = {
     'index.mockup_opp2': '운동-식단 통합 대시보드 — 현재 사용자들이 앱을 2~3개 병행 사용 중인 공백 영역',
 
     // ── Pricing page ─────────────────────────────────────────────────
-    'pricing.page_title':         '이용 플랜 - TalonInsight',
+    'pricing.page_title':         '이용 플랜: 구독 없는 앱 시장조사 크레딧 | TalonInsight',
     'pricing.hero_title_mobile':  '필요한 만큼 충전하고,<br>원하는 만큼 분석하세요.',
     'pricing.hero_sub_mobile':    '합리적인 크레딧 플랜으로 시작해보세요.',
     'pricing.hero_title_desktop': '이용 플랜',
@@ -199,7 +199,7 @@ const TRANSLATIONS = {
     'pricing.faq2_q':             '무료 분석횟수는 크레딧에 포함되나요?',
     'pricing.faq2_a':             '아니요, 매일 제공되는 무료 분석 3회는 크레딧에서 차감되지 않습니다. 무료 횟수를 모두 소진한 후에만 크레딧이 사용됩니다.',
     'pricing.faq3_q':             '환불규정은 어떻게 되나요?',
-    'pricing.faq3_a':             '구매 후 크레딧을 전혀 사용하지 않으신 경우, 7일 이내에 전액 환불이 가능합니다. 자세한 내용은 <a href="/policy/refund.html" class="text-primary underline hover:text-blue-700 transition-colors">환불정책</a>을 확인하세요.',
+    'pricing.faq3_a':             '구매 후 크레딧을 전혀 사용하지 않으신 경우, 7일 이내에 전액 환불이 가능합니다. 자세한 내용은 <a href="/refund" class="text-primary underline hover:text-blue-700 transition-colors">환불정책</a>을 확인하세요.',
     'pricing.faq4_q':             '분석 실패 시 크레딧이 차감되나요?',
     'pricing.faq4_a':             '시스템 오류나 서비스 장애로 인해 분석에 실패한 경우에는 크레딧이 절대 차감되지 않습니다. 안심하고 이용하세요.',
     'pricing.login_required':     '로그인 후 이용해 주세요.',
@@ -245,7 +245,8 @@ const TRANSLATIONS = {
     'policy.loading':            '불러오는 중...',
 
     // ── Services page ────────────────────────────────────────────────
-    'services.page_title':       '서비스 - TalonInsight',
+    'services.page_title':       '앱스토어 분석 서비스: 개별 앱 & 그룹 분석 | TalonInsight',
+    'services.h1':               '앱스토어 분석 서비스: 개별 앱 분석과 경쟁 앱 그룹 분석',
     'services.single_title':     '앱 개별 분석',
     'services.single_desc':      '경쟁앱을 깊게 파고들어 시장 기회를 찾아보세요.<br>앱스토어 · 플레이스토어 리뷰를 분석하여 미해결 문제,<br>핵심 가치, 진입 전략을 도출합니다.',
     'services.single_f1':        '시장 규모 정의 (TAM / SAM)',
@@ -288,7 +289,7 @@ const TRANSLATIONS = {
     'services.coming_confirm':   '확인',
 
     // ── Blog page ───────────────────────────────────────────────────────
-    'blog.page_title':           '블로그 - 앱 시장조사 & 분석 인사이트 | TalonInsight',
+    'blog.page_title':           '앱 시장조사 블로그: 가이드 & 인사이트 | TalonInsight',
     'blog.hero_title':           '앱 분석 인사이트',
     'blog.hero_subtitle':        '앱 시장조사, 경쟁사 분석, 리뷰 분석에 대한 실용적인 가이드',
     'blog.tag_guide':            '가이드',
@@ -615,9 +616,9 @@ const TRANSLATIONS = {
     'footer.contact':       'Contact',
 
     // ── Index page ───────────────────────────────────────────────────
-    'index.page_title':     'TalonInsight - Sharp App Competitor Analysis',
+    'index.page_title':     'App Market Research Tool & App Store Analysis | TalonInsight',
     'index.hero_title':     'App market research,<br><span class="text-primary">done in 30 seconds.</span>',
-    'index.hero_subtitle':  'Analyze competitor apps\' store listings and reviews to uncover core value propositions and unresolved pain points.',
+    'index.hero_subtitle':  'Analyze any App Store or Google Play app\'s listing and reviews to uncover its core value proposition and unresolved user pain points.',
     'index.search_placeholder': 'Enter an app name to analyze',
     'index.market_tooltip': 'Select the target market for your search',
     'index.dropdown_more':  'Show more results',
@@ -669,7 +670,7 @@ const TRANSLATIONS = {
     'index.friction_p3_badge': 'No full market picture',
     'index.friction_p3_tag': 'Scattered data',
     'index.friction_p4_title': 'High Entry Barrier',
-    'index.friction_p4_desc': 'Enterprise analytics tools cost millions of won per year — a massive burden for solo developers or small teams.',
+    'index.friction_p4_desc': 'Enterprise app intelligence tools cost thousands of dollars per year — a massive burden for solo developers or small teams.',
     'index.friction_p4_badge': 'avg. annual cost for enterprise tools',
     'index.friction_p4_tag': '$5,000+/yr',
     'index.friction_p4_badge': 'based on Sensor Tower / App Annie pricing',
@@ -725,7 +726,7 @@ const TRANSLATIONS = {
     'index.mockup_opp2': 'Unified workout + diet dashboard — users are currently juggling 2–3 separate apps to cover this need',
 
     // ── Pricing page ─────────────────────────────────────────────────
-    'pricing.page_title':         'Pricing Plans - TalonInsight',
+    'pricing.page_title':         'Pricing: Pay-as-you-go App Market Research | TalonInsight',
     'pricing.hero_title_mobile':  'Top up when you need it.<br>Analyze as much as you want.',
     'pricing.hero_sub_mobile':    'Pick a credit plan that fits your pace.',
     'pricing.hero_title_desktop': 'Pricing Plans',
@@ -742,7 +743,7 @@ const TRANSLATIONS = {
     'pricing.faq2_q':             'Do free analyses count against my credits?',
     'pricing.faq2_a':             'No. Your 3 free daily analyses don\'t touch your credits. Credits only kick in after your free quota is used up.',
     'pricing.faq3_q':             'What\'s the refund policy?',
-    'pricing.faq3_a':             'If you haven\'t used any credits, you can request a full refund within 7 days of purchase. See our <a href="/policy/refund.html" class="text-primary underline hover:text-blue-700 transition-colors">Refund Policy</a> for details.',
+    'pricing.faq3_a':             'If you haven\'t used any credits, you can request a full refund within 7 days of purchase. See our <a href="/refund" class="text-primary underline hover:text-blue-700 transition-colors">Refund Policy</a> for details.',
     'pricing.faq4_q':             'Will I be charged if an analysis fails?',
     'pricing.faq4_a':             'If an analysis fails due to a system error or service disruption, you will never be charged. You\'re fully covered.',
     'pricing.login_required':     'Please log in to continue.',
@@ -788,7 +789,8 @@ const TRANSLATIONS = {
     'policy.loading':            'Loading...',
 
     // ── Services page ────────────────────────────────────────────────
-    'services.page_title':       'Services - TalonInsight',
+    'services.page_title':       'App Store Analysis Services: Single & Group | TalonInsight',
+    'services.h1':               'App Store Analysis Services: Single App & Competitor Group Analysis',
     'services.single_title':     'Single App Analysis',
     'services.single_desc':      'Dig deep into a competitor app and uncover market opportunities.<br>Analyze App Store & Play Store reviews to extract unresolved problems,<br>core value propositions, and entry strategies.',
     'services.single_f1':        'Market Size Definition (TAM / SAM)',
@@ -831,7 +833,7 @@ const TRANSLATIONS = {
     'services.coming_confirm':   'Got it',
 
     // ── Blog page ───────────────────────────────────────────────────────
-    'blog.page_title':           'Blog - App Market Research & Analysis Insights | TalonInsight',
+    'blog.page_title':           'App Market Research Blog: Guides & Insights | TalonInsight',
     'blog.hero_title':           'App Analysis Insights',
     'blog.hero_subtitle':        'Practical guides on app market research, competitor analysis, and review analysis',
     'blog.tag_guide':            'Guide',

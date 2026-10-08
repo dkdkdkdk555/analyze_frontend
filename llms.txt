@@ -1,0 +1,31 @@
+# TalonInsight
+
+> TalonInsight (taloninsight.com) is an AI app market research tool for App Store and Google Play analysis. Enter an app name and it analyzes the app's store listing and user reviews to produce a market research report in about 30 seconds: market size (TAM/SAM), core value proposition, review analysis by star rating, unresolved user pain points, target personas, and a market entry strategy. It is built for indie developers, startup founders, and product teams validating an app idea or studying competitors.
+
+Key facts:
+
+- Category: app market research tool, app store analysis, competitor app analysis, app review analysis.
+- Data sources: public Apple App Store and Google Play store listings and user reviews.
+- Store markets: United States, United Kingdom, Australia, India, South Korea, Japan, Germany, France and Brazil.
+- Report languages: English and Korean.
+- Pricing: pay-as-you-go credits in USD, no subscription; credits never expire. Free to try: 3 analyses without an account, and new accounts get 3 free credits.
+- Operator: HealthTier, Seoul, Republic of Korea. Payments via Paddle (Merchant of Record) and PayPal.
+
+## Product
+
+- [Home: analyze an app](https://taloninsight.com/): Search any App Store or Google Play app by name and run a single-app market analysis.
+- [Services](https://taloninsight.com/services/services): What each analysis includes. Single App Analysis (1 credit): TAM/SAM market size, core value and feature analysis, rating-based review analysis, unresolved problems, three target personas, entry strategy. Group Analysis (2–5 apps in one category, apps + 1 credits): competitor positioning map, shared unresolved problems, review-based market share estimate, entry risks, competitive landscape summary.
+- [Pricing](https://taloninsight.com/payment/pricing): Credit packs — Starter $3 (10 credits), Growth $5.90 (20 credits), Pro $14.50 (50 credits), Power $33.60 (120 credits). Unused credits are refundable within 7 days; failed analyses are never charged.
+
+## Guides
+
+- [App Market Research Guide](https://taloninsight.com/blog/en/app-market-research-guide): A 5-step, low-cost process for researching an app market before you build.
+- [App Review Analysis](https://taloninsight.com/blog/en/playstore-review-analysis): How to read competitor app reviews to find what users actually want and where to differentiate.
+- [Competitor App Analysis](https://taloninsight.com/blog/en/competitor-app-analysis): A framework for benchmarking competitor apps and finding what top apps have in common.
+
+## Optional
+
+- [Blog](https://taloninsight.com/blog/blog): All guides (English and Korean).
+- [Terms of Service](https://taloninsight.com/terms)
+- [Privacy Policy](https://taloninsight.com/privacy)
+- [Refund Policy](https://taloninsight.com/refund)

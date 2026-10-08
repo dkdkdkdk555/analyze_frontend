@@ -1,7 +1,28 @@
-# Legacy redirect - old group analysis result path
-/group-analysis-result.html /analysis/group-analysis-result.html 301
-
 # Policy pages - short URL rewrites (URL stays the same in browser)
 /privacy /policy/privacy 200
 /terms /policy/terms 200
 /refund /policy/refund 200
+/privacy.html /privacy 301
+/terms.html /terms 301
+/refund.html /refund 301
+
+# Pages moved into folders on 2026-03-04. Before 404.html existed these old URLs
+# silently served the homepage; now they 301 to the real page.
+/analysis.html /analysis/analysis 301
+/analysis /analysis/analysis 301
+/group-analysis.html /analysis/group-analysis 301
+/group-analysis /analysis/group-analysis 301
+/group-analysis-result.html /analysis/group-analysis-result 301
+/group-analysis-result /analysis/group-analysis-result 301
+/services.html /services/services 301
+/services /services/services 301
+/pricing.html /payment/pricing 301
+/pricing /payment/pricing 301
+/blog.html /blog/blog 301
+/blog /blog/blog 301
+/blog/ /blog/blog 301
+/credit-history.html /mypage/credit-history 301
+/my-analyses.html /mypage/my-analyses 301
+/payment-history.html /payment/payment-history 301
+/payment-success.html /payment/payment-success 301
+/payment-fail.html /payment/payment-fail 301

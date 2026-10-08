@@ -1,10 +1,8 @@
-# robots.txt for taloninsight.com
-
+# TalonInsight — search engines and AI crawlers are welcome on all public pages.
+# /api/ is the Worker API (JSON only). Account, payment and analysis-result pages
+# stay crawlable so bots can read their <meta name="robots" content="noindex">.
 User-agent: *
 Allow: /
+Disallow: /api/
 
-# Sitemap location
 Sitemap: https://taloninsight.com/sitemap.xml
-
-# Crawl-delay for polite crawling (optional, mainly for Naver)
-Crawl-delay: 1
