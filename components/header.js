@@ -5,6 +5,7 @@
  * @param {string} options.apiBaseUrl
  */
 import { t, getLang, setLang, getMarket } from './i18n.js';
+import { escapeHtml, cssUrl } from './sanitize.js';
 
 export async function initHeader({ page, apiBaseUrl }) {
   const headerEl = document.getElementById('app-header');
@@ -78,8 +79,8 @@ function buildDesktopAuth(user) {
     return `
       <div id="profile-menu-container" class="relative max-md:hidden">
         <button data-action="profile" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f0f1f4] hover:bg-gray-200 transition-all cursor-pointer select-none">
-          <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shrink-0">${initial}</div>
-          <span class="text-xs font-medium text-[#111318] max-w-[90px] truncate">${user.name || user.email}</span>
+          <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shrink-0">${escapeHtml(initial)}</div>
+          <span class="text-xs font-medium text-[#111318] max-w-[90px] truncate">${escapeHtml(user.name || user.email)}</span>
           <span class="material-symbols-outlined text-[#636e88] text-sm leading-none">expand_more</span>
         </button>
 
@@ -137,10 +138,10 @@ function buildMobileAuth(user) {
       <div class="border-t border-[#e5e7eb]">
         <div class="px-5 py-4 bg-[#f8f9ff] border-b border-[#e8eaf0]">
           <div class="flex items-center gap-3 mb-3">
-            <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">${initial}</div>
+            <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">${escapeHtml(initial)}</div>
             <div class="flex flex-col min-w-0">
-              <span class="text-sm font-bold text-[#111318] truncate">${user.name || ''}</span>
-              <span class="text-xs text-[#636e88] truncate">${user.email}</span>
+              <span class="text-sm font-bold text-[#111318] truncate">${escapeHtml(user.name)}</span>
+              <span class="text-xs text-[#636e88] truncate">${escapeHtml(user.email)}</span>
             </div>
           </div>
           <div class="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-[#e8eaf0]">
@@ -799,11 +800,11 @@ function initHeaderSearch(apiBaseUrl) {
     }
 
     dropdownItems.innerHTML = results.map(app => `
-      <div class="flex items-center gap-3 rounded-lg p-2.5 hover:bg-primary/5 cursor-pointer transition-colors" data-app='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-10 shrink-0 border border-gray-100" style="background-image: url('${app.iconImageUrl}')"></div>
+      <div class="flex items-center gap-3 rounded-lg p-2.5 hover:bg-primary/5 cursor-pointer transition-colors" data-app="${escapeHtml(JSON.stringify(app))}">
+        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-10 shrink-0 border border-gray-100" style="background-image: ${cssUrl(app.iconImageUrl)}"></div>
         <div class="flex-1 min-w-0">
-          <p class="text-[#111318] text-sm font-bold truncate">${app.appName}</p>
-          ${app.developer ? `<p class="text-[#636e88] text-xs truncate">${app.developer}</p>` : ''}
+          <p class="text-[#111318] text-sm font-bold truncate">${escapeHtml(app.appName)}</p>
+          ${app.developer ? `<p class="text-[#636e88] text-xs truncate">${escapeHtml(app.developer)}</p>` : ''}
         </div>
       </div>
     `).join('');
@@ -812,7 +813,7 @@ function initHeaderSearch(apiBaseUrl) {
 
     dropdownItems.querySelectorAll('[data-app]').forEach(item => {
       item.addEventListener('click', () => {
-        const app = JSON.parse(item.dataset.app.replace(/&apos;/g, "'"));
+        const app = JSON.parse(item.dataset.app);
         const params = new URLSearchParams();
         if (app.appStoreUrl)  params.set('appStoreUrl', app.appStoreUrl);
         if (app.playStoreUrl) params.set('playStoreUrl', app.playStoreUrl);

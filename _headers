@@ -2,6 +2,19 @@
 # HTML / JS / CSS keep the Pages default (max-age=0, must-revalidate + ETag): file names are
 # not hashed and JS modules import each other, so a long cache could mix old and new code.
 
+# Security headers for every response.
+# - frame-ancestors / X-Frame-Options: the site is never meant to be framed (clickjacking).
+# - object-src / base-uri: block plugin content and <base> tag hijacking. A full script-src policy
+#   is not set yet: pages still rely on inline scripts and the Tailwind CDN (see SECURITY.md).
+# - Referrer-Policy: other sites only see the origin, never paths or query strings.
+/*
+  Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), usb=()
+
 # Images and fonts rarely change; to replace one, upload it under a new file name.
 /assets/images/*
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400

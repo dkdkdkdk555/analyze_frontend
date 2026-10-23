@@ -1,4 +1,5 @@
 import { getMarket, setMarket, t } from './i18n.js';
+import { escapeHtml, cssUrl } from './sanitize.js';
 
 let debounceTimer;
 let groupAddCallback = null;
@@ -313,18 +314,18 @@ export function initSearchBar(apiBaseUrl) {
     const groupAddTooltip = t('index.group_add_tooltip');
     const startAnalysisTooltip = t('index.start_individual_analysis_tooltip');
     dropdownItems.innerHTML = displayResults.map(app => `
-      <div class="flex items-center gap-4 rounded-lg p-3 hover:bg-primary/5 cursor-pointer transition-colors group/item" data-app='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-14 shadow-sm border border-gray-100" style="background-image: url('${app.iconImageUrl}')"></div>
+      <div class="flex items-center gap-4 rounded-lg p-3 hover:bg-primary/5 cursor-pointer transition-colors group/item" data-app="${escapeHtml(JSON.stringify(app))}">
+        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-14 shadow-sm border border-gray-100" style="background-image: ${cssUrl(app.iconImageUrl)}"></div>
         <div class="flex flex-1 flex-col text-left">
           <div class="flex items-center gap-2 flex-wrap">
-            <p class="text-[#111318] text-base font-bold leading-normal">${app.appName}</p>
+            <p class="text-[#111318] text-base font-bold leading-normal">${escapeHtml(app.appName)}</p>
             ${app.playStoreUrl ? '<span class="flex items-center gap-1 rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-bold text-green-700">PLAY STORE</span>' : ''}
             ${app.appStoreUrl ? '<span class="flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold text-blue-700">APP STORE</span>' : ''}
           </div>
-          ${app.developer ? `<p class="text-[#636e88] text-sm">${app.developer}</p>` : ''}
+          ${app.developer ? `<p class="text-[#636e88] text-sm">${escapeHtml(app.developer)}</p>` : ''}
         </div>
         <div class="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
-          <button class="relative p-1.5 rounded-lg hover:bg-sky-100 transition-colors" data-group-add='${JSON.stringify(app).replace(/'/g, "&apos;")}'>
+          <button class="relative p-1.5 rounded-lg hover:bg-sky-100 transition-colors" data-group-add="${escapeHtml(JSON.stringify(app))}">
             <span class="material-symbols-outlined text-sky-500 text-xl">playlist_add</span>
             <span class="group-add-tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-4 py-2.5 bg-sky-500 text-white text-sm font-bold rounded-xl whitespace-nowrap shadow-xl opacity-0 invisible transition-opacity duration-200 pointer-events-none z-[200]">
               ${groupAddTooltip}
@@ -365,7 +366,7 @@ export function initSearchBar(apiBaseUrl) {
         e.stopPropagation(); // Prevent triggering the parent item click
         const appData = btn.dataset.groupAdd;
         if (appData) {
-          const app = JSON.parse(appData.replace(/&apos;/g, "'"));
+          const app = JSON.parse(appData);
           if (groupAddCallback) {
             groupAddCallback({
               appName: app.appName,
@@ -421,7 +422,7 @@ export function initSearchBar(apiBaseUrl) {
       item.addEventListener('click', () => {
         const appData = item.dataset.app;
         if (appData) {
-          const app = JSON.parse(appData.replace(/&apos;/g, "'"));
+          const app = JSON.parse(appData);
           const params = new URLSearchParams();
           if (app.appStoreUrl) params.set('appStoreUrl', app.appStoreUrl);
           if (app.playStoreUrl) params.set('playStoreUrl', app.playStoreUrl);

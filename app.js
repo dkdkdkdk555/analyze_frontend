@@ -2,6 +2,7 @@ import { initSearchBar, onGroupAdd } from './components/search-bar.js';
 import { initHeader } from './components/header.js';
 import { initFooter } from './components/footer.js';
 import { applyTranslations, t, getLang, getMarket } from './components/i18n.js';
+import { escapeHtml, safeUrl } from './components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const AB_TEXT = 'default_v1';
@@ -141,9 +142,10 @@ function renderSelectedApps() {
 
   container.className = 'flex flex-wrap gap-3 min-h-[80px] p-3 border-2 border-primary/30 rounded-xl bg-primary/5 items-start content-start';
   container.innerHTML = selectedGroupApps.map((app, i) => {
-    const iconHtml = app.iconUrl
-      ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-12 h-12 rounded-xl object-cover">`
-      : `<div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-lg">${(app.appName || '?')[0]}</div>`;
+    const iconUrl = safeUrl(app.iconUrl);
+    const iconHtml = iconUrl
+      ? `<img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(app.appName)}" class="w-12 h-12 rounded-xl object-cover">`
+      : `<div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-lg">${escapeHtml((app.appName || '?')[0])}</div>`;
 
     return `
       <div class="flex flex-col items-center gap-1 relative animate-[popIn_0.2s_ease_both]">
@@ -154,7 +156,7 @@ function renderSelectedApps() {
             data-index="${i}"
           >×</button>
         </div>
-        <p class="text-[10px] font-medium text-[#111318] text-center max-w-[56px] truncate">${app.appName}</p>
+        <p class="text-[10px] font-medium text-[#111318] text-center max-w-[56px] truncate">${escapeHtml(app.appName)}</p>
       </div>`;
   }).join('');
 

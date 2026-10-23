@@ -1,6 +1,7 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, applyTranslations, t } from '../components/i18n.js';
+import { escapeHtml } from '../components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -20,5 +21,5 @@ try {
 } catch (err) {
   console.error('[refund] Failed to load policy content:', err);
   document.getElementById('policy-content').innerHTML =
-    `<p class="text-red-500">Failed to load content (lang: ${lang}). Error: ${err.message}</p>`;
+    `<p class="text-red-500">Failed to load content (lang: ${escapeHtml(lang)}). Error: ${escapeHtml(err.message)}</p>`;
 }

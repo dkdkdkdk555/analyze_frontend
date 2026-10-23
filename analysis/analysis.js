@@ -3,6 +3,7 @@ import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, getMarket, t, applyTranslations } from '../components/i18n.js';
 import { getVisitorId } from '../components/fingerprint.js';
+import { escapeHtml, safeUrl } from '../components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 const params = new URLSearchParams(window.location.search);
@@ -169,7 +170,7 @@ function renderResults(data) {
   }
 
   // App Header
-  document.getElementById('app-icon').src = data.appIconUrl || '';
+  document.getElementById('app-icon').src = safeUrl(data.appIconUrl);
   document.getElementById('app-name').textContent = data.appName || '';
   document.getElementById('breadcrumb-app-name').textContent = `${t('analysis.app_analysis_prefix')}: ${data.appName || ''}`;
   document.getElementById('app-meta').textContent = `${t('analysis.analysis_done')} | ${new Date().toLocaleDateString(getLang() === 'en' ? 'en-US' : 'ko-KR')}`;
@@ -177,13 +178,14 @@ function renderResults(data) {
   // Store links
   const appStoreLinkEl = document.getElementById('app-store-link');
   const playStoreLinkEl = document.getElementById('play-store-link');
-  if (appStoreUrl) {
-    appStoreLinkEl.href = appStoreUrl;
+  // appStoreUrl / playStoreUrl come from the page URL: only allow http(s) links
+  if (safeUrl(appStoreUrl)) {
+    appStoreLinkEl.href = safeUrl(appStoreUrl);
     appStoreLinkEl.classList.remove('hidden');
     appStoreLinkEl.classList.add('inline-flex');
   }
-  if (playStoreUrl) {
-    playStoreLinkEl.href = playStoreUrl;
+  if (safeUrl(playStoreUrl)) {
+    playStoreLinkEl.href = safeUrl(playStoreUrl);
     playStoreLinkEl.classList.remove('hidden');
     playStoreLinkEl.classList.add('inline-flex');
   }
@@ -209,9 +211,9 @@ function renderResults(data) {
       <li class="p-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-primary">${featureIcons[i % featureIcons.length]}</span>
-          <span class="font-medium text-sm md:text-base">${f.feature}</span>
+          <span class="font-medium text-sm md:text-base">${escapeHtml(f.feature)}</span>
         </div>
-        <span class="px-2 md:px-3 py-1 ${badgeClass} rounded-full text-[10px] md:text-xs font-bold uppercase">${f.recognizedByUsers}</span>
+        <span class="px-2 md:px-3 py-1 ${badgeClass} rounded-full text-[10px] md:text-xs font-bold uppercase">${escapeHtml(f.recognizedByUsers)}</span>
       </li>
     `;
   }).join('');
@@ -229,9 +231,9 @@ function renderResults(data) {
             ${bars}
           </div>
         </div>
-        <p class="font-bold text-xs md:text-sm">${p.problem}</p>
-        <p class="text-[10px] md:text-xs text-gray-500">${p.description}</p>
-        <span class="text-[10px] font-bold ${strengthClass.badge} px-1.5 py-0.5 self-start rounded">${p.signalStrength?.toUpperCase() || 'N/A'}</span>
+        <p class="font-bold text-xs md:text-sm">${escapeHtml(p.problem)}</p>
+        <p class="text-[10px] md:text-xs text-gray-500">${escapeHtml(p.description)}</p>
+        <span class="text-[10px] font-bold ${strengthClass.badge} px-1.5 py-0.5 self-start rounded">${escapeHtml(p.signalStrength?.toUpperCase() || 'N/A')}</span>
       </div>
     `;
   }).join('');
@@ -256,12 +258,12 @@ function renderResults(data) {
           <div class="p-3 md:p-4">
             <div class="flex items-center gap-2 mb-2 flex-wrap">
               ${stars}
-              <span class="text-[10px] md:text-xs font-bold ml-1 md:ml-2">${rating}${getLang() === 'en' ? '★' : '점'} (${label})</span>
+              <span class="text-[10px] md:text-xs font-bold ml-1 md:ml-2">${escapeHtml(rating)}${getLang() === 'en' ? '★' : '점'} (${label})</span>
             </div>
-            <p class="text-xs md:text-sm text-[#636e88] mb-2">${review.summary || ''}</p>
+            <p class="text-xs md:text-sm text-[#636e88] mb-2">${escapeHtml(review.summary)}</p>
             ${review.keywords?.length ? `
               <div class="flex flex-wrap gap-1">
-                ${review.keywords.map(k => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${k}</span>`).join('')}
+                ${review.keywords.map(k => `<span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${escapeHtml(k)}</span>`).join('')}
               </div>
             ` : ''}
           </div>
@@ -413,7 +415,7 @@ function renderRatingsSection(ratings, reviewSources) {
       const breakdown = parts.length > 1 ? ` (${parts.join(' + ')})` : '';
       const summaryEl = document.createElement('div');
       summaryEl.className = 'mt-3 pt-3 border-t border-[#f0f1f4] text-center text-[10px] md:text-xs text-[#636e88]';
-      summaryEl.innerHTML = `<span class="font-semibold text-[#111318]">${totalReviews.toLocaleString()}</span>${t('analysis.reviews_analyzed')}${breakdown}`;
+      summaryEl.innerHTML = `<span class="font-semibold text-[#111318]">${escapeHtml(totalReviews.toLocaleString())}</span>${t('analysis.reviews_analyzed')}${escapeHtml(breakdown)}`;
       legendEl.appendChild(summaryEl);
     }
   }
@@ -429,7 +431,7 @@ function renderComplaintList(elementId, complaint) {
   list.innerHTML = items.slice(0, 3).map(item => `
     <li class="flex gap-2">
       <div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-      <p class="text-xs md:text-sm">${item}</p>
+      <p class="text-xs md:text-sm">${escapeHtml(item)}</p>
     </li>
   `).join('') || '<li class="text-xs md:text-sm text-gray-400">데이터 없음</li>';
 }
@@ -593,24 +595,24 @@ function renderUserPersonas(personas) {
   grid.innerHTML = personas.slice(0, 3).map((p, i) => {
     const c = personaColors[i % personaColors.length];
     const keywords = (p.keywords || []).slice(0, 5).map(k =>
-      `<span class="text-[10px] ${c.badge} px-1.5 py-0.5 rounded-full">${k}</span>`
+      `<span class="text-[10px] ${c.badge} px-1.5 py-0.5 rounded-full">${escapeHtml(k)}</span>`
     ).join('');
     return `
       <div class="flex flex-col gap-3 p-4 rounded-xl border ${c.border} ${c.bg}">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined ${c.icon} text-xl">person</span>
           <div>
-            <p class="font-bold text-sm text-[#111318]">${p.type || ''}</p>
-            <p class="text-[10px] text-[#636e88]">${p.ageRange || ''}</p>
+            <p class="font-bold text-sm text-[#111318]">${escapeHtml(p.type)}</p>
+            <p class="text-[10px] text-[#636e88]">${escapeHtml(p.ageRange)}</p>
           </div>
         </div>
         <div>
           <p class="text-[10px] font-semibold text-[#636e88] uppercase tracking-wider mb-1" data-i18n="analysis.persona_motivation">Motivation</p>
-          <p class="text-xs text-[#111318]">${p.motivation || ''}</p>
+          <p class="text-xs text-[#111318]">${escapeHtml(p.motivation)}</p>
         </div>
         <div>
           <p class="text-[10px] font-semibold text-[#636e88] uppercase tracking-wider mb-1" data-i18n="analysis.persona_painpoint">Pain Point</p>
-          <p class="text-xs text-[#636e88]">${p.painPoint || ''}</p>
+          <p class="text-xs text-[#636e88]">${escapeHtml(p.painPoint)}</p>
         </div>
         ${keywords ? `<div class="flex flex-wrap gap-1 mt-1">${keywords}</div>` : ''}
       </div>
@@ -627,7 +629,7 @@ function renderMarketOpportunity(opportunity) {
   list.innerHTML = (opportunity.opportunities || []).map((opp, i) => `
     <li class="flex gap-3 items-start p-3 md:p-4 bg-[#f6f6f8] rounded-xl">
       <div class="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</div>
-      <p class="text-xs md:text-sm text-[#111318]">${opp}</p>
+      <p class="text-xs md:text-sm text-[#111318]">${escapeHtml(opp)}</p>
     </li>
   `).join('');
 }
@@ -987,7 +989,7 @@ async function downloadAsPDF() {
       <html lang="ko">
       <head>
         <meta charset="UTF-8">
-        <title>${analysisData.appName || '앱 분석'} - 분석 결과</title>
+        <title>${escapeHtml(analysisData.appName || '앱 분석')} - 분석 결과</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1008,7 +1010,7 @@ async function downloadAsPDF() {
       <body>
         <div class="max-w-4xl mx-auto">
           <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-900">${analysisData.appName || '앱'} 분석 리포트</h1>
+            <h1 class="text-2xl font-bold text-gray-900">${escapeHtml(analysisData.appName || '앱')} 분석 리포트</h1>
             <p class="text-gray-500 mt-2">${new Date().toLocaleDateString('ko-KR')} | TalonInsight</p>
           </div>
           ${printContent.innerHTML}

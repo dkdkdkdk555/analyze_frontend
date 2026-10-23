@@ -1,3 +1,5 @@
+import { escapeHtml } from './sanitize.js';
+
 export function renderRatingChart(containerId, distribution) {
   const container = document.getElementById(containerId);
 
@@ -24,11 +26,11 @@ export function renderRatingChart(containerId, distribution) {
           const percentage = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
           return `
             <div class="rating-bar">
-              <span class="rating-label">${rating}점</span>
+              <span class="rating-label">${escapeHtml(rating)}점</span>
               <div class="bar-container">
-                <div class="bar" style="width: ${percentage}%; background-color: ${colors[rating] || '#ccc'}"></div>
+                <div class="bar" style="width: ${Number(percentage) || 0}%; background-color: ${colors[rating] || '#ccc'}"></div>
               </div>
-              <span class="rating-count">${count} (${percentage}%)</span>
+              <span class="rating-count">${escapeHtml(count)} (${escapeHtml(percentage)}%)</span>
             </div>
           `;
         }).join('')}

@@ -1,6 +1,7 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, t, applyTranslations } from '../components/i18n.js';
+import { escapeHtml, safeUrl } from '../components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -48,7 +49,7 @@ async function init() {
       if (attempt > 0) {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
-      res = await fetch(`${API_BASE_URL}/api/groups/${id}`);
+      res = await fetch(`${API_BASE_URL}/api/groups/${encodeURIComponent(id)}`);
       if (res.ok || res.status !== 404) break;
     }
     if (!res.ok) { showError(); return; }
@@ -80,11 +81,12 @@ async function renderResult(data) {
   // App chips
   const chipsEl = document.getElementById('app-chips');
   chipsEl.innerHTML = apps.map(app => {
-    const iconHtml = app.iconUrl
-      ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-5 h-5 rounded object-cover">`
-      : `<div class="w-5 h-5 rounded bg-primary flex items-center justify-center text-white text-xs font-bold">${(app.appName || '?')[0]}</div>`;
+    const iconUrl = safeUrl(app.iconUrl);
+    const iconHtml = iconUrl
+      ? `<img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(app.appName)}" class="w-5 h-5 rounded object-cover">`
+      : `<div class="w-5 h-5 rounded bg-primary flex items-center justify-center text-white text-xs font-bold">${escapeHtml((app.appName || '?')[0])}</div>`;
     return `<span class="flex items-center gap-1.5 bg-background-light border border-[#e5e7eb] rounded-full px-3 py-1 text-xs font-medium text-[#111318]">
-      ${iconHtml}${app.appName}
+      ${iconHtml}${escapeHtml(app.appName)}
     </span>`;
   }).join('');
 
@@ -385,19 +387,20 @@ async function renderPositioningMap(posMap, apps) {
   legendEl.innerHTML = appPositions.map((app, i) => {
     const color = APP_COLORS[i % APP_COLORS.length];
     const appData = apps.find(a => a.appName === app.appName);
-    const iconHtml = appData?.iconUrl
-      ? `<img src="${appData.iconUrl}" alt="${app.appName}" class="w-3 h-3 rounded-sm object-cover flex-shrink-0" onerror="this.style.display='none'">`
+    const iconUrl = safeUrl(appData?.iconUrl);
+    const iconHtml = iconUrl
+      ? `<img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(app.appName)}" class="w-3 h-3 rounded-sm object-cover flex-shrink-0" onerror="this.style.display='none'">`
       : `<span class="w-3 h-3 rounded-full flex-shrink-0" style="background:${color}"></span>`;
     return `<span class="flex items-center gap-1.5 text-xs text-[#636e88]">
       ${iconHtml}
-      ${app.appName}
+      ${escapeHtml(app.appName)}
     </span>`;
   }).join('');
 
   if (posMap.opportunityZone) {
     legendEl.innerHTML += `<span class="flex items-center gap-1.5 text-xs text-primary">
       <span class="w-3 h-3 rounded-full border border-primary flex-shrink-0" style="background:rgba(30,90,232,0.1)"></span>
-      💡 ${posMap.opportunityZone.label || t('group_result.opportunity_area')}
+      💡 ${escapeHtml(posMap.opportunityZone.label || t('group_result.opportunity_area'))}
     </span>`;
   }
 }
@@ -425,11 +428,11 @@ function renderPainPoints(painPoints) {
           <span class="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${sev.dot}"></span>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-1">
-              <span class="font-semibold text-sm text-[#111318]">${pp.problem}</span>
+              <span class="font-semibold text-sm text-[#111318]">${escapeHtml(pp.problem)}</span>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${sev.color}">${t(sev.key)}</span>
             </div>
-            <p class="text-xs text-[#636e88] leading-relaxed mb-2">${pp.description}</p>
-            ${affectedApps ? `<p class="text-[11px] text-[#636e88]">${t('group_result.affected_apps')}: <span class="font-medium text-[#111318]">${affectedApps}</span></p>` : ''}
+            <p class="text-xs text-[#636e88] leading-relaxed mb-2">${escapeHtml(pp.description)}</p>
+            ${affectedApps ? `<p class="text-[11px] text-[#636e88]">${t('group_result.affected_apps')}: <span class="font-medium text-[#111318]">${escapeHtml(affectedApps)}</span></p>` : ''}
           </div>
         </div>
       </div>`;
@@ -442,16 +445,17 @@ function renderMarketShare(marketShare, insight) {
 
   el.innerHTML = marketShare.map((item, i) => {
     const color = APP_COLORS[i % APP_COLORS.length];
+    const share = Number(item.share) || 0;
     return `
       <div>
         <div class="flex items-center justify-between mb-1">
-          <span class="text-sm font-semibold text-[#111318]">${item.appName}</span>
-          <span class="text-sm font-bold" style="color:${color}">${item.share}%</span>
+          <span class="text-sm font-semibold text-[#111318]">${escapeHtml(item.appName)}</span>
+          <span class="text-sm font-bold" style="color:${color}">${share}%</span>
         </div>
         <div class="h-2 bg-[#f0f1f4] rounded-full overflow-hidden mb-1">
-          <div class="h-full rounded-full transition-all duration-700" style="width:${item.share}%;background:${color}"></div>
+          <div class="h-full rounded-full transition-all duration-700" style="width:${share}%;background:${color}"></div>
         </div>
-        <p class="text-xs text-[#636e88]">${item.insight}</p>
+        <p class="text-xs text-[#636e88]">${escapeHtml(item.insight)}</p>
       </div>`;
   }).join('');
 
@@ -472,13 +476,13 @@ function renderEntryOpportunity(opportunity) {
   }
 
   const tags = (opportunity.tags || []).map(tag =>
-    `<span class="px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">${tag}</span>`
+    `<span class="px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">${escapeHtml(tag)}</span>`
   ).join('');
 
   el.innerHTML = `
     <div class="border-l-4 border-primary pl-4 mb-4">
-      <h3 class="text-base font-bold text-[#111318] mb-2">${opportunity.title || ''}</h3>
-      <p class="text-sm text-[#636e88] leading-relaxed">${opportunity.description || ''}</p>
+      <h3 class="text-base font-bold text-[#111318] mb-2">${escapeHtml(opportunity.title)}</h3>
+      <p class="text-sm text-[#636e88] leading-relaxed">${escapeHtml(opportunity.description)}</p>
     </div>
     ${tags ? `<div class="flex flex-wrap gap-2">${tags}</div>` : ''}
   `;
@@ -508,10 +512,10 @@ function renderEntryRisks(risks) {
     return `
       <div class="${sev.bg} border ${sev.border} rounded-xl p-4">
         <div class="flex items-start justify-between gap-2 mb-2">
-          <p class="text-sm font-bold text-[#111318]">${risk.risk}</p>
+          <p class="text-sm font-bold text-[#111318]">${escapeHtml(risk.risk)}</p>
           <span class="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${sev.badge}">${t(sev.key)}</span>
         </div>
-        <p class="text-xs text-[#636e88] leading-relaxed">${risk.description}</p>
+        <p class="text-xs text-[#636e88] leading-relaxed">${escapeHtml(risk.description)}</p>
       </div>`;
   }).join('');
 }
@@ -522,9 +526,10 @@ function renderIndividualApps(apps) {
   const isKo = getLang() === 'ko';
 
   el.innerHTML = apps.map(app => {
-    const iconHtml = app.iconUrl
-      ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-10 h-10 rounded-xl object-cover">`
-      : `<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold">${(app.appName || '?')[0]}</div>`;
+    const iconUrl = safeUrl(app.iconUrl);
+    const iconHtml = iconUrl
+      ? `<img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(app.appName)}" class="w-10 h-10 rounded-xl object-cover">`
+      : `<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold">${escapeHtml((app.appName || '?')[0])}</div>`;
 
     // preview 모드에서는 개별 분석 결과 링크를 잠금 상태로 표시
     if (isPreviewMode) {
@@ -532,7 +537,7 @@ function renderIndividualApps(apps) {
         <div class="flex items-center gap-3 p-4 bg-gray-50 border border-[#e5e7eb] rounded-xl opacity-60">
           ${iconHtml}
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-[#111318] truncate">${app.appName}</p>
+            <p class="text-sm font-semibold text-[#111318] truncate">${escapeHtml(app.appName)}</p>
             <p class="text-xs text-[#636e88] mt-0.5">${isKo ? '전체 결과를 보려면 잠금 해제하세요' : 'Unlock to view full results'}</p>
           </div>
           <span class="material-symbols-outlined text-[#636e88]" style="font-size:18px">lock</span>
@@ -541,14 +546,14 @@ function renderIndividualApps(apps) {
 
     // Link to user analysis history using the stored userAnalysisId
     const analysisHref = app.userAnalysisId
-      ? `/mypage/my-analyses.html?id=${app.userAnalysisId}`
+      ? `/mypage/my-analyses.html?id=${encodeURIComponent(app.userAnalysisId)}`
       : '#';
 
     return `
-      <a href="${analysisHref}" class="flex items-center gap-3 p-4 bg-white border border-[#e5e7eb] rounded-xl hover:border-primary hover:shadow-sm transition-all group">
+      <a href="${escapeHtml(analysisHref)}" class="flex items-center gap-3 p-4 bg-white border border-[#e5e7eb] rounded-xl hover:border-primary hover:shadow-sm transition-all group">
         ${iconHtml}
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold text-[#111318] truncate">${app.appName}</p>
+          <p class="text-sm font-semibold text-[#111318] truncate">${escapeHtml(app.appName)}</p>
           <p class="text-xs text-[#636e88] mt-0.5">${t('group_result.individual_link')}</p>
         </div>
         <span class="material-symbols-outlined text-[#636e88] group-hover:text-primary transition-colors" style="font-size:18px">arrow_forward</span>

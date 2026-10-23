@@ -120,7 +120,7 @@ function loadPayPalSDK(clientId) {
   if (paypalSDKLoaded) return Promise.resolve();
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture`;
     script.onload = () => { paypalSDKLoaded = true; resolve(); };
     script.onerror = reject;
     document.head.appendChild(script);

@@ -26,3 +26,6 @@
 /payment-history.html /payment/payment-history 301
 /payment-success.html /payment/payment-success 301
 /payment-fail.html /payment/payment-fail 301
+
+# Internal security notes live in the repo only; do not serve them from the site.
+/SECURITY.md / 301

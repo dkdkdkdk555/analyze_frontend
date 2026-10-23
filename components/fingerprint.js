@@ -46,7 +46,10 @@ async function loadFingerprintJS() {
   // Load from CDN
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js';
+    // Exact version + SRI hash: a changed or tampered CDN file is refused by the browser
+    script.src = 'https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4.6.2/dist/fp.min.js';
+    script.integrity = 'sha384-krE1YAVuJx0qn+hR6KwuVnQtbZIATYwWHVaIy7nXFZRyOrBxBfg81m+cqtbljaYo';
+    script.crossOrigin = 'anonymous';
     script.async = true;
     script.onload = async () => {
       try {

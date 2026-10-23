@@ -1143,7 +1143,7 @@ export { MARKET_OPTIONS };
  */
 function detectLang() {
   const saved = localStorage.getItem('lang');
-  if (saved && TRANSLATIONS[saved]) return saved;
+  if (saved && Object.hasOwn(TRANSLATIONS, saved)) return saved;
 
   const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
   if (browserLang.startsWith('ko')) return 'ko';
@@ -1158,7 +1158,7 @@ export function getLang() {
 
 /** Persists a language choice and applies translations in place (no page reload) */
 export function setLang(lang) {
-  if (!TRANSLATIONS[lang]) return;
+  if (!Object.hasOwn(TRANSLATIONS, lang)) return;
   localStorage.setItem('lang', lang);
   applyTranslations();
 }

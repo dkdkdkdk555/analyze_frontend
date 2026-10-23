@@ -1,6 +1,7 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, getMarket, setMarket, t, applyTranslations } from '../components/i18n.js';
+import { escapeHtml, safeUrl, cssUrl } from '../components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -311,19 +312,19 @@ function renderGroupDropdown(results) {
 
   items.innerHTML = displayResults.map(app => {
     const isAdded = alreadyAdded.has(app.appName.toLowerCase());
-    const iconBg = app.iconImageUrl ? `url('${app.iconImageUrl}')` : 'none';
+    const iconBg = cssUrl(app.iconImageUrl);
     return `
       <div class="flex items-center gap-3 rounded-lg p-3 ${isAdded ? 'opacity-50 cursor-default' : 'hover:bg-primary/5 cursor-pointer'} transition-colors group/item"
-        data-app='${JSON.stringify(app).replace(/'/g, '&apos;')}'>
+        data-app="${escapeHtml(JSON.stringify(app))}">
         <div class="shrink-0 rounded-xl bg-[#e5e7eb] bg-center bg-cover bg-no-repeat border border-gray-100"
           style="width:44px;height:44px;background-image:${iconBg}"></div>
         <div class="flex flex-1 flex-col text-left min-w-0">
           <div class="flex items-center gap-1.5 flex-wrap">
-            <p class="text-[#111318] text-sm font-bold leading-normal truncate">${app.appName}</p>
+            <p class="text-[#111318] text-sm font-bold leading-normal truncate">${escapeHtml(app.appName)}</p>
             ${app.playStoreUrl ? '<span class="rounded bg-green-100 px-1 py-0.5 text-[9px] font-bold text-green-700 shrink-0">PLAY</span>' : ''}
             ${app.appStoreUrl ? '<span class="rounded bg-blue-100 px-1 py-0.5 text-[9px] font-bold text-blue-700 shrink-0">iOS</span>' : ''}
           </div>
-          ${app.developer ? `<p class="text-[#636e88] text-xs truncate">${app.developer}</p>` : ''}
+          ${app.developer ? `<p class="text-[#636e88] text-xs truncate">${escapeHtml(app.developer)}</p>` : ''}
         </div>
         ${isAdded
           ? `<span class="material-symbols-outlined text-green-500 shrink-0" style="font-size:20px">check_circle</span>`
@@ -346,7 +347,7 @@ function renderGroupDropdown(results) {
   dropdown?.classList.remove('hidden');
 
   items.querySelectorAll('[data-app]').forEach(item => {
-    const appData = JSON.parse(item.dataset.app.replace(/&apos;/g, "'"));
+    const appData = JSON.parse(item.dataset.app);
     if (alreadyAdded.has(appData.appName.toLowerCase())) return;
     item.addEventListener('click', (e) => {
       e.stopPropagation(); // 드롭다운이 document 외부클릭 핸들러에 의해 닫히지 않도록
@@ -413,9 +414,10 @@ function renderSelectedApps() {
 
   container.className = 'flex flex-wrap gap-4 min-h-[100px] p-4 border-2 border-primary rounded-xl bg-white items-start content-start';
   container.innerHTML = selectedApps.map((app, i) => {
-    const iconHtml = app.iconUrl
-      ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-14 h-14 rounded-xl object-cover">`
-      : `<div class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl">${(app.appName || '?')[0]}</div>`;
+    const iconUrl = safeUrl(app.iconUrl);
+    const iconHtml = iconUrl
+      ? `<img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(app.appName)}" class="w-14 h-14 rounded-xl object-cover">`
+      : `<div class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl">${escapeHtml((app.appName || '?')[0])}</div>`;
 
     return `
       <div class="flex flex-col items-center gap-1.5 relative animate-[popIn_0.2s_ease_both]">
@@ -426,7 +428,7 @@ function renderSelectedApps() {
             data-index="${i}"
           >×</button>
         </div>
-        <p class="text-xs font-medium text-[#111318] text-center max-w-[64px] truncate">${app.appName}</p>
+        <p class="text-xs font-medium text-[#111318] text-center max-w-[64px] truncate">${escapeHtml(app.appName)}</p>
       </div>`;
   }).join('');
 
@@ -542,12 +544,12 @@ function showConfirmStartModal() {
 
   if (isGuestMode) {
     document.getElementById('confirm-start-detail').innerHTML = getLang() === 'ko'
-      ? `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 무료로 분석해요.<br><span class="text-amber-600">게스트 분석: 결과가 저장되지 않습니다.</span>`
-      : `Analyzing <strong>${n}</strong> apps in the <strong>${groupName}</strong> group for free.<br><span class="text-amber-600">Guest analysis: Results won't be saved.</span>`;
+      ? `<strong>${escapeHtml(groupName)}</strong> 그룹의 앱 ${n}개를 무료로 분석해요.<br><span class="text-amber-600">게스트 분석: 결과가 저장되지 않습니다.</span>`
+      : `Analyzing <strong>${n}</strong> apps in the <strong>${escapeHtml(groupName)}</strong> group for free.<br><span class="text-amber-600">Guest analysis: Results won't be saved.</span>`;
   } else {
     document.getElementById('confirm-start-detail').innerHTML = getLang() === 'ko'
-      ? `<strong>${groupName}</strong> 그룹의 앱 ${n}개를 분석해요.<br><strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`
-      : `Analyzing <strong>${n}</strong> apps in the <strong>${groupName}</strong> group.<br><strong class="text-[#111318]">${creditRequired} credits</strong> will be used.`;
+      ? `<strong>${escapeHtml(groupName)}</strong> 그룹의 앱 ${n}개를 분석해요.<br><strong class="text-[#111318]">${creditRequired} 크레딧</strong>이 차감됩니다.`
+      : `Analyzing <strong>${n}</strong> apps in the <strong>${escapeHtml(groupName)}</strong> group.<br><strong class="text-[#111318]">${creditRequired} credits</strong> will be used.`;
   }
   document.getElementById('confirm-start-modal').classList.remove('hidden');
 }
@@ -666,9 +668,10 @@ async function startAnalysis() {
 function buildProgressGrid() {
   const grid = document.getElementById('app-progress-grid');
   grid.innerHTML = selectedApps.map((app, i) => {
-    const iconHtml = app.iconUrl
-      ? `<img src="${app.iconUrl}" alt="${app.appName}" class="w-16 h-16 rounded-2xl object-cover">`
-      : `<div class="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-white font-bold text-2xl">${(app.appName || '?')[0]}</div>`;
+    const iconUrl = safeUrl(app.iconUrl);
+    const iconHtml = iconUrl
+      ? `<img src="${escapeHtml(iconUrl)}" alt="${escapeHtml(app.appName)}" class="w-16 h-16 rounded-2xl object-cover">`
+      : `<div class="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-white font-bold text-2xl">${escapeHtml((app.appName || '?')[0])}</div>`;
 
     return `
       <div class="flex flex-col items-center gap-2" id="app-progress-${i}">
@@ -686,7 +689,7 @@ function buildProgressGrid() {
             <span class="text-white text-xs">✕</span>
           </div>
         </div>
-        <p class="text-xs font-medium text-[#111318] text-center max-w-[72px] truncate">${app.appName}</p>
+        <p class="text-xs font-medium text-[#111318] text-center max-w-[72px] truncate">${escapeHtml(app.appName)}</p>
         <p class="app-status text-xs text-[#636e88]">${t('group_page.waiting')}</p>
       </div>`;
   }).join('');
@@ -733,7 +736,7 @@ function showError(message) {
     <div class="flex flex-col items-center gap-4 text-center p-8">
       <span class="material-symbols-outlined text-5xl text-red-400">error</span>
       <p class="text-base font-semibold text-[#111318]">${t('group_page.error_title')}</p>
-      <p class="text-sm text-[#636e88]">${message}</p>
+      <p class="text-sm text-[#636e88]">${escapeHtml(message)}</p>
       <button onclick="location.href='/analysis/group-analysis.html'" class="mt-2 px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary/90 transition-colors">
         ${t('group_page.retry')}
       </button>

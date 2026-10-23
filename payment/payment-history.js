@@ -1,6 +1,7 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, t, applyTranslations } from '../components/i18n.js';
+import { escapeHtml } from '../components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -22,7 +23,7 @@ function statusBadge(status) {
   const labelKey = `payment.status_${status}`;
   const label = t(labelKey) !== labelKey ? t(labelKey) : (status || '-');
   const cls = STATUS_CLS[status] || 'bg-gray-100 text-gray-500';
-  return `<span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full ${cls}">${label}</span>`;
+  return `<span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full ${cls}">${escapeHtml(label)}</span>`;
 }
 
 function formatAmount(amountCents) {
@@ -69,18 +70,18 @@ async function init() {
     <div class="bg-white rounded-2xl border border-[#e8eaf0] shadow-sm p-5">
       <div class="flex items-start justify-between gap-3 mb-3">
         <div class="flex-1 min-w-0">
-          <p class="text-base font-bold text-[#111318] truncate">${p.product_name || t('payment.credit_package')}</p>
+          <p class="text-base font-bold text-[#111318] truncate">${escapeHtml(p.product_name || t('payment.credit_package'))}</p>
           <p class="text-xs text-[#636e88] mt-0.5">${formatDate(p.created_at)}</p>
         </div>
         ${statusBadge(p.status)}
       </div>
       <div class="flex items-center justify-between pt-3 border-t border-[#f0f1f4]">
         <div class="flex items-center gap-1.5">
-          <span class="text-sm font-semibold text-primary">${(p.credit_amount || 0).toLocaleString()} ${t('payment.credit_given')}</span>
+          <span class="text-sm font-semibold text-primary">${escapeHtml((p.credit_amount || 0).toLocaleString())} ${t('payment.credit_given')}</span>
         </div>
         <p class="text-base font-bold text-[#111318]">
           ${formatAmount(p.amount)}
-          ${p.provider ? `<span class="text-xs text-[#636e88] font-normal ml-1">(${p.provider})</span>` : ''}
+          ${p.provider ? `<span class="text-xs text-[#636e88] font-normal ml-1">(${escapeHtml(p.provider)})</span>` : ''}
         </p>
       </div>
     </div>

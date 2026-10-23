@@ -1,6 +1,7 @@
 import { initHeader } from '../components/header.js';
 import { initFooter } from '../components/footer.js';
 import { getLang, t, applyTranslations } from '../components/i18n.js';
+import { escapeHtml } from '../components/sanitize.js';
 
 const API_BASE_URL = 'https://analyze-dega.ukdroidisgood.workers.dev';
 
@@ -102,15 +103,15 @@ async function init() {
   tbody.innerHTML = ledger.map(entry => {
     const isPositive = entry.amount > 0;
     const amountClass = isPositive ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold';
-    const amountText = `${isPositive ? '+' : ''}${entry.amount.toLocaleString()} C`;
+    const amountText = escapeHtml(`${isPositive ? '+' : ''}${entry.amount.toLocaleString()} C`);
 
     return `
       <tr class="border-b border-[#f0f1f4] last:border-0 hover:bg-[#f8f9ff] transition-colors">
         <td class="px-5 py-4 text-sm text-[#636e88] whitespace-nowrap">${formatDate(entry.created_at)}</td>
         <td class="px-5 py-4">
           <div class="flex items-center gap-2">
-            <span class="inline-block px-2 py-0.5 text-xs font-medium rounded-full ${isPositive ? 'bg-green-100 text-green-700' : 'bg-[#f0f1f4] text-[#636e88]'}">${typeLabel(entry.type)}</span>
-            <span class="text-sm text-[#111318]">${translateDescription(entry.description)}</span>
+            <span class="inline-block px-2 py-0.5 text-xs font-medium rounded-full ${isPositive ? 'bg-green-100 text-green-700' : 'bg-[#f0f1f4] text-[#636e88]'}">${escapeHtml(typeLabel(entry.type))}</span>
+            <span class="text-sm text-[#111318]">${escapeHtml(translateDescription(entry.description))}</span>
           </div>
         </td>
         <td class="px-5 py-4 text-right text-sm ${amountClass}">${amountText}</td>
